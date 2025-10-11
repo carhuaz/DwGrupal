@@ -1,19 +1,34 @@
 'use strict';
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Marca que hay JS activo (para los fallbacks de CSS)
+// ===== Helper ready(): corre init tanto si el DOM ya está listo como si no
+const ready = (fn) => {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fn, { once: true });
+  } else {
+    fn();
+  }
+};
+
+ready(() => {
   document.documentElement.classList.add('js-ready');
 
   const $  = (s, r=document) => r.querySelector(s);
   const $$ = (s, r=document) => [...r.querySelectorAll(s)];
 
-  /* ======================================================
-     1) Reveal en scroll (animación de entrada)
-  ====================================================== */
+  // Número de WhatsApp destino
+  const RAW_WHATSAPP = '931436146';
+  const formatPeruNumber = (raw) => {
+    const only = String(raw).replace(/[^\d]/g, '');
+    if (only.startsWith('51')) return only;
+    if (only.length === 9) return '51' + only;
+    return only;
+  };
+  const WA_NUMBER = formatPeruNumber(RAW_WHATSAPP);
+
+  /* ===================== Reveal en scroll ===================== */
   (() => {
     const els = $$('[data-reveal]');
     if (!els.length) return;
-
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver((entries) => {
         entries.forEach(e => {
@@ -23,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
       }, { threshold: 0.12 });
-
       els.forEach((el, i) => {
         el.style.transitionDelay = `${Math.min(i*60, 360)}ms`;
         io.observe(el);
@@ -33,9 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })();
 
-  /* ======================================================
-     2) Input-group: estado de focus (para icono)
-  ====================================================== */
+  /* ================= Focus reactivo de iconos ================= */
   (() => {
     $$('#contactForm .input-group').forEach(group => {
       const input = $('input, textarea', group);
@@ -45,29 +57,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   })();
 
-  /* ======================================================
-     3) Contador de caracteres del mensaje
-  ====================================================== */
+  /* ================= Contador de caracteres =================== */
   (() => {
     const ta = $('#mensaje');
     const counter = $('#msgCount');
     if (!ta || !counter) return;
     const max = Number(ta.getAttribute('maxlength')) || 600;
-
-    const update = () => {
-      const len = (ta.value || '').length;
-      counter.textContent = `${len} / ${max}`;
-    };
-    update();
-    ta.addEventListener('input', update);
+    const update = () => counter.textContent = `${(ta.value||'').length} / ${max}`;
+    update(); ta.addEventListener('input', update);
   })();
 
-  /* ======================================================
-     4) Validación + envío simulado + limpiar
-  ====================================================== */
+  /* ========== Validación + redirección a WhatsApp ============ */
   (() => {
     const form = $('#contactForm');
     const alertBox = $('#formAlert');
+    const submitBtn = $('#contactForm button[type="submit"]');
+
     if (!form || !alertBox) return;
 
     const showAlert = (ok, msg) => {
@@ -78,20 +83,15 @@ document.addEventListener('DOMContentLoaded', () => {
       alertBox.className = 'alert mt-3 d-none';
       alertBox.textContent = '';
     };
-
     const mark = (el, valid) => {
-      el.classList.remove('is-valid', 'is-invalid');
+      el.classList.remove('is-valid','is-invalid');
       el.classList.add(valid ? 'is-valid' : 'is-invalid');
-      if (!valid) {
-        el.classList.add('shake');
-        setTimeout(() => el.classList.remove('shake'), 360);
-      }
+      if (!valid) { el.classList.add('shake'); setTimeout(()=>el.classList.remove('shake'),360); }
     };
-
     const validateEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
+    // Lógica común para enviar a WhatsApp
+    const goWhatsApp = () => {
       resetAlert();
 
       // Honeypot anti-spam
@@ -108,79 +108,75 @@ document.addEventListener('DOMContentLoaded', () => {
       const mensaje = $('#mensaje');
       const acepto  = $('#acepto');
 
-      // Validaciones básicas
       let ok = true;
+      if (!nombre.value.trim())         { mark(nombre, false);  ok = false; } else mark(nombre, true);
+      if (!validateEmail(email.value))  { mark(email, false);   ok = false; } else mark(email, true);
+      if (!motivo.value)                { mark(motivo, false);  ok = false; } else mark(motivo, true);
+      if (!asunto.value.trim())         { mark(asunto, false);  ok = false; } else mark(asunto, true);
+      if (!mensaje.value.trim())        { mark(mensaje, false); ok = false; } else mark(mensaje, true);
+      if (!acepto.checked)              { acepto.classList.add('shake'); setTimeout(()=>acepto.classList.remove('shake'),360); ok = false; }
 
-      if (!nombre.value.trim()) { mark(nombre, false); ok = false; } else mark(nombre, true);
-      if (!validateEmail(email.value.trim())) { mark(email, false); ok = false; } else mark(email, true);
-      if (!motivo.value) { mark(motivo, false); ok = false; } else mark(motivo, true);
-      if (!asunto.value.trim()) { mark(asunto, false); ok = false; } else mark(asunto, true);
-      if (!mensaje.value.trim()) { mark(mensaje, false); ok = false; } else mark(mensaje, true);
+      if (!ok) { showAlert(false, 'Revisa los campos marcados en rojo.'); return; }
 
-      if (!acepto.checked) {
-        acepto.classList.add('shake');
-        setTimeout(() => acepto.classList.remove('shake'), 360);
-        ok = false;
-      }
+      const lines = [
+        'Hola Digital Loot 👋',
+        `Nombre: ${nombre.value.trim()}`,
+        `Email: ${email.value.trim()}`,
+        `Motivo: ${motivo.value}`,
+        `Asunto: ${asunto.value.trim()}`,
+        'Mensaje:',
+        mensaje.value.trim()
+      ];
+      const text = encodeURIComponent(lines.join('\n'));
 
-      if (!ok) {
-        showAlert(false, 'Revisa los campos marcados en rojo.');
-        return;
-      }
+      // URL compatible y antibloqueador (misma pestaña)
+      const apiUrl = `https://api.whatsapp.com/send?phone=${WA_NUMBER}&text=${text}`;
+      window.location.href = apiUrl;
 
-      // “Envío” simulado
-      const data = {
-        nombre: nombre.value.trim(),
-        email: email.value.trim(),
-        motivo: motivo.value,
-        asunto: asunto.value.trim(),
-        mensaje: mensaje.value.trim(),
-        fecha: new Date().toISOString()
-      };
-
-      // Aquí podrías usar fetch() hacia tu backend (Formspree, Supabase, etc.)
-      // fetch('/api/contact', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) })
-
-      console.log('Contacto enviado:', data);
-      showAlert(true, '¡Gracias! Tu mensaje fue enviado. Te responderemos pronto.');
-
-      // Limpiar luego de un pequeño delay para que se lea la alerta
+      showAlert(true, 'Redirigiendo a WhatsApp…');
       setTimeout(() => {
         form.reset();
         $$('.is-valid', form).forEach(el => el.classList.remove('is-valid'));
-        $('#msgCount') && ($('#msgCount').textContent = '0 / 600');
-      }, 300);
+        const mc = $('#msgCount'); if (mc) mc.textContent = '0 / 600';
+      }, 250);
+    };
+
+    // Submit del formulario
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      goWhatsApp();
+    });
+
+    // Además, fallback: click directo en el botón de enviar
+    submitBtn?.addEventListener('click', (e) => {
+      // Si el navegador ignora submit programático, forzamos nuestra lógica
+      if (form.checkValidity && !form.checkValidity()) return; // deja que HTML5 marque invalidos
+      e.preventDefault();
+      goWhatsApp();
     });
 
     // Botón limpiar
     $('#btnClear')?.addEventListener('click', () => {
-      form.reset();
-      resetAlert();
+      form.reset(); resetAlert();
       $$('.is-valid, .is-invalid', form).forEach(el => el.classList.remove('is-valid','is-invalid'));
-      $('#msgCount') && ($('#msgCount').textContent = '0 / 600');
+      const mc = $('#msgCount'); if (mc) mc.textContent = '0 / 600';
     });
   })();
 
-  /* ======================================================
-     5) Copiar email con toast
-  ====================================================== */
+  /* ============== Copiar email + toast ============== */
   (() => {
     const btn = $('#copyEmailBtn');
     const toastEl = $('#copyToast');
     if (!btn || !toastEl) return;
-
     const bsToast = window.bootstrap ? new bootstrap.Toast(toastEl, { delay: 1500 }) : null;
-
     btn.addEventListener('click', async () => {
       try {
         const toCopy = btn.getAttribute('data-copy') || 'soporte@digitalloot.com';
         await navigator.clipboard.writeText(toCopy);
-        if (bsToast) bsToast.show();
+        if (bsToast) bsToast.show(); else alert('Email copiado: ' + toCopy);
       } catch {
-        // Fallback simple
         alert('Email copiado: ' + (btn.getAttribute('data-copy') || 'soporte@digitalloot.com'));
       }
     });
   })();
-
 });
