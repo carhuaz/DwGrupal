@@ -1,131 +1,167 @@
-/* ===== Fondo sutil animado para la sección ===== */
-.contacto-hero {
-  position: relative;
-  overflow: hidden;
+/* ============================================
+   Digital Loot · contacto.css
+   Requiere: estilos/estilos.css (variables base)
+============================================ */
+
+:root{
+  --bg:#0c0d10; --card:#111319; --muted:#9aa3af;
+  --primary:#6e57ff; --primary-600:#5844d9; --accent:#00e0ff;
+  --font-base:'Poppins', system-ui, -apple-system, Segoe UI, Ubuntu, Cantarell, Helvetica, Arial, sans-serif;
+  --font-head:'Space Grotesk','Poppins',system-ui,-apple-system,Segoe UI,Ubuntu,Cantarell,Helvetica,Arial,sans-serif;
 }
-.contacto-hero::before{
-  content:"";
-  position:absolute; inset:-30% -10% auto -10%;
-  height: 260px;
+
+/* ---------- HERO con glow sutil ---------- */
+header.bg-dark{
   background:
-    radial-gradient(120px 120px at 20% 70%, rgba(110,87,255,.35), transparent 65%),
-    radial-gradient(160px 160px at 80% 30%, rgba(0,224,255,.28), transparent 60%);
-  filter: blur(20px);
-  animation: floatBg 12s ease-in-out infinite alternate;
-  pointer-events:none;
+    radial-gradient(90% 70% at 50% 0%, rgba(110,87,255,.10), transparent 60%),
+    var(--card) !important;
+  border-bottom:1px solid #1f2430 !important;
 }
-@keyframes floatBg{
-  0%   { transform: translateY(0) rotate(0deg) }
-  100% { transform: translateY(12px) rotate(4deg) }
-}
-
-/* ===== Form container: brillo de borde animado ===== */
-.form-neo {
-  --br: 16px;
-  background: var(--card);
-  border-radius: var(--br);
-  border: 1px solid #1f2430;
-  box-shadow: 0 10px 24px rgba(0,0,0,.25);
+header h1{
+  font-family: var(--font-head);
+  font-weight: 900;
+  letter-spacing: .6px;
+  background: linear-gradient(90deg,#cfe3ff,#8fb5ff 35%,#6e57ff 65%,#00e0ff);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-shadow: 0 6px 16px rgba(0,0,0,.35);
   position: relative;
-  overflow: hidden;
 }
-.form-neo::after{
-  content:"";
-  position:absolute; inset:0; pointer-events:none;
-  background: conic-gradient(from 180deg, rgba(110,87,255,.25), rgba(0,224,255,.25), transparent 35%);
-  filter: blur(18px);
-  opacity:.35;
-  transition: opacity .4s ease;
+header h1::after{
+  content:""; position:absolute; left:50%; transform:translateX(-50%);
+  bottom:-10px; height:4px; width:170px; border-radius:999px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  box-shadow: 0 0 18px rgba(110,87,255,.45), 0 0 14px rgba(0,224,255,.35);
 }
-.form-neo:hover::after{ opacity:.55; }
+header p{ color:#cdd3db; }
 
-/* ===== Inputs con microinteracciones ===== */
-.input-group .input-group-text{
+/* ---------- Accesos rápidos ---------- */
+section .btn{
+  font-weight:700;
+  transition: transform .15s ease, box-shadow .2s ease, background .15s ease, border-color .15s ease;
+}
+section .btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,.28);
+}
+.btn.btn-primary{ background: var(--primary); border:none; }
+.btn.btn-primary:hover{ background: var(--primary-600); }
+
+/* ---------- FORMULARIO ---------- */
+#contactForm{
+  background: linear-gradient(180deg, rgba(17,19,25,.96), rgba(17,19,25,.93));
+  border:1px solid #1f2430 !important;
+  box-shadow: 0 14px 40px rgba(0,0,0,.35);
+}
+#contactForm .form-label{ color:#e9ecf1; }
+#contactForm .form-control,
+#contactForm .form-select{
+  background:#0f1117; color:#e9ecf1;
+  border:1px solid #1f2430;
+}
+#contactForm .form-control::placeholder{ color:#9aa3af; }
+
+#contactForm .form-control:focus,
+#contactForm .form-select:focus{
+  outline: none;
   border-color:#2a3350;
+  box-shadow: 0 0 0 3px rgba(110,87,255,.18);
 }
-.form-control,
-textarea.form-control{
-  background:#0f1117;
-  border:1px solid #2a3350;
-  color:#e9ecf1;
-  transition: border-color .2s, box-shadow .2s, transform .12s ease;
+
+/* Input group con icono reactivo (JS añade .focused al wrapper .input-group) */
+#contactForm .input-group-text{
+  background:#0f1117; color:#9aa3af; border:1px solid #1f2430;
+  transition: color .15s ease, border-color .15s ease, box-shadow .15s ease;
 }
-.form-control:focus,
-textarea.form-control:focus{
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(110,87,255,.2);
+#contactForm .input-group.focused .input-group-text{
+  color:#cfe3ff; border-color:#2a3350;
+  box-shadow: inset 0 0 0 1px rgba(110,87,255,.25);
+}
+
+/* Contador de caracteres del mensaje */
+#msgCount{
+  font-family: var(--font-base);
+  color:#aeb6c3 !important;
+}
+
+/* Botones de enviar/limpiar */
+#contactForm .btn.btn-buy{
+  background: var(--primary);
+  border: none;
+  font-weight: 800;
+  letter-spacing: .3px;
+}
+#contactForm .btn.btn-buy:hover{
+  background: var(--primary-600);
   transform: translateY(-1px);
-}
-
-/* Etiquetas flotantes suaves (solo visual) */
-.form-label{
-  transition: transform .2s ease, opacity .2s ease;
-}
-.form-control:focus + .floating, 
-.form-control:not(:placeholder-shown) + .floating{
-  transform: translateY(-8px);
-  opacity:.85;
-}
-
-/* Botón con “pulse” al hover y ripple al click */
-.btn-buy{
-  position: relative;
-  overflow: hidden;
-}
-.btn-buy::after{
-  content:"";
-  position:absolute; left:50%; top:50%;
-  width:0; height:0; border-radius:999px;
-  background: rgba(255,255,255,.35);
-  transform: translate(-50%,-50%);
-  transition: width .4s ease, height .4s ease;
-}
-.btn-buy:active::after{
-  width: 220%; height: 220%;
-}
-
-/* Alertas: aparición suave */
-#formAlert{
-  transform: translateY(6px);
-  opacity:0;
-}
-#formAlert.show{
-  transform:none;
-  opacity:1;
-  transition: .25s ease;
-}
-
-/* Shake si hay error */
-@keyframes xShake {
-  0%,100%{ transform: translateX(0) }
-  20%{ transform: translateX(-6px) }
-  40%{ transform: translateX(6px) }
-  60%{ transform: translateX(-4px) }
-  80%{ transform: translateX(4px) }
-}
-.invalid-shake{ animation: xShake .35s ease }
-
-/* Iconos info: “latido” suave al hover */
-.info-icon{
-  transition: transform .2s ease, color .2s ease;
-}
-.info-icon:hover{ 
-  transform: scale(1.1);
-  color: var(--accent);
-}
-
-/* Tarjeta lateral */
-.side-card{
-  background: rgba(17,19,25,.85);
-  border:1px solid #2a3350;
-  border-radius:14px;
-  padding: 1.25rem;
-  transition: transform .2s ease, box-shadow .2s ease;
-}
-.side-card:hover{
-  transform: translateY(-3px);
   box-shadow: 0 10px 24px rgba(0,0,0,.35);
 }
 
-/* Mostrar las revelaciones más smooth (compat con tu script) */
-[data-reveal]{ transition: opacity .6s ease, transform .6s ease; }
+/* Alert de resultado */
+#formAlert{
+  border-radius: 12px;
+  border:1px solid #1f2430;
+  box-shadow: 0 10px 24px rgba(0,0,0,.25);
+}
+
+/* Estados válidos/invalidos y micro-shake */
+.form-control.is-valid,
+.form-select.is-valid{ border-color:#35d399 !important; }
+.form-control.is-invalid,
+.form-select.is-invalid{ border-color:#ef4444 !important; }
+.shake{ animation: shake .35s ease; }
+@keyframes shake{
+  0%{ transform: translateX(0); }
+  25%{ transform: translateX(-4px); }
+  50%{ transform: translateX(3px); }
+  75%{ transform: translateX(-2px); }
+  100%{ transform: translateX(0); }
+}
+
+/* ---------- Lateral (mapa + redes) ---------- */
+.border-secondary-subtle{ border-color:#1f2430 !important; }
+.ratio img{ display:block; }
+
+/* Social (hereda de tu .social-btn; duplicamos por si no está) */
+.social-btn{
+  width:40px; height:40px; display:grid; place-items:center;
+  border-radius:999px; background:#0f1117; color:#e9ecf1;
+  border:1px solid #1f2430; transition: transform .15s ease, background .15s ease;
+}
+.social-btn:hover{ transform:translateY(-2px); background:#151823; }
+
+/* ---------- FAQ (flush) ---------- */
+.faq .accordion-item{
+  background: var(--card);
+  border: 1px solid #1f2430;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: .6rem;
+}
+.faq .accordion-button{
+  background: transparent; color:#e9ecf1; font-weight:600;
+}
+.faq .accordion-button:focus{ box-shadow:none; }
+.faq .accordion-button:not(.collapsed){
+  color:#fff; background: rgba(110,87,255,.08);
+}
+.faq .accordion-body{ color:#cdd3db; }
+
+/* ---------- Toast Copiar ---------- */
+.toast.text-bg-dark{
+  background:#0f1117 !important;
+  border:1px solid #1f2430 !important;
+  color:#e9ecf1 !important;
+  box-shadow: 0 16px 36px rgba(0,0,0,.45);
+  border-radius: 12px;
+}
+
+/* ---------- Reveal on scroll ---------- */
+[data-reveal]{ opacity:0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+.is-shown{ opacity:1; transform:none; }
+html:not(.js-ready) [data-reveal]{ opacity:1 !important; transform:none !important; }
+
+/* ---------- Accesibilidad motion ---------- */
+@media (prefers-reduced-motion: reduce){
+  [data-reveal]{ transition:none !important; }
+  .shake{ animation: none !important; }
+}
