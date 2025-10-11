@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Catálogo · Digital Loot</title>
+    <link rel="icon" type="image/png" href="img/favicon.png" />
+
+    <!-- Bootstrap CSS + Icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="estilos/catalogo.css" />
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-blur sticky-top">
+      <div class="container">
+        <a
+          class="navbar-brand d-flex align-items-center gap-2"
+          href="index.html"
+        >
+          <img
+            src="img/logo.png"
+            alt="Digital Loot"
+            width="36"
+            height="36"
+            class="rounded-circle object-fit-cover"
+          />
+          <span class="brand-name">Digital Loot</span>
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#nav"
+          aria-controls="nav"
+          aria-expanded="false"
+          aria-label="Alternar navegación"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div id="nav" class="collapse navbar-collapse">
+          <!-- Buscador -->
+          <form class="ms-lg-4 my-3 my-lg-0 w-100" role="search">
+            <div class="input-group input-glass">
+              <span class="input-group-text bg-transparent border-end-0"
+                ><i class="bi bi-search"></i
+              ></span>
+              <input
+                class="form-control border-start-0"
+                type="search"
+                placeholder="Buscar juegos, DLCs, gift cards…"
+                autocomplete="off"
+              />
+            </div>
+          </form>
+
+          <ul class="navbar-nav ms-lg-4 align-items-lg-center gap-lg-2">
+            <li class="nav-item">
+              <a class="nav-link active" href="catalogo.html">Catálogo</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="nosotros.html">Nosotros</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="contacto.html">Contacto</a>
+            </li>
+          </ul>
+
+          <!-- Carrito y usuario -->
+          <div class="d-flex align-items-center gap-2 ms-lg-3">
+            <a
+              class="btn btn-outline-light position-relative"
+              href="#"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#miniCart"
+              aria-controls="miniCart"
+            >
+              <i class="bi bi-cart3"></i>
+              <span
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                >0</span
+              >
+            </a>
+            <a class="btn btn-outline-light" href="#"
+              ><i class="bi bi-person"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <header
+      class="py-5 text-center bg-dark border-bottom border-secondary catalogo-hero"
+    >
+      <div class="container">
+        <h1 class="catalogo-title">Catálogo completo</h1>
+        <p class="catalogo-subtitle">
+          Explora todos los títulos disponibles y agrégalos a tu carrito.
+        </p>
+      </div>
+    </header>
+
+    <!-- FILTROS -->
+    <section class="py-3 border-bottom border-dark-subtle">
+      <div class="container d-flex flex-wrap justify-content-center gap-2">
+        <span class="btn btn-sm btn-outline-light rounded-pill active"
+          >Todo</span
+        >
+        <span class="btn btn-sm btn-outline-light rounded-pill">PC</span>
+        <span class="btn btn-sm btn-outline-light rounded-pill">Xbox</span>
+        <span class="btn btn-sm btn-outline-light rounded-pill"
+          >PlayStation</span
+        >
+        <span class="btn btn-sm btn-outline-light rounded-pill"
+          >Gift Cards</span
+        >
+        <span class="btn btn-sm btn-outline-light rounded-pill">DLC</span>
+      </div>
+    </section>
+
+    <!-- CATÁLOGO -->
+    <main id="productos" class="py-5">
+      <div class="container">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h2 class="h3 mb-0">Todos los productos</h2>
+          <div class="d-none d-md-flex align-items-center gap-2">
+            <span class="small text-muted">Ordenar:</span>
+            <select class="form-select form-select-sm w-auto">
+              <option>Relevancia</option>
+              <option>Precio ↑</option>
+              <option>Precio ↓</option>
+              <option>A-Z</option>
+              <option>Z-A</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- GRID DE PRODUCTOS -->
+        <div
+          class="row g-3 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xxl-5"
+        >
+          <!-- PRODUCTOS -->
+          <div class="col" data-reveal>
+            <article class="game-card h-100 d-flex flex-column">
+              <img
+                class="game-cover"
+                src="img/helldivers2.webp"
+                alt="Helldivers 2 (Steam)"
+              />
+              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
+                <h3 class="h6 mb-0">Helldivers 2 (Steam)</h3>
+                <div class="d-flex align-items-baseline gap-2">
+                  <span class="price">S/ 169.90</span>
+                  <span class="old-price">S/ 219.90</span>
+                </div>
+                <div class="d-flex gap-1 flex-wrap">
+                  <span class="tag">Acción</span
+                  ><span class="tag">Cooperativo</span>
+                </div>
+                <div class="mt-auto d-grid">
+                  <a class="btn btn-buy" href="#"
+                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
+                  >
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="col" data-reveal>
+            <article class="game-card h-100 d-flex flex-column">
+              <img
+                class="game-cover"
+                src="img/cyberpunk2077.jpg"
+                alt="Cyberpunk 2077 (Steam)"
+              />
+              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
+                <h3 class="h6 mb-0">Cyberpunk 2077 (Steam)</h3>
+                <div class="d-flex align-items-baseline gap-2">
+                  <span class="price">S/ 129.90</span>
+                  <span class="old-price">S/ 199.90</span>
+                </div>
+                <div class="d-flex gap-1 flex-wrap">
+                  <span class="tag">RPG</span
+                  ><span class="tag">Mundo abierto</span>
+                </div>
+                <div class="mt-auto d-grid">
+                  <a class="btn btn-buy" href="#"
+                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
+                  >
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="col" data-reveal>
+            <article class="game-card h-100 d-flex flex-column">
+              <img
+                class="game-cover"
+                src="img/spiderman2.jpg"
+                alt="Spider-Man 2 (PS)"
+              />
+              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
+                <h3 class="h6 mb-0">Spider-Man 2 (PS)</h3>
+                <div class="d-flex align-items-baseline gap-2">
+                  <span class="price">S/ 229.90</span>
+                  <span class="old-price">S/ 289.90</span>
+                </div>
+                <div class="d-flex gap-1 flex-wrap">
+                  <span class="tag">Acción</span
+                  ><span class="tag">Aventura</span>
+                </div>
+                <div class="mt-auto d-grid">
+                  <a class="btn btn-buy" href="#"
+                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
+                  >
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="col" data-reveal>
+            <article class="game-card h-100 d-flex flex-column">
+              <img
+                class="game-cover"
+                src="img/xboxpass.webp"
+                alt="Xbox Game Pass 3 Meses"
+              />
+              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
+                <h3 class="h6 mb-0">Xbox Game Pass 3 Meses</h3>
+                <div class="d-flex align-items-baseline gap-2">
+                  <span class="price">S/ 109.90</span>
+                </div>
+                <div class="d-flex gap-1 flex-wrap">
+                  <span class="tag">Suscripción</span
+                  ><span class="tag">Xbox</span>
+                </div>
+                <div class="mt-auto d-grid">
+                  <a class="btn btn-buy" href="#"
+                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
+                  >
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="col" data-reveal>
+            <article class="game-card h-100 d-flex flex-column">
+              <img
+                class="game-cover"
+                src="img/giftplay.jpg"
+                alt="Gift Card PlayStation S/100"
+              />
+              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
+                <h3 class="h6 mb-0">Gift Card PlayStation S/100</h3>
+                <div class="d-flex align-items-baseline gap-2">
+                  <span class="price">S/ 100.00</span>
+                </div>
+                <div class="d-flex gap-1 flex-wrap">
+                  <span class="tag">Gift</span
+                  ><span class="tag">PlayStation</span>
+                </div>
+                <div class="mt-auto d-grid">
+                  <a class="btn btn-buy" href="#"
+                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
+                  >
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- MINI CARRITO (igual que index) -->
+    <div
+      class="offcanvas offcanvas-end mini-cart"
+      tabindex="-1"
+      id="miniCart"
+      aria-labelledby="miniCartLabel"
+    >
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="miniCartLabel">Tu carrito</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="offcanvas"
+          aria-label="Cerrar"
+        ></button>
+      </div>
+
+      <div class="offcanvas-body d-flex flex-column">
+        <ul
+          id="cartList"
+          class="list-group list-group-flush mb-3 small flex-grow-1 overflow-auto"
+        ></ul>
+        <div class="d-flex justify-content-between fw-semibold mb-3">
+          <span>Subtotal</span>
+          <span id="cartSubtotal">S/ 0.00</span>
+        </div>
+
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary" id="btnCheckout" type="button">
+            Ir a pagar
+          </button>
+          <button class="btn btn-outline-light" id="btnClearCart" type="button">
+            Vaciar carrito
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer mt-5">
+      <div class="container py-5 text-center">
+        <p class="MarcaAgua mb-0">
+          © 2025 Digital Loot. Todos los derechos reservados.
+        </p>
+      </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="scripts/catalogo.js"></script>
+  </body>
+</html>

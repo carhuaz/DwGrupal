@@ -1,0 +1,297 @@
+/* ================================
+   Digital Loot – CATALOGO
+   (Estilo distintivo)
+================================ */
+
+/* Colores/tipos coherentes con el sitio */
+:root{
+  --bg:#0c0d10;
+  --card:#111319;
+  --muted:#9aa3af;
+  --primary:#6e57ff;
+  --primary-600:#5844d9;
+  --accent:#00e0ff;
+  --glass: rgba(17,19,25,.72);
+
+  --font-base:'Poppins', system-ui, -apple-system, Segoe UI, Ubuntu, Cantarell, Helvetica, Arial, sans-serif;
+  --font-head:'Space Grotesk','Poppins',system-ui,-apple-system,Segoe UI,Ubuntu,Cantarell,Helvetica,Arial,sans-serif;
+  --font-brand:'Press Start 2P', monospace;
+}
+
+/* ===== Base coherente */
+html, body{
+  margin:0; background:var(--bg); color:#e5e7eb;
+  font-family:var(--font-base); line-height:1.6;
+}
+
+/* ===== Navbar vidrio */
+.bg-blur{
+  background: rgba(17,19,25,.78);
+  backdrop-filter: blur(8px);
+}
+
+/* ===== HERO especial catálogo: luces flotantes */
+.catalogo-hero{
+  position: relative; overflow: hidden;
+  background:
+    radial-gradient(80% 60% at 50% 0%, rgba(110,87,255,.10), transparent 60%),
+    var(--card) !important;
+}
+.catalogo-hero::before,
+.catalogo-hero::after{
+  content:""; position:absolute; inset:auto; pointer-events:none;
+  width: 72vmin; height: 72vmin; border-radius: 999px;
+  filter: blur(28px); opacity:.28;
+  background: radial-gradient(closest-side, rgba(110,87,255,.7), transparent 65%);
+  animation: orbA 14s ease-in-out infinite alternate;
+}
+.catalogo-hero::before{ left:-18vmin; top:-8vmin; }
+.catalogo-hero::after{
+  right:-16vmin; top:-12vmin;
+  background: radial-gradient(closest-side, rgba(0,224,255,.7), transparent 65%);
+  animation: orbB 16s ease-in-out infinite alternate;
+}
+@keyframes orbA{ 0%{transform:translateY(0)} 100%{transform:translateY(12px)} }
+@keyframes orbB{ 0%{transform:translateY(10px)} 100%{transform:translateY(-6px)} }
+
+/* ===== Barra de filtros: sticky + glass */
+section.py-3.border-bottom{
+  position: sticky; top: 64px; /* debajo del navbar */
+  z-index: 1020;
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  border-color: #1f2430 !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+}
+section.py-3 .btn{
+  border-color:#2a3350; color:#e5e7eb; font-weight:600;
+}
+section.py-3 .btn:hover,
+section.py-3 .btn.active{
+  background: linear-gradient(90deg,var(--primary),var(--accent));
+  border-color: transparent; color:#0b0b0b;
+}
+
+/* ===== Encabezado de listado: toolbar */
+#productos .h3{
+  letter-spacing:.2px; font-family:var(--font-head);
+}
+#productos .form-select{
+  background:#0f1117; color:#e9ecf1; border:1px solid #2a3350;
+}
+#productos .form-select:focus{ box-shadow: 0 0 0 3px rgba(110,87,255,.22); }
+
+/* ===== Tarjetas de producto: estilo pro */
+.game-card{
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid #1f2430;
+  overflow: hidden;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .2s ease;
+}
+.game-card:hover{
+  transform: perspective(700px) rotateX(1.6deg) rotateY(-1.6deg) translateY(-4px);
+  box-shadow: 0 18px 34px rgba(0,0,0,.38);
+  border-color: #28314e;
+}
+/* Borde reactivo con gradiente suave */
+.game-card::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background: linear-gradient(120deg, rgba(110,87,255,.18), rgba(0,224,255,.18), transparent 60%);
+  opacity:.0; transition: opacity .25s ease;
+}
+.game-card:hover::before{ opacity:.8; }
+
+/* Imagen con zoom/parallax sutil */
+.game-cover{
+  width:100%; aspect-ratio:16/9; object-fit:cover; display:block;
+  transform: translateZ(0) scale(1);
+  transition: transform .4s ease;
+  background:#151823;
+}
+.game-card:hover .game-cover{ transform: scale(1.06); }
+
+/* Contenido */
+.game-card h3{
+  font-family:var(--font-head); font-weight:700; color:#e9ecf1;
+}
+.price{
+  font-family:var(--font-head); font-weight:800; color:#fff; letter-spacing:.3px;
+}
+.old-price{ color:#9aa3af; text-decoration: line-through; font-weight:500; }
+
+/* Tags */
+.tag{
+  background: rgba(110,87,255,.16);
+  border:1px solid rgba(110,87,255,.32);
+  color:#cfe3ff; font-size:.78rem; padding:.2rem .5rem; border-radius:999px;
+}
+
+/* Cinta de OFERTA automática si hay old-price (CSS :has, moderno) */
+@supports(selector(:has(*))){
+  .game-card:has(.old-price)::after{
+    content: "OFERTA";
+    position: absolute; top:12px; left:-28px; z-index: 2;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    color:#0b0b0b; font-weight:800; font-size:.72rem; letter-spacing:.8px;
+    padding:.28rem 1.2rem;
+    transform: rotate(-16deg);
+    box-shadow: 0 6px 16px rgba(0,0,0,.35);
+  }
+}
+
+/* Botón comprar con ripple */
+.btn-buy{
+  background: var(--primary); border:none; font-weight:800; letter-spacing:.2px;
+  position: relative; overflow: hidden;
+}
+.btn-buy:hover{ background: var(--primary-600); }
+.btn-buy::after{
+  content:""; position:absolute; left:50%; top:50%;
+  width:0; height:0; border-radius:999px; pointer-events:none;
+  background: rgba(255,255,255,.35);
+  transform: translate(-50%,-50%);
+  transition: width .38s ease, height .38s ease;
+}
+.btn-buy:active::after{ width: 220%; height: 220%; }
+
+/* ===== Scroll reveal más suave */
+[data-reveal]{
+  opacity:0; transform: translateY(16px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.is-shown{ opacity:1; transform:none; }
+
+/* ===== Mini-carrito coherente (por si no hereda estilos globales) */
+.mini-cart{
+  background:#0f1117; color:#e9ecf1; border-left:1px solid #1f2430; width:min(92vw, 420px);
+}
+.mini-cart .offcanvas-header{ border-bottom:1px solid #1f2430; }
+.mini-cart .list-group-item{ background:transparent; border-color:#1f2430; }
+.mini-cart .thumb{ width:52px; height:52px; border-radius:8px; object-fit:cover; background:#151823; }
+
+/* ===== Footer minimal */
+.site-footer{ background: var(--card); border-top:1px solid #1f2430; }
+.MarcaAgua{ color:#aeb6c3; letter-spacing:.3px; }
+
+/* ===== Responsive refinado */
+@media (max-width: 768px){
+  .catalogo-hero .display-5{ font-size:1.8rem; }
+  .game-card{ border-radius: 14px; }
+  section.py-3.border-bottom{ top: 60px; }
+}
+/* ===== Título del catálogo con estilo distintivo ===== */
+.catalogo-title{
+  --grad: linear-gradient(90deg, #cfe3ff 0%, #8fb5ff 35%, #6e57ff 65%, #00e0ff 100%);
+  font-family: var(--font-head);
+  font-weight: 900;
+  letter-spacing: .6px;
+  font-size: clamp(1.9rem, 3vw + 1rem, 3.2rem);
+  line-height: 1.1;
+  margin: 0 0 .35rem;
+
+  /* Gradiente en el texto */
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  /* Brillo sutil + profundidad */
+  text-shadow: 0 6px 18px rgba(0,0,0,.35);
+  position: relative;
+}
+
+/* Subrayado animado “barra de energía” */
+.catalogo-title::after{
+  content:"";
+  position:absolute; left:50%; transform:translateX(-50%);
+  bottom: -10px; height: 4px; width: 180px; border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  box-shadow: 0 0 18px rgba(110,87,255,.55), 0 0 14px rgba(0,224,255,.45);
+  overflow: hidden;
+}
+.catalogo-title::before{
+  content:"";
+  position:absolute; left:calc(50% - 90px); bottom:-10px;
+  height:4px; width:180px; border-radius:999px;
+  background: linear-gradient(90deg, transparent 0 15%, rgba(255,255,255,.7) 45%, transparent 75% 100%);
+  animation: shineMove 2.8s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+@keyframes shineMove{
+  0%   { transform: translateX(-30%); opacity:.3; }
+  50%  { transform: translateX(30%);  opacity:.8; }
+  100% { transform: translateX(90%);  opacity:.3; }
+}
+
+/* Subtítulo elegante */
+.catalogo-subtitle{
+  color:#cdd3db;
+  font-size: clamp(.95rem, .5vw + .7rem, 1.1rem);
+  opacity:.92;
+  margin-top: .9rem;
+}
+
+/* Alternativa con contorno (auto fallback si no hay background-clip) */
+@supports(-webkit-text-stroke:1px #a9b4c9){
+  .catalogo-title.is-outline{
+    color: #0c0d10;
+    -webkit-text-stroke: 1px #cfe3ff;
+    text-shadow: none;
+  }
+}
+
+/* Respeta reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .catalogo-title::before{ animation: none; opacity:.5; }
+}
+/* ===== Skeleton loader para portadas ===== */
+.is-skeleton{
+  background: linear-gradient(90deg, #121521 0%, #1a1f2e 35%, #121521 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+  color: transparent;
+}
+@keyframes shimmer{
+  0%{ background-position: 0% 0 }
+  100%{ background-position: -200% 0 }
+}
+
+/* ===== Glare (brillo) del tilt ===== */
+.glare{
+  position:absolute; top:0; left:0; right:0; height: 42%;
+  background: radial-gradient(80px 40px at 50% 0%, rgba(255,255,255,.18), transparent 70%);
+  opacity:0; pointer-events:none; transition: opacity .25s ease, transform .25s ease;
+}
+
+/* ===== Ripple en filtros ===== */
+section.py-3 .btn{
+  position: relative; overflow: hidden;
+}
+section.py-3 .btn .ripple{
+  position:absolute; border-radius:999px; transform: scale(0);
+  background: rgba(255,255,255,.35);
+  animation: btnRipple .5s ease forwards;
+  pointer-events: none;
+}
+@keyframes btnRipple{
+  to { transform: scale(2.6); opacity: 0; }
+}
+
+/* ===== Reveal en cascada ===== */
+.reveal-delay-ready{
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .6s ease var(--reveal-delay, 0ms), transform .6s ease var(--reveal-delay, 0ms);
+}
+.reveal-delay-ready.is-shown{
+  opacity: 1; transform: none;
+}
+/* Evita ocultar contenido si no se cargó JS */
+html:not(.js-ready) [data-reveal],
+html:not(.js-ready) .reveal-delay-ready{
+  opacity: 1 !important;
+  transform: none !important;
+}

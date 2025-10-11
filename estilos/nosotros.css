@@ -1,0 +1,156 @@
+/* ================================
+   Variables y base (hereda de estilos principales)
+================================ */
+:root{
+  --bg:#0c0d10;
+  --card:#111319;
+  --muted:#9aa3af;
+  --primary:#6e57ff;
+  --primary-600:#5844d9;
+  --accent:#00e0ff;
+
+  --font-base:'Poppins', system-ui, -apple-system, Segoe UI, Ubuntu, Cantarell, Helvetica, Arial, sans-serif;
+  --font-head:'Space Grotesk', 'Poppins', system-ui, -apple-system, Segoe UI, Ubuntu, Cantarell, Helvetica, Arial, sans-serif;
+  --font-brand:'Press Start 2P', monospace;
+}
+
+html, body{
+  margin:0;
+  background:var(--bg);
+  color:#e5e7eb;
+  font-family:var(--font-base);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ================================
+   ENCABEZADO / HERO
+================================ */
+header.bg-dark{
+  background: radial-gradient(80% 60% at 50% 0%, rgba(110,87,255,.10), transparent 60%), var(--card);
+  border-bottom: 1px solid #1f2430;
+  text-align:center;
+}
+header h1{
+  color:#fff;
+  font-family:var(--font-head);
+  font-weight:700;
+  letter-spacing:.3px;
+}
+header p{
+  color:#9aa3af;
+}
+
+/* ================================
+   SECCIÓN: QUIÉNES SOMOS
+================================ */
+section.container h2{
+  font-family:var(--font-head);
+  color:#e9ecf1;
+  font-weight:700;
+}
+section.container p{
+  color:#cdd3db;
+  font-size:1rem;
+}
+section.container img{
+  border-radius:16px;
+  border:1px solid #1f2430;
+  box-shadow:0 10px 24px rgba(0,0,0,.35);
+  transition:transform .25s ease;
+}
+section.container img:hover{
+  transform:scale(1.03);
+}
+
+/* ================================
+   SECCIÓN: MISIÓN / VISIÓN / VALORES
+================================ */
+section.bg-dark{
+  background: radial-gradient(80% 60% at 50% 0%, rgba(110,87,255,.10), transparent 60%), var(--card);
+  border-top:1px solid #1f2430;
+  border-bottom:1px solid #1f2430;
+}
+section.bg-dark h3{
+  font-family:var(--font-head);
+  color:#fff;
+  font-weight:600;
+}
+section.bg-dark p, section.bg-dark ul{
+  color:#cdd3db;
+  font-size:.95rem;
+}
+section.bg-dark .bi{
+  color:var(--primary);
+  transition:transform .2s ease, color .2s ease;
+}
+section.bg-dark .bi:hover{
+  color:var(--accent);
+  transform:scale(1.15);
+}
+
+/* ================================
+   SECCIÓN: SERVICIOS
+================================ */
+section.container .bi{
+  color:var(--primary);
+  transition:transform .2s ease, color .2s ease;
+}
+section.container .bi:hover{
+  color:var(--accent);
+  transform:scale(1.1);
+}
+section.container p.small{
+  color:#cdd3db;
+  font-weight:500;
+}
+
+/* ================================
+   ANIMACIONES REVEAL
+================================ */
+[data-reveal]{
+  opacity:0;
+  transform:translateY(18px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+.is-shown{
+  opacity:1;
+  transform:none;
+}
+
+/* ================================
+   TARJETAS / BLOQUES INFORMATIVOS
+================================ */
+.card{
+  background:rgba(17,19,25,.85);
+  border:1px solid #2a3350;
+  color:#e9ecf1;
+  border-radius:14px;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 10px 24px rgba(0,0,0,.35);
+}
+
+/* ================================
+   FOOTER
+================================ */
+.site-footer{
+  background: radial-gradient(80% 60% at 50% 0%, rgba(110,87,255,.10), transparent 60%), var(--card);
+  border-top:1px solid #1f2430;
+  text-align:center;
+}
+.site-footer p{
+  color:#cdd3db;
+  font-size:.95rem;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media (max-width:768px){
+  header h1{ font-size:1.8rem; }
+  section.container h2{ text-align:center; font-size:1.5rem; }
+  section.container img{ margin-top:1rem; }
+}

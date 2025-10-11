@@ -30,13 +30,16 @@
     />
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="estilos.css" />
+    <link rel="stylesheet" href="estilos/estilos.css" />
   </head>
   <body>
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-blur sticky-top">
       <div class="container">
-        <a class="navbar-brand d-flex align-items-center gap-2" href="#inicio">
+        <a
+          class="navbar-brand d-flex align-items-center gap-2"
+          href="index.html"
+        >
           <img
             src="img/logo.png"
             alt="Digital Loot"
@@ -60,7 +63,7 @@
         </button>
 
         <div id="nav" class="collapse navbar-collapse">
-          <!-- Buscador (visual por ahora) -->
+          <!-- Buscador -->
           <form class="ms-lg-4 my-3 my-lg-0 w-100" role="search">
             <div class="input-group input-glass">
               <span class="input-group-text bg-transparent border-end-0"
@@ -77,20 +80,20 @@
 
           <ul class="navbar-nav ms-lg-4 align-items-lg-center gap-lg-2">
             <li class="nav-item">
-              <a class="nav-link active" href="#productos">Catálogo</a>
+              <a class="nav-link active" href="catalogo.html">Catálogo</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#nosotros">Nosotros</a>
+              <a class="nav-link" href="nosotros.html">Nosotros</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#contacto">Contacto</a>
+              <a class="nav-link" href="contacto.html">Contacto</a>
             </li>
           </ul>
 
           <div class="d-flex align-items-center gap-2 ms-lg-3">
             <a
               class="btn btn-outline-light position-relative"
-              href="#carrito"
+              href="#"
               data-bs-toggle="offcanvas"
               data-bs-target="#miniCart"
               aria-controls="miniCart"
@@ -109,7 +112,7 @@
       </div>
     </nav>
 
-    <!-- HERO: Carousel con fade + ken-burns después del slide -->
+    <!-- HERO -->
     <header id="inicio" class="hero-carousel">
       <div
         id="promoCarousel"
@@ -143,7 +146,7 @@
         </div>
 
         <div class="carousel-inner">
-          <!-- Slide 1 (sube foco) -->
+          <!-- Slide 1 -->
           <div class="carousel-item active pos-40">
             <div
               class="slide-bg"
@@ -164,14 +167,14 @@
                   Compra instantánea · Entrega por email · Garantía de
                   activación
                 </p>
-                <a href="#productos" class="btn btn-lg btn-primary"
-                  ><i class="bi bi-bag-plus me-2"></i>Ver catálogo</a
-                >
+                <a href="catalogo.html" class="btn btn-lg btn-primary">
+                  <i class="bi bi-bag-plus me-2"></i>Ver catálogo completo
+                </a>
               </div>
             </div>
           </div>
 
-          <!-- Slide 2 (centrado) -->
+          <!-- Slide 2 -->
           <div class="carousel-item pos-50">
             <div
               class="slide-bg"
@@ -185,18 +188,18 @@
                 <span class="badge rounded-pill px-3 py-2 mb-3 badge-info"
                   >Ofertas de la semana</span
                 >
-                <h1 class="display-6 fw-bold">Hasta -50% en AAA</h1>
+                <h1 class="display-6 fw-bold">Hasta -50% en juegos AAA</h1>
                 <p class="lead text-muted-2 mb-4">
                   Steam · PlayStation · Xbox · Gift Cards
                 </p>
-                <a href="#productos" class="btn btn-lg btn-outline-light"
-                  ><i class="bi bi-fire me-2"></i>Ver ofertas</a
-                >
+                <a href="catalogo.html" class="btn btn-lg btn-outline-light">
+                  <i class="bi bi-fire me-2"></i>Ver ofertas
+                </a>
               </div>
             </div>
           </div>
 
-          <!-- Slide 3 (baja foco) -->
+          <!-- Slide 3 -->
           <div class="carousel-item pos-60">
             <div
               class="slide-bg"
@@ -212,9 +215,9 @@
                 >
                 <h1 class="display-6 fw-bold">Activa y juega al instante</h1>
                 <p class="lead text-muted-2 mb-4">Soporte 24/7 · Pago seguro</p>
-                <a href="#productos" class="btn btn-lg btn-primary"
-                  ><i class="bi bi-controller me-2"></i>Empezar</a
-                >
+                <a href="catalogo.html" class="btn btn-lg btn-primary">
+                  <i class="bi bi-controller me-2"></i>Explorar juegos
+                </a>
               </div>
             </div>
           </div>
@@ -851,6 +854,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- El script  -->
-    <script src="script.js?v=2"></script>
+    <script src="scripts/script.js"></script>
   </body>
 </html>
