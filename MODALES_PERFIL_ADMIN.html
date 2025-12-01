@@ -1,0 +1,627 @@
+<!-- ============================================================
+     AGREGA ESTOS MODALES AL FINAL DE TU index.html
+     (Antes de los scripts, después del último modal existente)
+============================================================ -->
+
+<!-- ========================================
+     MODAL DE PERFIL DE USUARIO
+========================================= -->
+<div
+  class="modal fade"
+  id="perfilModal"
+  tabindex="-1"
+  aria-labelledby="perfilModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="perfilModalLabel">
+          <i class="bi bi-person-circle me-2"></i>Mi Perfil
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Cerrar"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Tabs de perfil -->
+        <ul class="nav nav-pills nav-fill mb-4" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="info-personal-tab"
+              data-bs-toggle="pill"
+              data-bs-target="#info-personal-panel"
+              type="button"
+              role="tab"
+            >
+              <i class="bi bi-person me-2"></i>Información Personal
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="preferencias-tab"
+              data-bs-toggle="pill"
+              data-bs-target="#preferencias-panel"
+              type="button"
+              role="tab"
+            >
+              <i class="bi bi-gear me-2"></i>Preferencias
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="seguridad-tab"
+              data-bs-toggle="pill"
+              data-bs-target="#seguridad-panel"
+              type="button"
+              role="tab"
+            >
+              <i class="bi bi-shield-lock me-2"></i>Seguridad
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <!-- Panel de Información Personal -->
+          <div
+            class="tab-pane fade show active"
+            id="info-personal-panel"
+            role="tabpanel"
+          >
+            <form id="perfilForm" class="auth-form">
+              <div class="row">
+                <!-- Avatar -->
+                <div class="col-12 text-center mb-4">
+                  <div class="position-relative d-inline-block">
+                    <img
+                      id="perfilAvatar"
+                      src=""
+                      alt="Avatar"
+                      class="rounded-circle"
+                      style="
+                        width: 120px;
+                        height: 120px;
+                        object-fit: cover;
+                        border: 4px solid #6e57ff;
+                      "
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-primary rounded-circle position-absolute"
+                      style="bottom: 0; right: 0"
+                      onclick="cambiarAvatar()"
+                      title="Cambiar avatar"
+                    >
+                      <i class="bi bi-camera-fill"></i>
+                    </button>
+                  </div>
+                  <div class="mt-2">
+                    <small class="text-muted" id="perfilEmail"></small>
+                  </div>
+                </div>
+
+                <!-- Nombre completo -->
+                <div class="col-md-6 mb-3">
+                  <label for="perfilNombre" class="form-label">
+                    <i class="bi bi-person me-2"></i>Nombre completo
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="perfilNombre"
+                    placeholder="Juan Pérez"
+                    required
+                  />
+                </div>
+
+                <!-- Teléfono -->
+                <div class="col-md-6 mb-3">
+                  <label for="perfilTelefono" class="form-label">
+                    <i class="bi bi-telephone me-2"></i>Teléfono
+                  </label>
+                  <input
+                    type="tel"
+                    class="form-control"
+                    id="perfilTelefono"
+                    placeholder="+51 999 999 999"
+                  />
+                </div>
+
+                <!-- Fecha de nacimiento -->
+                <div class="col-md-6 mb-3">
+                  <label for="perfilFechaNacimiento" class="form-label">
+                    <i class="bi bi-calendar me-2"></i>Fecha de nacimiento
+                  </label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="perfilFechaNacimiento"
+                  />
+                </div>
+
+                <!-- País -->
+                <div class="col-md-6 mb-3">
+                  <label for="perfilPais" class="form-label">
+                    <i class="bi bi-globe me-2"></i>País
+                  </label>
+                  <select class="form-select" id="perfilPais">
+                    <option value="">Seleccionar...</option>
+                    <option value="Perú">Perú</option>
+                    <option value="Argentina">Argentina</option>
+                    <option value="Chile">Chile</option>
+                    <option value="Colombia">Colombia</option>
+                    <option value="México">México</option>
+                    <option value="España">España</option>
+                    <option value="Estados Unidos">Estados Unidos</option>
+                    <option value="Otro">Otro</option>
+                  </select>
+                </div>
+
+                <!-- Ciudad -->
+                <div class="col-md-6 mb-3">
+                  <label for="perfilCiudad" class="form-label">
+                    <i class="bi bi-geo-alt me-2"></i>Ciudad
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="perfilCiudad"
+                    placeholder="Lima"
+                  />
+                </div>
+
+                <!-- Dirección -->
+                <div class="col-md-6 mb-3">
+                  <label for="perfilDireccion" class="form-label">
+                    <i class="bi bi-house me-2"></i>Dirección
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="perfilDireccion"
+                    placeholder="Av. Ejemplo 123"
+                  />
+                </div>
+
+                <!-- Biografía -->
+                <div class="col-12 mb-3">
+                  <label for="perfilBio" class="form-label">
+                    <i class="bi bi-chat-text me-2"></i>Sobre mí
+                  </label>
+                  <textarea
+                    class="form-control"
+                    id="perfilBio"
+                    rows="3"
+                    placeholder="Cuéntanos un poco sobre ti..."
+                    maxlength="500"
+                  ></textarea>
+                  <small class="text-muted">Máximo 500 caracteres</small>
+                </div>
+              </div>
+
+              <div class="d-grid gap-2 mt-4">
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-save me-2"></i>Guardar cambios
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Panel de Preferencias -->
+          <div class="tab-pane fade" id="preferencias-panel" role="tabpanel">
+            <form id="preferenciasForm">
+              <h6 class="mb-3"><i class="bi bi-palette me-2"></i>Apariencia</h6>
+              <div class="mb-4">
+                <div class="form-check form-switch mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="prefTemaOscuro"
+                    checked
+                  />
+                  <label class="form-check-label" for="prefTemaOscuro">
+                    Tema oscuro
+                  </label>
+                </div>
+              </div>
+
+              <h6 class="mb-3">
+                <i class="bi bi-bell me-2"></i>Notificaciones
+              </h6>
+              <div class="mb-4">
+                <div class="form-check form-switch mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="prefNotifEmail"
+                    checked
+                  />
+                  <label class="form-check-label" for="prefNotifEmail">
+                    Notificaciones por email
+                  </label>
+                </div>
+                <div class="form-check form-switch mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="prefNotifOfertas"
+                    checked
+                  />
+                  <label class="form-check-label" for="prefNotifOfertas">
+                    Recibir ofertas y promociones
+                  </label>
+                </div>
+                <div class="form-check form-switch mb-2">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="prefNotifLanzamientos"
+                  />
+                  <label class="form-check-label" for="prefNotifLanzamientos">
+                    Notificar nuevos lanzamientos
+                  </label>
+                </div>
+              </div>
+
+              <h6 class="mb-3">
+                <i class="bi bi-translate me-2"></i>Idioma y región
+              </h6>
+              <div class="mb-4">
+                <div class="mb-3">
+                  <label for="prefIdioma" class="form-label">Idioma</label>
+                  <select class="form-select" id="prefIdioma">
+                    <option value="es" selected>Español</option>
+                    <option value="en">English</option>
+                    <option value="pt">Português</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="prefMoneda" class="form-label">Moneda</label>
+                  <select class="form-select" id="prefMoneda">
+                    <option value="PEN" selected>Soles (S/)</option>
+                    <option value="USD">Dólares ($)</option>
+                    <option value="EUR">Euros (€)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-save me-2"></i>Guardar preferencias
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Panel de Seguridad -->
+          <div class="tab-pane fade" id="seguridad-panel" role="tabpanel">
+            <form id="cambiarPasswordForm">
+              <h6 class="mb-3">
+                <i class="bi bi-key me-2"></i>Cambiar contraseña
+              </h6>
+
+              <div class="mb-3">
+                <label for="passwordActual" class="form-label">
+                  Contraseña actual
+                </label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="passwordActual"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="passwordNueva" class="form-label">
+                  Nueva contraseña
+                </label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="passwordNueva"
+                  required
+                  minlength="8"
+                />
+                <small class="text-muted">Mínimo 8 caracteres</small>
+              </div>
+
+              <div class="mb-3">
+                <label for="passwordConfirmar" class="form-label">
+                  Confirmar nueva contraseña
+                </label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="passwordConfirmar"
+                  required
+                />
+              </div>
+
+              <div class="d-grid gap-2 mb-4">
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-shield-check me-2"></i>Cambiar contraseña
+                </button>
+              </div>
+
+              <hr />
+
+              <h6 class="mb-3 text-danger">
+                <i class="bi bi-trash me-2"></i>Zona de peligro
+              </h6>
+              <p class="text-muted small">
+                Al eliminar tu cuenta, perderás todos tus datos de forma
+                permanente.
+              </p>
+              <button
+                type="button"
+                class="btn btn-outline-danger"
+                onclick="confirmarEliminarCuenta()"
+              >
+                <i class="bi bi-trash me-2"></i>Eliminar mi cuenta
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================
+     MODAL DE ADMINISTRACIÓN MEJORADO
+     (Reemplaza el modal adminModal existente)
+========================================= -->
+<div
+  class="modal fade"
+  id="adminModalMejorado"
+  tabindex="-1"
+  aria-labelledby="adminModalMejoradoLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="adminModalMejoradoLabel">
+          <i class="bi bi-shield-lock-fill me-2"></i>
+          Panel de Administración
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Cerrar"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Tabs de navegación -->
+        <ul class="nav nav-tabs mb-4" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link active"
+              id="admin-stats-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#admin-stats-panel"
+              type="button"
+              role="tab"
+            >
+              <i class="bi bi-graph-up me-2"></i>Estadísticas
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="admin-usuarios-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#admin-usuarios-panel"
+              type="button"
+              role="tab"
+            >
+              <i class="bi bi-people-fill me-2"></i>Usuarios
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="admin-admins-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#admin-admins-panel"
+              type="button"
+              role="tab"
+            >
+              <i class="bi bi-shield-check me-2"></i>Administradores
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button
+              class="nav-link"
+              id="admin-productos-tab"
+              data-bs-toggle="tab"
+              data-bs-target="#admin-productos-panel"
+              type="button"
+              role="tab"
+            >
+              <i class="bi bi-box-seam me-2"></i>Productos
+            </button>
+          </li>
+        </ul>
+
+        <!-- Contenido de tabs -->
+        <div class="tab-content">
+          <!-- Panel de Estadísticas -->
+          <div
+            class="tab-pane fade show active"
+            id="admin-stats-panel"
+            role="tabpanel"
+          >
+            <div class="row g-3" id="adminStatsContent">
+              <div class="col-12 text-center">
+                <div class="spinner-border" role="status"></div>
+                <p class="mt-2">Cargando estadísticas...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel de Usuarios -->
+          <div class="tab-pane fade" id="admin-usuarios-panel" role="tabpanel">
+            <div class="mb-3 d-flex justify-content-between align-items-center">
+              <h6 class="mb-0">Lista de Usuarios Registrados</h6>
+              <button
+                class="btn btn-sm btn-outline-primary"
+                onclick="recargarUsuarios()"
+              >
+                <i class="bi bi-arrow-clockwise me-1"></i>Recargar
+              </button>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-hover table-sm">
+                <thead>
+                  <tr>
+                    <th>Avatar</th>
+                    <th>Usuario</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Registrado</th>
+                    <th>Última Conexión</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="usuariosTableBody">
+                  <tr>
+                    <td colspan="7" class="text-center">
+                      <div
+                        class="spinner-border spinner-border-sm me-2"
+                        role="status"
+                      ></div>
+                      Cargando usuarios...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Panel de Administradores -->
+          <div class="tab-pane fade" id="admin-admins-panel" role="tabpanel">
+            <div
+              class="alert alert-info d-flex align-items-center mb-4"
+              role="alert"
+            >
+              <i class="bi bi-info-circle fs-4 me-3"></i>
+              <div>
+                <strong>¿Crear nuevos administradores?</strong><br />
+                <small>
+                  <strong>Recomendación:</strong> Solo crea administradores de
+                  confianza. Los admins tienen acceso total al sistema. Puedes
+                  promover usuarios existentes o invitar nuevos administradores
+                  por email.
+                </small>
+              </div>
+            </div>
+
+            <!-- Formulario para crear admin -->
+            <div class="card mb-4">
+              <div class="card-body">
+                <h6 class="card-title">
+                  <i class="bi bi-person-plus me-2"></i>Promover Usuario a Admin
+                </h6>
+                <form id="crearAdminForm" class="row g-3">
+                  <div class="col-md-8">
+                    <label for="adminEmail" class="form-label"
+                      >Email del usuario</label
+                    >
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="adminEmail"
+                      placeholder="usuario@ejemplo.com"
+                      required
+                    />
+                    <small class="text-muted">
+                      El usuario debe estar registrado en el sistema
+                    </small>
+                  </div>
+                  <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                      <i class="bi bi-shield-plus me-2"></i>Promover a Admin
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Lista de administradores actuales -->
+            <h6 class="mb-3">
+              <i class="bi bi-shield-check me-2"></i>Administradores Actuales
+            </h6>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Registrado</th>
+                    <th>Última Conexión</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="adminsTableBody">
+                  <tr>
+                    <td colspan="5" class="text-center">
+                      <div
+                        class="spinner-border spinner-border-sm me-2"
+                        role="status"
+                      ></div>
+                      Cargando administradores...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Panel de Productos (básico por ahora) -->
+          <div class="tab-pane fade" id="admin-productos-panel" role="tabpanel">
+            <div class="alert alert-secondary" role="alert">
+              <i class="bi bi-construction me-2"></i>
+              <strong>Próximamente:</strong> Gestión de productos (crear,
+              editar, eliminar)
+            </div>
+            <div id="adminProductosContent">
+              <p class="text-muted">
+                Por ahora, los productos se gestionan directamente en Supabase.
+              </p>
+              <a
+                href="https://supabase.com/dashboard/project/bkvizvvpwkstggwplbkz"
+                target="_blank"
+                class="btn btn-outline-primary"
+              >
+                <i class="bi bi-box-arrow-up-right me-2"></i>Ir a Supabase
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,265 @@
+/* ============================================
+   Digital Loot · nosotros.css (página dinámica)
+   Requiere: estilos/estilos.css (variables base)
+============================================ */
+
+/* ---------- Vars locales (por si faltan) ---------- */
+:root{
+  --bg:#0c0d10; --card:#111319; --muted:#9aa3af;
+  --primary:#6e57ff; --primary-600:#5844d9; --accent:#00e0ff;
+  --font-base:'Poppins', system-ui, -apple-system, Segoe UI, Ubuntu, Cantarell, Helvetica, Arial, sans-serif;
+  --font-head:'Space Grotesk','Poppins',system-ui,-apple-system,Segoe UI,Ubuntu,Cantarell,Helvetica,Arial,sans-serif;
+}
+
+/* ============================================
+   HERO con luces flotantes + título pro
+============================================ */
+.nosotros-hero{
+  position: relative; overflow: hidden;
+  background:
+    radial-gradient(80% 60% at 50% 0%, rgba(110,87,255,.10), transparent 60%),
+    var(--card) !important;
+  border-bottom: 1px solid #1f2430 !important;
+}
+.nosotros-hero::before,
+.nosotros-hero::after{
+  content:""; position:absolute; width:72vmin; height:72vmin; border-radius:999px;
+  filter: blur(28px); opacity:.28; pointer-events:none;
+}
+.nosotros-hero::before{
+  left:-18vmin; top:-10vmin;
+  background: radial-gradient(closest-side, rgba(110,87,255,.7), transparent 65%);
+  animation: orbA 14s ease-in-out infinite alternate;
+}
+.nosotros-hero::after{
+  right:-16vmin; top:-12vmin;
+  background: radial-gradient(closest-side, rgba(0,224,255,.7), transparent 65%);
+  animation: orbB 16s ease-in-out infinite alternate;
+}
+@keyframes orbA{ 0%{transform:translateY(0)} 100%{transform:translateY(12px)} }
+@keyframes orbB{ 0%{transform:translateY(10px)} 100%{transform:translateY(-6px)} }
+
+/* Título y subtítulo */
+.nos-title{
+  --grad: linear-gradient(90deg, #cfe3ff 0%, #8fb5ff 35%, #6e57ff 65%, #00e0ff 100%);
+  font-family: var(--font-head);
+  font-weight: 900;
+  letter-spacing: .6px;
+  font-size: clamp(1.9rem, 3vw + 1rem, 3.2rem);
+  line-height: 1.1; margin: 0 0 .65rem;
+  background: var(--grad);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-shadow: 0 6px 18px rgba(0,0,0,.35);
+  position: relative;
+}
+.nos-title::after{
+  content:""; position:absolute; left:50%; transform:translateX(-50%);
+  bottom:-10px; height:4px; width:180px; border-radius:999px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  box-shadow: 0 0 18px rgba(110,87,255,.55), 0 0 14px rgba(0,224,255,.45);
+}
+.nos-subtitle{ color:#cdd3db; opacity:.92; }
+
+/* ============================================
+   KPI / Contadores
+============================================ */
+.kpi-row .kpi-card{
+  background: var(--card);
+  border:1px solid #1f2430;
+  border-radius:16px;
+  padding: 1rem .75rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,.25);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.kpi-row .kpi-card:hover{
+  transform: translateY(-4px);
+  border-color:#2a3350;
+  box-shadow: 0 16px 28px rgba(0,0,0,.32);
+}
+.kpi-num{
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+  line-height:1;
+  color:#e9ecf1;
+  margin-bottom:.25rem;
+  /* brillo sutil */
+  text-shadow: 0 3px 10px rgba(0,0,0,.25);
+}
+
+/* ============================================
+   Secciones base / tipografía
+============================================ */
+section.container h2{ font-family:var(--font-head); font-weight:700; color:#e9ecf1; }
+section.container p{ color:#cdd3db; }
+section.bg-dark{
+  background: radial-gradient(80% 60% at 50% 0%, rgba(110,87,255,.10), transparent 60%), var(--card);
+  border-top:1px solid #1f2430; border-bottom:1px solid #1f2430;
+}
+section.bg-dark h3{ color:#fff; font-weight:700; }
+.text-muted{ color:#aeb6c3 !important; }
+
+/* ============================================
+   Reveal en scroll (compatible con script global)
+============================================ */
+[data-reveal]{ opacity:0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+.is-shown{ opacity:1; transform:none; }
+
+/* Failsafe si no cargó JS */
+html:not(.js-ready) [data-reveal]{ opacity:1 !important; transform:none !important; }
+
+/* ============================================
+   Imagen con parallax tilt
+============================================ */
+.tilt-wrap{ display:inline-block; perspective: 900px; }
+.tilt-img{
+  border:1px solid #1f2430; border-radius:16px;
+  box-shadow:0 10px 24px rgba(0,0,0,.35);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  will-change: transform;
+}
+.tilt-wrap:hover .tilt-img{
+  border-color: #2a3350;
+  box-shadow:0 16px 32px rgba(0,0,0,.4);
+}
+
+/* ============================================
+   Iconos (hover con brillo)
+============================================ */
+section .bi{
+  transition: transform .2s ease, color .2s ease, text-shadow .2s ease, filter .2s ease;
+}
+section .bi:hover{
+  transform: scale(1.08);
+  color: var(--accent);
+  text-shadow: 0 4px 16px rgba(0,224,255,.35);
+  filter: drop-shadow(0 4px 12px rgba(0,224,255,.3));
+}
+
+/* ============================================
+   Timeline / Hitos
+============================================ */
+.tl{
+  position: relative;
+  margin: 2rem auto 0;
+  max-width: 960px;
+  padding-left: 18px; /* espacio para la línea en mobile */
+}
+.tl::before{
+  content:"";
+  position:absolute; left:8px; top:0; bottom:0; width:2px;
+  background: linear-gradient(180deg, rgba(110,87,255,.45), rgba(0,224,255,.45));
+  opacity:.6;
+}
+.tl::after{
+  content:"";
+  position:absolute; left:8px; top:0; width:2px; height:0;
+  background: linear-gradient(180deg, var(--primary), var(--accent));
+  box-shadow: 0 0 12px rgba(110,87,255,.55), 0 0 10px rgba(0,224,255,.45);
+  transition: height 1s ease;
+}
+.tl.in-view::after{ height: 100%; }
+
+.tl-item{
+  position: relative;
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 14px;
+  margin-bottom: 22px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.tl.in-view .tl-item.is-shown{ opacity: 1; transform: none; }
+
+.tl-dot{
+  width:18px; height:18px; border-radius:999px;
+  background: radial-gradient(circle at 40% 40%, #fff, #cfe3ff 35%, var(--primary) 70%);
+  box-shadow: 0 0 0 3px rgba(110,87,255,.28), 0 6px 18px rgba(0,0,0,.35);
+  position: relative; top: 6px;
+}
+.tl-card{
+  background: var(--card);
+  border: 1px solid #1f2430;
+  border-radius: 14px;
+  padding: .9rem 1rem;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.tl-card:hover{
+  transform: translateY(-3px);
+  border-color: #2a3350;
+  box-shadow: 0 12px 24px rgba(0,0,0,.35);
+}
+.tl-year{
+  display:inline-block;
+  font-size:.8rem; font-weight:800; letter-spacing:.35px;
+  color:#0c0d10;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius:999px; padding:.2rem .6rem; margin-bottom:.35rem;
+  box-shadow: 0 6px 16px rgba(0,0,0,.25);
+}
+
+/* Alternancia desktop */
+@media (min-width: 768px){
+  .tl{ padding-left: 0; }
+  .tl::before, .tl::after{ left: 50%; transform: translateX(-1px); }
+  .tl-item{
+    grid-template-columns: 1fr 18px 1fr;
+    gap: 16px; margin-bottom: 26px;
+  }
+  .tl-item:nth-child(odd) .tl-card{ grid-column: 1 / 2; text-align: right; }
+  .tl-item:nth-child(odd) .tl-dot { grid-column: 2 / 3; justify-self: center; }
+  .tl-item:nth-child(odd) .tl-year{ margin-left: .3rem; }
+
+  .tl-item:nth-child(even) .tl-card{ grid-column: 3 / 4; }
+  .tl-item:nth-child(even) .tl-dot { grid-column: 2 / 3; justify-self: center; }
+}
+
+/* ============================================
+   FAQ (flush) – micro mejoras
+============================================ */
+.faq .accordion-item{
+  background: var(--card);
+  border: 1px solid #1f2430;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: .6rem;
+}
+.faq .accordion-button{
+  background: transparent;
+  color:#e9ecf1;
+  font-weight:600;
+}
+.faq .accordion-button:focus{ box-shadow:none; }
+.faq .accordion-button:not(.collapsed){
+  color:#fff; background: rgba(110,87,255,.08);
+}
+.faq .accordion-body{
+  color:#cdd3db;
+}
+
+/* ============================================
+   CTA final
+============================================ */
+.cta-final{
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(110,87,255,.10), transparent 60%),
+    var(--card);
+  border-top:1px solid #1f2430; border-bottom:1px solid #1f2430;
+}
+.cta-final .btn{ font-weight:700; }
+.cta-final .btn-primary{
+  background: var(--primary); border:none;
+}
+.cta-final .btn-primary:hover{ background: var(--primary-600); }
+
+/* ============================================
+   Accesibilidad
+============================================ */
+@media (prefers-reduced-motion: reduce){
+  .nosotros-hero::before,.nosotros-hero::after{ animation:none !important; }
+  [data-reveal]{ transition:none !important; }
+  .tilt-img{ transition:none !important; }
+  .tl::after{ transition:none !important; }
+  .tl-item{ transition:none !important; opacity:1 !important; transform:none !important; }
+}

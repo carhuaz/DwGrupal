@@ -53,9 +53,9 @@
           <!-- Buscador -->
           <form class="ms-lg-4 my-3 my-lg-0 w-100" role="search">
             <div class="input-group input-glass">
-              <span class="input-group-text bg-transparent border-end-0"
-                ><i class="bi bi-search"></i
-              ></span>
+              <span class="input-group-text bg-transparent border-end-0">
+                <i class="bi bi-search"></i>
+              </span>
               <input
                 class="form-control border-start-0"
                 type="search"
@@ -79,22 +79,29 @@
 
           <!-- Carrito y usuario -->
           <div class="d-flex align-items-center gap-2 ms-lg-3">
-            <a
-              class="btn btn-outline-light position-relative"
-              href="#"
+            <!-- Cart Icon -->
+            <button
+              type="button"
+              class="btn btn-outline-light position-relative cart-btn"
               data-bs-toggle="offcanvas"
               data-bs-target="#miniCart"
               aria-controls="miniCart"
+              aria-label="Abrir carrito de compras"
             >
               <i class="bi bi-cart3"></i>
-              <span
-                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                >0</span
-              >
-            </a>
-            <a class="btn btn-outline-light" href="#"
-              ><i class="bi bi-person"></i
-            ></a>
+              <span id="cartBadge" aria-live="polite">0</span>
+            </button>
+
+            <!-- User Icon -->
+            <button
+              type="button"
+              class="btn btn-outline-light user-btn"
+              data-bs-toggle="modal"
+              data-bs-target="#loginModal"
+              aria-label="Iniciar sesión"
+            >
+              <i class="bi bi-person"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -114,19 +121,46 @@
 
     <!-- FILTROS -->
     <section class="py-3 border-bottom border-dark-subtle">
-      <div class="container d-flex flex-wrap justify-content-center gap-2">
-        <span class="btn btn-sm btn-outline-light rounded-pill active"
-          >Todo</span
+      <div
+        class="container d-flex flex-wrap justify-content-center gap-2"
+        id="filtrosPlataforma"
+      >
+        <button
+          class="btn btn-sm btn-outline-light rounded-pill active"
+          data-plataforma="Todo"
         >
-        <span class="btn btn-sm btn-outline-light rounded-pill">PC</span>
-        <span class="btn btn-sm btn-outline-light rounded-pill">Xbox</span>
-        <span class="btn btn-sm btn-outline-light rounded-pill"
-          >PlayStation</span
+          Todo
+        </button>
+        <button
+          class="btn btn-sm btn-outline-light rounded-pill"
+          data-plataforma="Steam"
         >
-        <span class="btn btn-sm btn-outline-light rounded-pill"
-          >Gift Cards</span
+          PC/Steam
+        </button>
+        <button
+          class="btn btn-sm btn-outline-light rounded-pill"
+          data-plataforma="Xbox"
         >
-        <span class="btn btn-sm btn-outline-light rounded-pill">DLC</span>
+          Xbox
+        </button>
+        <button
+          class="btn btn-sm btn-outline-light rounded-pill"
+          data-plataforma="PlayStation"
+        >
+          PlayStation
+        </button>
+        <button
+          class="btn btn-sm btn-outline-light rounded-pill"
+          data-plataforma="Gift Card"
+        >
+          Gift Cards
+        </button>
+        <button
+          class="btn btn-sm btn-outline-light rounded-pill"
+          data-plataforma="DLC"
+        >
+          DLC
+        </button>
       </div>
     </section>
 
@@ -134,156 +168,145 @@
     <main id="productos" class="py-5">
       <div class="container">
         <div class="d-flex align-items-center justify-content-between mb-3">
-          <h2 class="h3 mb-0">Todos los productos</h2>
+          <h2 class="h3 mb-0">
+            Todos los productos (<span id="totalProductos">0</span>)
+          </h2>
           <div class="d-none d-md-flex align-items-center gap-2">
             <span class="small text-muted">Ordenar:</span>
-            <select class="form-select form-select-sm w-auto">
-              <option>Relevancia</option>
-              <option>Precio ↑</option>
-              <option>Precio ↓</option>
-              <option>A-Z</option>
-              <option>Z-A</option>
+            <select
+              class="form-select form-select-sm w-auto"
+              id="ordenarSelect"
+            >
+              <option value="relevancia">Relevancia</option>
+              <option value="precio_asc">Precio ↑</option>
+              <option value="precio_desc">Precio ↓</option>
+              <option value="nombre_asc">A-Z</option>
+              <option value="nombre_desc">Z-A</option>
             </select>
           </div>
         </div>
 
         <!-- GRID DE PRODUCTOS -->
         <div
+          id="productosGrid"
           class="row g-3 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xxl-5"
         >
-          <!-- PRODUCTOS -->
-          <div class="col" data-reveal>
-            <article class="game-card h-100 d-flex flex-column">
-              <img
-                class="game-cover"
-                src="img/helldivers2.webp"
-                alt="Helldivers 2 (Steam)"
-              />
-              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
-                <h3 class="h6 mb-0">Helldivers 2 (Steam)</h3>
-                <div class="d-flex align-items-baseline gap-2">
-                  <span class="price">S/ 169.90</span>
-                  <span class="old-price">S/ 219.90</span>
-                </div>
-                <div class="d-flex gap-1 flex-wrap">
-                  <span class="tag">Acción</span
-                  ><span class="tag">Cooperativo</span>
-                </div>
-                <div class="mt-auto d-grid">
-                  <a class="btn btn-buy" href="#"
-                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
-                  >
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="col" data-reveal>
-            <article class="game-card h-100 d-flex flex-column">
-              <img
-                class="game-cover"
-                src="img/cyberpunk2077.jpg"
-                alt="Cyberpunk 2077 (Steam)"
-              />
-              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
-                <h3 class="h6 mb-0">Cyberpunk 2077 (Steam)</h3>
-                <div class="d-flex align-items-baseline gap-2">
-                  <span class="price">S/ 129.90</span>
-                  <span class="old-price">S/ 199.90</span>
-                </div>
-                <div class="d-flex gap-1 flex-wrap">
-                  <span class="tag">RPG</span
-                  ><span class="tag">Mundo abierto</span>
-                </div>
-                <div class="mt-auto d-grid">
-                  <a class="btn btn-buy" href="#"
-                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
-                  >
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="col" data-reveal>
-            <article class="game-card h-100 d-flex flex-column">
-              <img
-                class="game-cover"
-                src="img/spiderman2.jpg"
-                alt="Spider-Man 2 (PS)"
-              />
-              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
-                <h3 class="h6 mb-0">Spider-Man 2 (PS)</h3>
-                <div class="d-flex align-items-baseline gap-2">
-                  <span class="price">S/ 229.90</span>
-                  <span class="old-price">S/ 289.90</span>
-                </div>
-                <div class="d-flex gap-1 flex-wrap">
-                  <span class="tag">Acción</span
-                  ><span class="tag">Aventura</span>
-                </div>
-                <div class="mt-auto d-grid">
-                  <a class="btn btn-buy" href="#"
-                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
-                  >
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="col" data-reveal>
-            <article class="game-card h-100 d-flex flex-column">
-              <img
-                class="game-cover"
-                src="img/xboxpass.webp"
-                alt="Xbox Game Pass 3 Meses"
-              />
-              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
-                <h3 class="h6 mb-0">Xbox Game Pass 3 Meses</h3>
-                <div class="d-flex align-items-baseline gap-2">
-                  <span class="price">S/ 109.90</span>
-                </div>
-                <div class="d-flex gap-1 flex-wrap">
-                  <span class="tag">Suscripción</span
-                  ><span class="tag">Xbox</span>
-                </div>
-                <div class="mt-auto d-grid">
-                  <a class="btn btn-buy" href="#"
-                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
-                  >
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="col" data-reveal>
-            <article class="game-card h-100 d-flex flex-column">
-              <img
-                class="game-cover"
-                src="img/giftplay.jpg"
-                alt="Gift Card PlayStation S/100"
-              />
-              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
-                <h3 class="h6 mb-0">Gift Card PlayStation S/100</h3>
-                <div class="d-flex align-items-baseline gap-2">
-                  <span class="price">S/ 100.00</span>
-                </div>
-                <div class="d-flex gap-1 flex-wrap">
-                  <span class="tag">Gift</span
-                  ><span class="tag">PlayStation</span>
-                </div>
-                <div class="mt-auto d-grid">
-                  <a class="btn btn-buy" href="#"
-                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
-                  >
-                </div>
-              </div>
-            </article>
+          <!-- Los productos se cargarán dinámicamente desde Supabase -->
+          <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando productos...</span>
+            </div>
           </div>
         </div>
       </div>
     </main>
 
-    <!-- MINI CARRITO (igual que index) -->
+    <!-- Modal de Detalles de Producto -->
+    <div
+      class="modal fade product-detail-modal"
+      id="productDetailModal"
+      tabindex="-1"
+      aria-labelledby="productDetailModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="productDetailModalLabel">
+              Detalles del Producto
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-4">
+              <div class="col-md-6">
+                <img
+                  id="modalProductImage"
+                  src=""
+                  alt=""
+                  class="product-detail-img"
+                />
+              </div>
+              <div class="col-md-6">
+                <h3 id="modalProductName" class="mb-3"></h3>
+
+                <div class="mb-3">
+                  <div class="detail-label">Plataforma</div>
+                  <span id="modalProductPlatform" class="platform-badge"></span>
+                </div>
+
+                <div class="mb-3">
+                  <div class="detail-label">Precio</div>
+                  <div class="d-flex align-items-center gap-3">
+                    <span id="modalProductPrice" class="price-detail"></span>
+                    <span
+                      id="modalProductOldPrice"
+                      class="old-price-detail d-none"
+                    ></span>
+                  </div>
+                  <span
+                    id="modalProductDiscount"
+                    class="badge-discount d-none mt-2"
+                  ></span>
+                </div>
+
+                <div class="mb-3" id="modalProductDescriptionContainer">
+                  <div class="detail-label">Descripción</div>
+                  <p id="modalProductDescription" class="detail-value"></p>
+                </div>
+
+                <div class="mb-3">
+                  <div class="detail-label">Características</div>
+                  <ul class="list-unstyled">
+                    <li class="mb-2">
+                      <i class="bi bi-check-circle-fill text-success me-2"></i
+                      >Entrega inmediata por email
+                    </li>
+                    <li class="mb-2">
+                      <i class="bi bi-check-circle-fill text-success me-2"></i
+                      >Activación garantizada
+                    </li>
+                    <li class="mb-2">
+                      <i class="bi bi-check-circle-fill text-success me-2"></i
+                      >Soporte 24/7
+                    </li>
+                    <li class="mb-2">
+                      <i class="bi bi-check-circle-fill text-success me-2"></i
+                      >Válido globalmente
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-light"
+              data-bs-dismiss="modal"
+            >
+              Cerrar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="modalAddToCartBtn"
+            >
+              <i class="bi bi-cart-plus me-2"></i>Agregar al carrito
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+       MINI CARRITO
+    ============================================================ -->
     <div
       class="offcanvas offcanvas-end mini-cart"
       tabindex="-1"
@@ -311,12 +334,215 @@
         </div>
 
         <div class="d-grid gap-2">
-          <button class="btn btn-primary" id="btnCheckout" type="button">
-            Ir a pagar
+          <button
+            class="btn btn-success btn-lg"
+            id="btnCheckout"
+            type="button"
+            onclick="abrirModalFinalizarCompra()"
+          >
+            <i class="bi bi-check-circle me-2"></i>Finalizar Compra
           </button>
           <button class="btn btn-outline-light" id="btnClearCart" type="button">
             Vaciar carrito
           </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================
+         MODAL DE LOGIN / REGISTRO
+    ========================================= -->
+    <div
+      class="modal fade login-modal"
+      id="loginModal"
+      tabindex="-1"
+      aria-labelledby="loginModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header border-0">
+            <h5 class="modal-title w-100 text-center" id="loginModalLabel">
+              <i class="bi bi-person-circle me-2"></i>Bienvenido
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body p-4">
+            <ul
+              class="nav nav-pills nav-fill mb-4"
+              id="authTabs"
+              role="tablist"
+            >
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link active"
+                  id="login-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#login-panel"
+                  type="button"
+                  role="tab"
+                >
+                  Iniciar Sesión
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="register-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#register-panel"
+                  type="button"
+                  role="tab"
+                >
+                  Registrarse
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content" id="authTabsContent">
+              <div
+                class="tab-pane fade show active"
+                id="login-panel"
+                role="tabpanel"
+              >
+                <form id="loginForm" class="auth-form">
+                  <div class="mb-3">
+                    <label for="loginEmail" class="form-label"
+                      ><i class="bi bi-envelope me-2"></i>Correo
+                      electrónico</label
+                    >
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="loginEmail"
+                      placeholder="tu@email.com"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="loginPassword" class="form-label"
+                      ><i class="bi bi-lock me-2"></i>Contraseña</label
+                    >
+                    <div class="input-group">
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="loginPassword"
+                        placeholder="••••••••"
+                        required
+                      />
+                      <button
+                        class="btn btn-outline-secondary toggle-password"
+                        type="button"
+                        data-target="loginPassword"
+                      >
+                        <i class="bi bi-eye"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="mb-3 form-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="rememberMe"
+                    />
+                    <label class="form-check-label" for="rememberMe"
+                      >Recordarme</label
+                    >
+                  </div>
+                  <button type="submit" class="btn btn-primary w-100 mb-3">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+                  </button>
+                </form>
+              </div>
+              <div class="tab-pane fade" id="register-panel" role="tabpanel">
+                <form id="registerForm" class="auth-form">
+                  <div class="mb-3">
+                    <label for="registerName" class="form-label"
+                      ><i class="bi bi-person me-2"></i>Nombre completo</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="registerName"
+                      placeholder="Juan Pérez"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="registerEmail" class="form-label"
+                      ><i class="bi bi-envelope me-2"></i>Correo
+                      electrónico</label
+                    >
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="registerEmail"
+                      placeholder="tu@email.com"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="registerPassword" class="form-label"
+                      ><i class="bi bi-lock me-2"></i>Contraseña</label
+                    >
+                    <div class="input-group">
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="registerPassword"
+                        placeholder="••••••••"
+                        required
+                      />
+                      <button
+                        class="btn btn-outline-secondary toggle-password"
+                        type="button"
+                        data-target="registerPassword"
+                      >
+                        <i class="bi bi-eye"></i>
+                      </button>
+                    </div>
+                    <small class="text-muted">Mínimo 8 caracteres</small>
+                  </div>
+                  <div class="mb-3">
+                    <label for="registerPasswordConfirm" class="form-label"
+                      ><i class="bi bi-lock-fill me-2"></i>Confirmar
+                      contraseña</label
+                    >
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="registerPasswordConfirm"
+                      placeholder="••••••••"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3 form-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="acceptTerms"
+                      required
+                    />
+                    <label class="form-check-label" for="acceptTerms"
+                      >Acepto los
+                      <a href="#" class="text-primary"
+                        >términos y condiciones</a
+                      ></label
+                    >
+                  </div>
+                  <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-person-plus me-2"></i>Crear cuenta
+                  </button>
+                </form>
+              </div>
+            </div>
+            <div id="authMessage" class="mt-3"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -330,8 +556,34 @@
       </div>
     </footer>
 
-    <!-- SCRIPTS -->
+    <!-- SCRIPTS AL FINAL DEL BODY -->
+
+    <!-- 1. Bootstrap Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="scripts/catalogo.js"></script>
+
+    <!-- 2. Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- 3. Cliente de Supabase -->
+    <script src="js/supabaseClient.js"></script>
+
+    <!-- 4. Módulo de carrito (IMPORTANTE: ANTES que productos y catálogo) -->
+    <script src="js/carrito.js"></script>
+
+    <!-- 5. Módulo de autenticación -->
+    <script src="js/auth.js"></script>
+
+    <!-- 6. Módulo de productos -->
+    <script src="js/productos.js"></script>
+
+    <!-- 7. Módulo de pedidos -->
+    <script src="js/pedidos.js"></script>
+    <script src="js/pedidos-ui.js"></script>
+
+    <!-- 8. Módulo específico del catálogo -->
+    <script src="js/catalogo.js"></script>
+
+    <!-- 9. Scripts generales -->
+    <script src="scripts/script.js"></script>
   </body>
 </html>

@@ -90,23 +90,31 @@
             </li>
           </ul>
 
+          <!-- Acciones de usuario -->
           <div class="d-flex align-items-center gap-2 ms-lg-3">
-            <a
-              class="btn btn-outline-light position-relative"
-              href="#"
+            <!-- Carrito de compras -->
+            <button
+              type="button"
+              class="btn btn-outline-light position-relative cart-btn"
               data-bs-toggle="offcanvas"
               data-bs-target="#miniCart"
               aria-controls="miniCart"
+              aria-label="Abrir carrito de compras"
             >
               <i class="bi bi-cart3"></i>
-              <span
-                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                >0</span
-              >
-            </a>
-            <a class="btn btn-outline-light" href="#"
-              ><i class="bi bi-person"></i
-            ></a>
+              <span id="cartBadge" aria-live="polite">0</span>
+            </button>
+
+            <!-- Botón de login/usuario -->
+            <button
+              type="button"
+              class="btn btn-outline-light user-btn"
+              data-bs-toggle="modal"
+              data-bs-target="#loginModal"
+              aria-label="Iniciar sesión"
+            >
+              <i class="bi bi-person"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -245,22 +253,55 @@
       </div>
     </header>
 
-    <!-- CATEGORÍAS (estático) -->
-    <section class="py-4 border-top border-bottom border-dark-subtle">
+    <!-- CATEGORÍAS -->
+    <section
+      class="py-4 border-top border-bottom border-dark-subtle"
+      id="filtrosPlataforma"
+    >
       <div class="container">
         <div class="d-flex flex-wrap justify-content-center gap-2">
-          <span class="btn btn-sm btn-outline-light rounded-pill active"
-            >Todo</span
+          <button
+            class="btn btn-sm btn-outline-light rounded-pill active"
+            data-plataforma="Todo"
+            type="button"
           >
-          <span class="btn btn-sm btn-outline-light rounded-pill">PC</span>
-          <span class="btn btn-sm btn-outline-light rounded-pill">Xbox</span>
-          <span class="btn btn-sm btn-outline-light rounded-pill"
-            >PlayStation</span
+            Todo
+          </button>
+          <button
+            class="btn btn-sm btn-outline-light rounded-pill"
+            data-plataforma="PC"
+            type="button"
           >
-          <span class="btn btn-sm btn-outline-light rounded-pill"
-            >Gift Cards</span
+            PC
+          </button>
+          <button
+            class="btn btn-sm btn-outline-light rounded-pill"
+            data-plataforma="Xbox"
+            type="button"
           >
-          <span class="btn btn-sm btn-outline-light rounded-pill">DLC</span>
+            Xbox
+          </button>
+          <button
+            class="btn btn-sm btn-outline-light rounded-pill"
+            data-plataforma="PlayStation"
+            type="button"
+          >
+            PlayStation
+          </button>
+          <button
+            class="btn btn-sm btn-outline-light rounded-pill"
+            data-plataforma="Gift Cards"
+            type="button"
+          >
+            Gift Cards
+          </button>
+          <button
+            class="btn btn-sm btn-outline-light rounded-pill"
+            data-plataforma="DLC"
+            type="button"
+          >
+            DLC
+          </button>
         </div>
       </div>
     </section>
@@ -268,255 +309,39 @@
     <!-- CATÁLOGO -->
     <main id="productos" class="py-5">
       <div class="container">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-          <h2 class="h3 mb-0">Destacados</h2>
-          <div class="d-none d-md-flex align-items-center gap-2">
-            <span class="small text-muted">Ordenar:</span>
-            <select class="form-select form-select-sm w-auto">
-              <option>Relevancia</option>
-              <option>Precio ↑</option>
-              <option>Precio ↓</option>
-              <option>A-Z</option>
-              <option>Z-A</option>
+        <div
+          class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2"
+        >
+          <div>
+            <h2 class="h3 mb-0">Destacados</h2>
+            <small class="text-muted" id="contadorProductos"
+              >Cargando productos...</small
+            >
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="small text-muted d-none d-md-inline">Ordenar:</span>
+            <select
+              class="form-select form-select-sm w-auto"
+              id="ordenarSelect"
+            >
+              <option value="relevancia">Relevancia</option>
+              <option value="precio_asc">Precio ↑</option>
+              <option value="precio_desc">Precio ↓</option>
+              <option value="nombre_asc">A-Z</option>
+              <option value="nombre_desc">Z-A</option>
             </select>
           </div>
         </div>
 
+        <!-- Este contenedor se llenará dinámicamente -->
         <div
           class="row g-3 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xxl-5"
         >
-          <!-- CARD 1 -->
-          <div class="col" data-reveal>
-            <article class="game-card h-100 d-flex flex-column">
-              <img
-                class="game-cover"
-                src="img/elden.jpg"
-                alt="ELDEN RING (Steam)"
-              />
-              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
-                <h3 class="h6 mb-0">ELDEN RING (Steam)</h3>
-                <div class="d-flex align-items-baseline gap-2">
-                  <span class="price">S/ 129.90</span>
-                  <span class="old-price">S/ 199.90</span>
-                </div>
-                <div class="d-flex gap-1 flex-wrap">
-                  <span class="tag">RPG</span><span class="tag">Soulslike</span>
-                </div>
-                <div class="mt-auto d-grid">
-                  <a class="btn btn-buy" href="#"
-                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
-                  >
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <!-- CARD 2 -->
-          <div class="col" data-reveal>
-            <article class="game-card h-100 d-flex flex-column">
-              <img
-                class="game-cover"
-                src="img/baldur.jpg"
-                alt="Baldur's Gate 3 (Steam)"
-              />
-              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
-                <h3 class="h6 mb-0">Baldur's Gate 3 (Steam)</h3>
-                <div class="d-flex align-items-baseline gap-2">
-                  <span class="price">S/ 149.90</span>
-                  <span class="old-price">S/ 219.90</span>
-                </div>
-                <div class="d-flex gap-1 flex-wrap">
-                  <span class="tag">RPG</span>
-                </div>
-                <div class="mt-auto d-grid">
-                  <a class="btn btn-buy" href="#"
-                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
-                  >
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <!-- CARD 3 -->
-          <div class="col" data-reveal>
-            <article class="game-card h-100 d-flex flex-column">
-              <img
-                class="game-cover"
-                src="img/Last.jpg"
-                alt="The Last of Us Part I (PS)"
-              />
-              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
-                <h3 class="h6 mb-0">The Last of Us Part I (PS)</h3>
-                <div class="d-flex align-items-baseline gap-2">
-                  <span class="price">S/ 179.90</span>
-                  <span class="old-price">S/ 229.90</span>
-                </div>
-                <div class="d-flex gap-1 flex-wrap">
-                  <span class="tag">Acción</span
-                  ><span class="tag">Historia</span>
-                </div>
-                <div class="mt-auto d-grid">
-                  <a class="btn btn-buy" href="#"
-                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
-                  >
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <!-- CARD 4 -->
-          <div class="col" data-reveal>
-            <article class="game-card h-100 d-flex flex-column">
-              <img
-                class="game-cover"
-                src="img/starfield.jpg"
-                alt="Starfield (Xbox)"
-              />
-              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
-                <h3 class="h6 mb-0">Starfield (Xbox)</h3>
-                <div class="d-flex align-items-baseline gap-2">
-                  <span class="price">S/ 139.90</span>
-                  <span class="old-price">S/ 199.90</span>
-                </div>
-                <div class="d-flex gap-1 flex-wrap">
-                  <span class="tag">Sci-Fi</span>
-                </div>
-                <div class="mt-auto d-grid">
-                  <a class="btn btn-buy" href="#"
-                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
-                  >
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <!-- CARD 5 -->
-          <div class="col" data-reveal>
-            <article class="game-card h-100 d-flex flex-column">
-              <img
-                class="game-cover"
-                src="img/gift.webp"
-                alt="Gift Card Steam S/50"
-              />
-              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
-                <h3 class="h6 mb-0">Gift Card Steam S/50</h3>
-                <div class="d-flex align-items-baseline gap-2">
-                  <span class="price">S/ 50.00</span>
-                </div>
-                <div class="d-flex gap-1 flex-wrap">
-                  <span class="tag">Gift</span>
-                </div>
-                <div class="mt-auto d-grid">
-                  <a class="btn btn-buy" href="#"
-                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
-                  >
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <!-- CARD 6 -->
-          <div class="col" data-reveal>
-            <article class="game-card h-100 d-flex flex-column">
-              <img
-                class="game-cover"
-                src="img/witcher3.jpg"
-                alt="The Witcher 3: Blood & Wine (DLC)"
-              />
-              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
-                <h3 class="h6 mb-0">The Witcher 3: Blood & Wine (DLC)</h3>
-                <div class="d-flex align-items-baseline gap-2">
-                  <span class="price">S/ 29.90</span>
-                  <span class="old-price">S/ 49.90</span>
-                </div>
-                <div class="d-flex gap-1 flex-wrap">
-                  <span class="tag">DLC</span>
-                </div>
-                <div class="mt-auto d-grid">
-                  <a class="btn btn-buy" href="#"
-                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
-                  >
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <!-- CARD 7 -->
-          <div class="col" data-reveal>
-            <article class="game-card h-100 d-flex flex-column">
-              <img
-                class="game-cover"
-                src="img/Hades.jpeg"
-                alt="Hades (Steam)"
-              />
-              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
-                <h3 class="h6 mb-0">Hades (Steam)</h3>
-                <div class="d-flex align-items-baseline gap-2">
-                  <span class="price">S/ 29.90</span>
-                  <span class="old-price">S/ 59.90</span>
-                </div>
-                <div class="d-flex gap-1 flex-wrap">
-                  <span class="tag">Roguelike</span>
-                </div>
-                <div class="mt-auto d-grid">
-                  <a class="btn btn-buy" href="#"
-                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
-                  >
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <!-- CARD 8 -->
-          <div class="col" data-reveal>
-            <article class="game-card h-100 d-flex flex-column">
-              <img
-                class="game-cover"
-                src="img/GOW.webp"
-                alt="God of War (PS)"
-              />
-              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
-                <h3 class="h6 mb-0">God of War (PS)</h3>
-                <div class="d-flex align-items-baseline gap-2">
-                  <span class="price">S/ 119.90</span>
-                  <span class="old-price">S/ 169.90</span>
-                </div>
-                <div class="d-flex gap-1 flex-wrap">
-                  <span class="tag">Acción</span>
-                </div>
-                <div class="mt-auto d-grid">
-                  <a class="btn btn-buy" href="#"
-                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
-                  >
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <!-- CARD 9 -->
-          <div class="col" data-reveal>
-            <article class="game-card h-100 d-flex flex-column">
-              <img
-                class="game-cover"
-                src="img/Forza.avif"
-                alt="Forza Horizon 5 (Xbox)"
-              />
-              <div class="p-3 d-flex flex-column gap-2 flex-grow-1">
-                <h3 class="h6 mb-0">Forza Horizon 5 (Xbox)</h3>
-                <div class="d-flex align-items-baseline gap-2">
-                  <span class="price">S/ 99.90</span>
-                  <span class="old-price">S/ 149.90</span>
-                </div>
-                <div class="d-flex gap-1 flex-wrap">
-                  <span class="tag">Carreras</span>
-                </div>
-                <div class="mt-auto d-grid">
-                  <a class="btn btn-buy" href="#"
-                    ><i class="bi bi-bag-plus me-2"></i>Agregar</a
-                  >
-                </div>
-              </div>
-            </article>
+          <!-- Los productos se cargarán aquí desde Supabase -->
+          <div class="col-12 text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando productos...</span>
+            </div>
           </div>
         </div>
       </div>
@@ -683,7 +508,461 @@
         </div>
       </div>
     </footer>
-    <!-- Mini-carrito lateral -->
+
+    <!-- Modal de Detalles de Producto -->
+    <div
+      class="modal fade product-detail-modal"
+      id="productDetailModal"
+      tabindex="-1"
+      aria-labelledby="productDetailModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="productDetailModalLabel">
+              Detalles del Producto
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-4">
+              <div class="col-md-6">
+                <img
+                  id="modalProductImage"
+                  src=""
+                  alt=""
+                  class="product-detail-img"
+                />
+              </div>
+              <div class="col-md-6">
+                <h3 id="modalProductName" class="mb-3"></h3>
+
+                <div class="mb-3">
+                  <div class="detail-label">Plataforma</div>
+                  <span id="modalProductPlatform" class="platform-badge"></span>
+                </div>
+
+                <div class="mb-3">
+                  <div class="detail-label">Precio</div>
+                  <div class="d-flex align-items-center gap-3">
+                    <span id="modalProductPrice" class="price-detail"></span>
+                    <span
+                      id="modalProductOldPrice"
+                      class="old-price-detail d-none"
+                    ></span>
+                  </div>
+                  <span
+                    id="modalProductDiscount"
+                    class="badge-discount d-none mt-2"
+                  ></span>
+                </div>
+
+                <div class="mb-3" id="modalProductDescriptionContainer">
+                  <div class="detail-label">Descripción</div>
+                  <p id="modalProductDescription" class="detail-value"></p>
+                </div>
+
+                <div class="mb-3">
+                  <div class="detail-label">Características</div>
+                  <ul class="list-unstyled">
+                    <li class="mb-2">
+                      <i class="bi bi-check-circle-fill text-success me-2"></i
+                      >Entrega inmediata por email
+                    </li>
+                    <li class="mb-2">
+                      <i class="bi bi-check-circle-fill text-success me-2"></i
+                      >Activación garantizada
+                    </li>
+                    <li class="mb-2">
+                      <i class="bi bi-check-circle-fill text-success me-2"></i
+                      >Soporte 24/7
+                    </li>
+                    <li class="mb-2">
+                      <i class="bi bi-check-circle-fill text-success me-2"></i
+                      >Válido globalmente
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-light"
+              data-bs-dismiss="modal"
+            >
+              Cerrar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="modalAddToCartBtn"
+            >
+              <i class="bi bi-cart-plus me-2"></i>Agregar al carrito
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================
+         MODAL DE LOGIN / REGISTRO
+    ========================================= -->
+    <div
+      class="modal fade login-modal"
+      id="loginModal"
+      tabindex="-1"
+      aria-labelledby="loginModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header border-0">
+            <h5 class="modal-title w-100 text-center" id="loginModalLabel">
+              <i class="bi bi-person-circle me-2"></i>Bienvenido
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body p-4">
+            <!-- Tabs: Login / Registro -->
+            <ul
+              class="nav nav-pills nav-fill mb-4"
+              id="authTabs"
+              role="tablist"
+            >
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link active"
+                  id="login-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#login-panel"
+                  type="button"
+                  role="tab"
+                  aria-controls="login-panel"
+                  aria-selected="true"
+                >
+                  Iniciar Sesión
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="register-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#register-panel"
+                  type="button"
+                  role="tab"
+                  aria-controls="register-panel"
+                  aria-selected="false"
+                >
+                  Registrarse
+                </button>
+              </li>
+            </ul>
+
+            <div class="tab-content" id="authTabsContent">
+              <!-- Panel de Login -->
+              <div
+                class="tab-pane fade show active"
+                id="login-panel"
+                role="tabpanel"
+                aria-labelledby="login-tab"
+              >
+                <form id="loginForm" class="auth-form">
+                  <div class="mb-3">
+                    <label for="loginEmail" class="form-label">
+                      <i class="bi bi-envelope me-2"></i>Correo electrónico
+                    </label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="loginEmail"
+                      placeholder="tu@email.com"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="loginPassword" class="form-label">
+                      <i class="bi bi-lock me-2"></i>Contraseña
+                    </label>
+                    <div class="input-group">
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="loginPassword"
+                        placeholder="••••••••"
+                        required
+                      />
+                      <button
+                        class="btn btn-outline-secondary toggle-password"
+                        type="button"
+                        data-target="loginPassword"
+                      >
+                        <i class="bi bi-eye"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="mb-3 form-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="rememberMe"
+                    />
+                    <label class="form-check-label" for="rememberMe">
+                      Recordarme
+                    </label>
+                  </div>
+                  <button type="submit" class="btn btn-primary w-100 mb-3">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+                  </button>
+                  <div class="text-center">
+                    <a href="#" class="text-muted small"
+                      >¿Olvidaste tu contraseña?</a
+                    >
+                  </div>
+                </form>
+              </div>
+
+              <!-- Panel de Registro -->
+              <div
+                class="tab-pane fade"
+                id="register-panel"
+                role="tabpanel"
+                aria-labelledby="register-tab"
+              >
+                <form id="registerForm" class="auth-form">
+                  <div class="mb-3">
+                    <label for="registerName" class="form-label">
+                      <i class="bi bi-person me-2"></i>Nombre completo
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="registerName"
+                      placeholder="Juan Pérez"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="registerEmail" class="form-label">
+                      <i class="bi bi-envelope me-2"></i>Correo electrónico
+                    </label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="registerEmail"
+                      placeholder="tu@email.com"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="registerPassword" class="form-label">
+                      <i class="bi bi-lock me-2"></i>Contraseña
+                    </label>
+                    <div class="input-group">
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="registerPassword"
+                        placeholder="••••••••"
+                        required
+                      />
+                      <button
+                        class="btn btn-outline-secondary toggle-password"
+                        type="button"
+                        data-target="registerPassword"
+                      >
+                        <i class="bi bi-eye"></i>
+                      </button>
+                    </div>
+                    <small class="text-muted">Mínimo 8 caracteres</small>
+                  </div>
+                  <div class="mb-3">
+                    <label for="registerPasswordConfirm" class="form-label">
+                      <i class="bi bi-lock-fill me-2"></i>Confirmar contraseña
+                    </label>
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="registerPasswordConfirm"
+                      placeholder="••••••••"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3 form-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="acceptTerms"
+                      required
+                    />
+                    <label class="form-check-label" for="acceptTerms">
+                      Acepto los
+                      <a href="#" class="text-primary"
+                        >términos y condiciones</a
+                      >
+                    </label>
+                  </div>
+                  <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-person-plus me-2"></i>Crear Cuenta
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <!-- Separador -->
+            <div class="divider my-4">
+              <span>o continuar con</span>
+            </div>
+
+            <!-- Botones de login social -->
+            <div class="d-grid gap-2">
+              <button
+                type="button"
+                class="btn btn-outline-light social-login-btn"
+              >
+                <i class="bi bi-google me-2"></i>Google
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-light social-login-btn"
+              >
+                <i class="bi bi-facebook me-2"></i>Facebook
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================
+         MODAL DE ADMINISTRACIÓN
+    ========================================= -->
+    <div
+      class="modal fade"
+      id="adminModal"
+      tabindex="-1"
+      aria-labelledby="adminModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header bg-dark text-white">
+            <h5 class="modal-title" id="adminModalLabel">
+              <i class="bi bi-shield-lock-fill me-2"></i>
+              Panel de Administración
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            <!-- Tabs de navegación -->
+            <ul class="nav nav-tabs mb-4" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link active"
+                  id="usuarios-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#usuarios-panel"
+                  type="button"
+                  role="tab"
+                >
+                  <i class="bi bi-people-fill me-2"></i>Usuarios
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="stats-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#stats-panel"
+                  type="button"
+                  role="tab"
+                >
+                  <i class="bi bi-graph-up me-2"></i>Estadísticas
+                </button>
+              </li>
+            </ul>
+
+            <!-- Contenido de tabs -->
+            <div class="tab-content">
+              <!-- Panel de Usuarios -->
+              <div
+                class="tab-pane fade show active"
+                id="usuarios-panel"
+                role="tabpanel"
+              >
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Fecha Registro</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody id="usuariosListAdmin">
+                      <tr>
+                        <td colspan="5" class="text-center">
+                          <div
+                            class="spinner-border spinner-border-sm me-2"
+                            role="status"
+                          ></div>
+                          Cargando usuarios...
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Panel de Estadísticas -->
+              <div class="tab-pane fade" id="stats-panel" role="tabpanel">
+                <div class="row g-3" id="adminStats">
+                  <div class="col-12 text-center">
+                    <div class="spinner-border" role="status"></div>
+                    <p class="mt-2">Cargando estadísticas...</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================
+         MINI-CARRITO LATERAL (OFFCANVAS)
+    ========================================= -->
     <div
       class="offcanvas offcanvas-end mini-cart"
       tabindex="-1"
@@ -714,8 +993,13 @@
         </div>
 
         <div class="d-grid gap-2">
-          <button class="btn btn-primary" id="btnCheckout" type="button">
-            Ir a pagar
+          <button
+            class="btn btn-success btn-lg"
+            id="btnCheckout"
+            type="button"
+            onclick="abrirModalFinalizarCompra()"
+          >
+            <i class="bi bi-check-circle me-2"></i>Finalizar Compra
           </button>
           <button class="btn btn-outline-light" id="btnClearCart" type="button">
             Vaciar carrito
@@ -841,6 +1125,662 @@
         </div>
       </div>
     </div>
+    <!-- ========================================
+         MODAL DE PERFIL DE USUARIO
+    ========================================= -->
+    <div
+      class="modal fade"
+      id="perfilModal"
+      tabindex="-1"
+      aria-labelledby="perfilModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="perfilModalLabel">
+              <i class="bi bi-person-circle me-2"></i>Mi Perfil
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            <!-- Tabs de perfil -->
+            <ul class="nav nav-pills nav-fill mb-4" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link active"
+                  id="info-personal-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#info-personal-panel"
+                  type="button"
+                  role="tab"
+                >
+                  <i class="bi bi-person me-2"></i>Información Personal
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="preferencias-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#preferencias-panel"
+                  type="button"
+                  role="tab"
+                >
+                  <i class="bi bi-gear me-2"></i>Preferencias
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="seguridad-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#seguridad-panel"
+                  type="button"
+                  role="tab"
+                >
+                  <i class="bi bi-shield-lock me-2"></i>Seguridad
+                </button>
+              </li>
+            </ul>
+
+            <div class="tab-content">
+              <!-- Panel de Información Personal -->
+              <div
+                class="tab-pane fade show active"
+                id="info-personal-panel"
+                role="tabpanel"
+              >
+                <form id="perfilForm" class="auth-form">
+                  <div class="row">
+                    <!-- Avatar -->
+                    <div class="col-12 text-center mb-4">
+                      <div class="position-relative d-inline-block">
+                        <img
+                          id="perfilAvatar"
+                          src=""
+                          alt="Avatar"
+                          class="rounded-circle"
+                          style="
+                            width: 120px;
+                            height: 120px;
+                            object-fit: cover;
+                            border: 4px solid #6e57ff;
+                          "
+                        />
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-primary rounded-circle position-absolute"
+                          style="bottom: 0; right: 0"
+                          onclick="cambiarAvatar()"
+                          title="Cambiar avatar"
+                        >
+                          <i class="bi bi-camera-fill"></i>
+                        </button>
+                      </div>
+                      <div class="mt-2">
+                        <small class="text-muted" id="perfilEmail"></small>
+                      </div>
+                    </div>
+
+                    <!-- Nombre completo -->
+                    <div class="col-md-6 mb-3">
+                      <label for="perfilNombre" class="form-label">
+                        <i class="bi bi-person me-2"></i>Nombre completo
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="perfilNombre"
+                        placeholder="Juan Pérez"
+                        required
+                      />
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div class="col-md-6 mb-3">
+                      <label for="perfilTelefono" class="form-label">
+                        <i class="bi bi-telephone me-2"></i>Teléfono
+                      </label>
+                      <input
+                        type="tel"
+                        class="form-control"
+                        id="perfilTelefono"
+                        placeholder="+51 999 999 999"
+                      />
+                    </div>
+
+                    <!-- Fecha de nacimiento -->
+                    <div class="col-md-6 mb-3">
+                      <label for="perfilFechaNacimiento" class="form-label">
+                        <i class="bi bi-calendar me-2"></i>Fecha de nacimiento
+                      </label>
+                      <input
+                        type="date"
+                        class="form-control"
+                        id="perfilFechaNacimiento"
+                      />
+                    </div>
+
+                    <!-- País -->
+                    <div class="col-md-6 mb-3">
+                      <label for="perfilPais" class="form-label">
+                        <i class="bi bi-globe me-2"></i>País
+                      </label>
+                      <select class="form-select" id="perfilPais">
+                        <option value="">Seleccionar...</option>
+                        <option value="Perú">Perú</option>
+                        <option value="Argentina">Argentina</option>
+                        <option value="Chile">Chile</option>
+                        <option value="Colombia">Colombia</option>
+                        <option value="México">México</option>
+                        <option value="España">España</option>
+                        <option value="Estados Unidos">Estados Unidos</option>
+                        <option value="Otro">Otro</option>
+                      </select>
+                    </div>
+
+                    <!-- Ciudad -->
+                    <div class="col-md-6 mb-3">
+                      <label for="perfilCiudad" class="form-label">
+                        <i class="bi bi-geo-alt me-2"></i>Ciudad
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="perfilCiudad"
+                        placeholder="Lima"
+                      />
+                    </div>
+
+                    <!-- Dirección -->
+                    <div class="col-md-6 mb-3">
+                      <label for="perfilDireccion" class="form-label">
+                        <i class="bi bi-house me-2"></i>Dirección
+                      </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="perfilDireccion"
+                        placeholder="Av. Ejemplo 123"
+                      />
+                    </div>
+
+                    <!-- Biografía -->
+                    <div class="col-12 mb-3">
+                      <label for="perfilBio" class="form-label">
+                        <i class="bi bi-chat-text me-2"></i>Sobre mí
+                      </label>
+                      <textarea
+                        class="form-control"
+                        id="perfilBio"
+                        rows="3"
+                        placeholder="Cuéntanos un poco sobre ti..."
+                        maxlength="500"
+                      ></textarea>
+                      <small class="text-muted">Máximo 500 caracteres</small>
+                    </div>
+                  </div>
+
+                  <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary">
+                      <i class="bi bi-save me-2"></i>Guardar cambios
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Panel de Preferencias -->
+              <div
+                class="tab-pane fade"
+                id="preferencias-panel"
+                role="tabpanel"
+              >
+                <form id="preferenciasForm">
+                  <h6 class="mb-3">
+                    <i class="bi bi-palette me-2"></i>Apariencia
+                  </h6>
+                  <div class="mb-4">
+                    <div class="form-check form-switch mb-2">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="prefTemaOscuro"
+                        checked
+                      />
+                      <label class="form-check-label" for="prefTemaOscuro">
+                        Tema oscuro
+                      </label>
+                    </div>
+                  </div>
+
+                  <h6 class="mb-3">
+                    <i class="bi bi-bell me-2"></i>Notificaciones
+                  </h6>
+                  <div class="mb-4">
+                    <div class="form-check form-switch mb-2">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="prefNotifEmail"
+                        checked
+                      />
+                      <label class="form-check-label" for="prefNotifEmail">
+                        Notificaciones por email
+                      </label>
+                    </div>
+                    <div class="form-check form-switch mb-2">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="prefNotifOfertas"
+                        checked
+                      />
+                      <label class="form-check-label" for="prefNotifOfertas">
+                        Recibir ofertas y promociones
+                      </label>
+                    </div>
+                    <div class="form-check form-switch mb-2">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="prefNotifLanzamientos"
+                      />
+                      <label
+                        class="form-check-label"
+                        for="prefNotifLanzamientos"
+                      >
+                        Notificar nuevos lanzamientos
+                      </label>
+                    </div>
+                  </div>
+
+                  <h6 class="mb-3">
+                    <i class="bi bi-translate me-2"></i>Idioma y región
+                  </h6>
+                  <div class="mb-4">
+                    <div class="mb-3">
+                      <label for="prefIdioma" class="form-label">Idioma</label>
+                      <select class="form-select" id="prefIdioma">
+                        <option value="es" selected>Español</option>
+                        <option value="en">English</option>
+                        <option value="pt">Português</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="prefMoneda" class="form-label">Moneda</label>
+                      <select class="form-select" id="prefMoneda">
+                        <option value="PEN" selected>Soles (S/)</option>
+                        <option value="USD">Dólares ($)</option>
+                        <option value="EUR">Euros (€)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">
+                      <i class="bi bi-save me-2"></i>Guardar preferencias
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Panel de Seguridad -->
+              <div class="tab-pane fade" id="seguridad-panel" role="tabpanel">
+                <form id="cambiarPasswordForm">
+                  <h6 class="mb-3">
+                    <i class="bi bi-key me-2"></i>Cambiar contraseña
+                  </h6>
+
+                  <div class="mb-3">
+                    <label for="passwordActual" class="form-label">
+                      Contraseña actual
+                    </label>
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="passwordActual"
+                      required
+                    />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="passwordNueva" class="form-label">
+                      Nueva contraseña
+                    </label>
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="passwordNueva"
+                      required
+                      minlength="8"
+                    />
+                    <small class="text-muted">Mínimo 8 caracteres</small>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="passwordConfirmar" class="form-label">
+                      Confirmar nueva contraseña
+                    </label>
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="passwordConfirmar"
+                      required
+                    />
+                  </div>
+
+                  <div class="d-grid gap-2 mb-4">
+                    <button type="submit" class="btn btn-primary">
+                      <i class="bi bi-shield-check me-2"></i>Cambiar contraseña
+                    </button>
+                  </div>
+
+                  <hr />
+
+                  <h6 class="mb-3 text-danger">
+                    <i class="bi bi-trash me-2"></i>Zona de peligro
+                  </h6>
+                  <p class="text-muted small">
+                    Al eliminar tu cuenta, perderás todos tus datos de forma
+                    permanente.
+                  </p>
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger"
+                    onclick="confirmarEliminarCuenta()"
+                  >
+                    <i class="bi bi-trash me-2"></i>Eliminar mi cuenta
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================
+         MODAL DE ADMINISTRACIÓN MEJORADO
+    ========================================= -->
+    <div
+      class="modal fade"
+      id="adminModalMejorado"
+      tabindex="-1"
+      aria-labelledby="adminModalMejoradoLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header bg-dark text-white">
+            <h5 class="modal-title" id="adminModalMejoradoLabel">
+              <i class="bi bi-shield-lock-fill me-2"></i>
+              Panel de Administración
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            <!-- Tabs de navegación -->
+            <ul class="nav nav-tabs mb-4" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link active"
+                  id="admin-stats-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#admin-stats-panel"
+                  type="button"
+                  role="tab"
+                >
+                  <i class="bi bi-graph-up me-2"></i>Estadísticas
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="admin-usuarios-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#admin-usuarios-panel"
+                  type="button"
+                  role="tab"
+                >
+                  <i class="bi bi-people-fill me-2"></i>Usuarios
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="admin-admins-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#admin-admins-panel"
+                  type="button"
+                  role="tab"
+                >
+                  <i class="bi bi-shield-check me-2"></i>Administradores
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="admin-productos-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#admin-productos-panel"
+                  type="button"
+                  role="tab"
+                >
+                  <i class="bi bi-box-seam me-2"></i>Productos
+                </button>
+              </li>
+            </ul>
+
+            <!-- Contenido de tabs -->
+            <div class="tab-content">
+              <!-- Panel de Estadísticas -->
+              <div
+                class="tab-pane fade show active"
+                id="admin-stats-panel"
+                role="tabpanel"
+              >
+                <div class="row g-3" id="adminStatsContent">
+                  <div class="col-12 text-center">
+                    <div class="spinner-border" role="status"></div>
+                    <p class="mt-2">Cargando estadísticas...</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Panel de Usuarios -->
+              <div
+                class="tab-pane fade"
+                id="admin-usuarios-panel"
+                role="tabpanel"
+              >
+                <div
+                  class="mb-3 d-flex justify-content-between align-items-center"
+                >
+                  <h6 class="mb-0">Lista de Usuarios Registrados</h6>
+                  <button
+                    class="btn btn-sm btn-outline-primary"
+                    onclick="recargarUsuarios()"
+                  >
+                    <i class="bi bi-arrow-clockwise me-1"></i>Recargar
+                  </button>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-hover table-sm">
+                    <thead>
+                      <tr>
+                        <th>Avatar</th>
+                        <th>Usuario</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Registrado</th>
+                        <th>Última Conexión</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody id="usuariosTableBody">
+                      <tr>
+                        <td colspan="7" class="text-center">
+                          <div
+                            class="spinner-border spinner-border-sm me-2"
+                            role="status"
+                          ></div>
+                          Cargando usuarios...
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Panel de Administradores -->
+              <div
+                class="tab-pane fade"
+                id="admin-admins-panel"
+                role="tabpanel"
+              >
+                <div
+                  class="alert alert-info d-flex align-items-center mb-4"
+                  role="alert"
+                >
+                  <i class="bi bi-info-circle fs-4 me-3"></i>
+                  <div>
+                    <strong>¿Crear nuevos administradores?</strong><br />
+                    <small>
+                      <strong>Recomendación:</strong> Solo crea administradores
+                      de confianza. Los admins tienen acceso total al sistema.
+                      Puedes promover usuarios existentes o invitar nuevos
+                      administradores por email.
+                    </small>
+                  </div>
+                </div>
+
+                <!-- Formulario para crear admin -->
+                <div class="card mb-4">
+                  <div class="card-body">
+                    <h6 class="card-title">
+                      <i class="bi bi-person-plus me-2"></i>Promover Usuario a
+                      Admin
+                    </h6>
+                    <form id="crearAdminForm" class="row g-3">
+                      <div class="col-md-8">
+                        <label for="adminEmail" class="form-label"
+                          >Email del usuario</label
+                        >
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="adminEmail"
+                          placeholder="usuario@ejemplo.com"
+                          required
+                        />
+                        <small class="text-muted">
+                          El usuario debe estar registrado en el sistema
+                        </small>
+                      </div>
+                      <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">
+                          <i class="bi bi-shield-plus me-2"></i>Promover a Admin
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <!-- Lista de administradores actuales -->
+                <h6 class="mb-3">
+                  <i class="bi bi-shield-check me-2"></i>Administradores
+                  Actuales
+                </h6>
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Registrado</th>
+                        <th>Última Conexión</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody id="adminsTableBody">
+                      <tr>
+                        <td colspan="5" class="text-center">
+                          <div
+                            class="spinner-border spinner-border-sm me-2"
+                            role="status"
+                          ></div>
+                          Cargando administradores...
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Panel de Productos -->
+              <div
+                class="tab-pane fade"
+                id="admin-productos-panel"
+                role="tabpanel"
+              >
+                <div class="alert alert-secondary" role="alert">
+                  <i class="bi bi-construction me-2"></i>
+                  <strong>Próximamente:</strong> Gestión de productos (crear,
+                  editar, eliminar)
+                </div>
+                <div id="adminProductosContent">
+                  <p class="text-muted">
+                    Por ahora, los productos se gestionan directamente en
+                    Supabase.
+                  </p>
+                  <a
+                    href="https://supabase.com/dashboard/project/bkvizvvpwkstggwplbkz"
+                    target="_blank"
+                    class="btn btn-outline-primary"
+                  >
+                    <i class="bi bi-box-arrow-up-right me-2"></i>Ir a Supabase
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <a
       id="toTop"
       href="#inicio"
@@ -850,10 +1790,379 @@
       <i class="bi bi-chevron-up"></i>
     </a>
 
-    <!-- Bootstrap bundle (requerido para el carrusel) -->
+    <!-- Botón discreto de Admin (solo visible para admins) -->
+    <button
+      id="adminPanelBtn"
+      onclick="abrirAdminPanel()"
+      class="btn btn-sm btn-dark position-fixed bottom-0 start-0 m-3 admin-btn"
+      style="display: none; opacity: 0.3; transition: opacity 0.3s"
+      onmouseover="this.style.opacity='1'"
+      onmouseout="this.style.opacity='0.3'"
+      title="Panel de Administración"
+    >
+      <i class="bi bi-gear-fill"></i>
+    </button>
+
+    <!-- ============================================================
+         MODALES DE PEDIDOS
+    ============================================================ -->
+
+    <!-- MODAL: MIS PEDIDOS -->
+    <div
+      class="modal fade"
+      id="misPedidosModal"
+      tabindex="-1"
+      aria-labelledby="misPedidosModalLabel"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable"
+      >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="misPedidosModalLabel">
+              <i class="bi bi-bag-check me-2"></i>Mis Pedidos
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <!-- Estadísticas Rápidas -->
+            <div class="row mb-4" id="estadisticasPedidos">
+              <div class="col-md-3 col-6 mb-3">
+                <div class="card h-100">
+                  <div class="card-body text-center">
+                    <i class="bi bi-box-seam fs-1 text-primary"></i>
+                    <h3 class="mt-2 mb-0" id="stat-total-pedidos">0</h3>
+                    <small class="text-muted">Total Pedidos</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 col-6 mb-3">
+                <div class="card h-100">
+                  <div class="card-body text-center">
+                    <i class="bi bi-check-circle fs-1 text-success"></i>
+                    <h3 class="mt-2 mb-0" id="stat-completados">0</h3>
+                    <small class="text-muted">Completados</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 col-6 mb-3">
+                <div class="card h-100">
+                  <div class="card-body text-center">
+                    <i class="bi bi-truck fs-1 text-info"></i>
+                    <h3 class="mt-2 mb-0" id="stat-enviados">0</h3>
+                    <small class="text-muted">En Camino</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 col-6 mb-3">
+                <div class="card h-100">
+                  <div class="card-body text-center">
+                    <i class="bi bi-currency-dollar fs-1 text-warning"></i>
+                    <h3 class="mt-2 mb-0" id="stat-total-gastado">S/ 0.00</h3>
+                    <small class="text-muted">Total Gastado</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="btn-group" role="group">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary active"
+                  onclick="filtrarPedidosPorEstado('todos')"
+                >
+                  Todos
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-warning"
+                  onclick="filtrarPedidosPorEstado('pendiente')"
+                >
+                  Pendientes
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-info"
+                  onclick="filtrarPedidosPorEstado('enviado')"
+                >
+                  Enviados
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline-success"
+                  onclick="filtrarPedidosPorEstado('entregado')"
+                >
+                  Entregados
+                </button>
+              </div>
+              <button class="btn btn-primary" onclick="cargarMisPedidos()">
+                <i class="bi bi-arrow-clockwise me-1"></i>Actualizar
+              </button>
+            </div>
+
+            <!-- Lista de Pedidos -->
+            <div id="listaPedidos">
+              <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p class="mt-3">Cargando tus pedidos...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: DETALLE DE PEDIDO -->
+    <div
+      class="modal fade"
+      id="detallePedidoModal"
+      tabindex="-1"
+      aria-labelledby="detallePedidoModalLabel"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+      >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="detallePedidoModalLabel">
+              <i class="bi bi-receipt me-2"></i>Detalle del Pedido
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body" id="detallePedidoContent">
+            <!-- El contenido se cargará dinámicamente -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: CONFIRMAR COMPRA -->
+    <div
+      class="modal fade"
+      id="confirmarCompraModal"
+      tabindex="-1"
+      aria-labelledby="confirmarCompraModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmarCompraModalLabel">
+              <i class="bi bi-credit-card me-2"></i>Finalizar Compra
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="formConfirmarCompra">
+              <!-- Información de Envío -->
+              <h6 class="mb-3">
+                <i class="bi bi-truck me-2"></i>Información de Envío
+              </h6>
+
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="compra-nombre" class="form-label"
+                    >Nombre Completo *</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="compra-nombre"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label for="compra-telefono" class="form-label"
+                    >Teléfono *</label
+                  >
+                  <input
+                    type="tel"
+                    class="form-control"
+                    id="compra-telefono"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="compra-direccion" class="form-label"
+                  >Dirección *</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="compra-direccion"
+                  required
+                />
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="compra-ciudad" class="form-label">Ciudad *</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="compra-ciudad"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label for="compra-codigo-postal" class="form-label"
+                    >Código Postal</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="compra-codigo-postal"
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="compra-pais" class="form-label">País *</label>
+                <select class="form-select" id="compra-pais" required>
+                  <option value="Perú" selected>Perú</option>
+                  <option value="Argentina">Argentina</option>
+                  <option value="Chile">Chile</option>
+                  <option value="Colombia">Colombia</option>
+                  <option value="México">México</option>
+                  <option value="España">España</option>
+                </select>
+              </div>
+
+              <!-- Método de Pago -->
+              <h6 class="mb-3 mt-4">
+                <i class="bi bi-wallet2 me-2"></i>Método de Pago
+              </h6>
+
+              <div class="mb-3">
+                <select class="form-select" id="compra-metodo-pago" required>
+                  <option value="tarjeta" selected>
+                    Tarjeta de Crédito/Débito
+                  </option>
+                  <option value="paypal">PayPal</option>
+                  <option value="transferencia">Transferencia Bancaria</option>
+                  <option value="efectivo">Contra Entrega (Efectivo)</option>
+                </select>
+              </div>
+
+              <!-- Notas Adicionales -->
+              <div class="mb-3">
+                <label for="compra-notas" class="form-label"
+                  >Notas Adicionales (Opcional)</label
+                >
+                <textarea
+                  class="form-control"
+                  id="compra-notas"
+                  rows="3"
+                  placeholder="Instrucciones de entrega, referencias, etc."
+                ></textarea>
+              </div>
+
+              <!-- Resumen de Compra -->
+              <div class="card bg-light mt-4">
+                <div class="card-body">
+                  <h6 class="card-title mb-3">Resumen de Compra</h6>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal:</span>
+                    <span id="resumen-subtotal">S/ 0.00</span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Impuestos (IGV 18%):</span>
+                    <span id="resumen-impuestos">S/ 0.00</span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Envío:</span>
+                    <span id="resumen-envio">S/ 0.00</span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <small class="text-muted"
+                      >Envío gratis en compras mayores a S/ 100</small
+                    >
+                  </div>
+                  <hr />
+                  <div class="d-flex justify-content-between fw-bold fs-5">
+                    <span>Total:</span>
+                    <span id="resumen-total" class="text-primary">S/ 0.00</span>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary btn-lg"
+              onclick="procesarCompra()"
+            >
+              <i class="bi bi-check-circle me-2"></i>Confirmar Pedido
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRIPTS AL FINAL DEL BODY -->
+
+    <!-- 1. Bootstrap Bundle (siempre primero) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- El script  -->
+    <!-- 2. Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- 3. Cliente de Supabase (inicialización) -->
+    <script src="js/supabaseClient.js"></script>
+
+    <!-- 4. Módulo de productos -->
+    <script src="js/productos.js"></script>
+
+    <!-- 5. Módulo de carrito -->
+    <script src="js/carrito.js"></script>
+
+    <!-- 6. Módulo de autenticación -->
+    <script src="js/auth.js"></script>
+
+    <!-- 7. Módulo de perfil de usuario -->
+    <script src="js/perfil.js"></script>
+
+    <!-- 8. Módulo de perfil y admin mejorado -->
+    <script src="js/perfil-admin.js"></script>
+
+    <!-- 9. Módulo de pedidos (backend) -->
+    <script src="js/pedidos.js"></script>
+
+    <!-- 10. Módulo de pedidos (UI) -->
+    <script src="js/pedidos-ui.js"></script>
+
+    <!-- 11. Scripts generales (animaciones, etc) -->
     <script src="scripts/script.js"></script>
   </body>
 </html>

@@ -1,0 +1,36 @@
+# Archivos y carpetas a ignorar por Git
+
+# Variables de entorno
+.env
+.env.local
+.env.production
+
+# Dependencias
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Archivos temporales
+*.tmp
+*.temp
+.cache/
+
+# Build
+dist/
+build/

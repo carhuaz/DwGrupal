@@ -1,0 +1,1233 @@
+/* ================================
+   Variables 
+=================================== */
+:root{
+  --bg:#0c0d10;
+  --card:#111319;
+  --muted:#9aa3af;
+  --primary:#6e57ff;
+  --primary-600:#5844d9;
+  --accent:#00e0ff;
+
+  /* Tipografía base */
+  --font-base:'Poppins', system-ui, -apple-system, Segoe UI, Ubuntu, Cantarell, Helvetica, Arial, sans-serif;
+  --font-head:'Space Grotesk', 'Poppins', system-ui, -apple-system, Segoe UI, Ubuntu, Cantarell, Helvetica, Arial, sans-serif;
+  --font-brand:'Press Start 2P', monospace;
+}
+
+/* ================================
+   Base
+=================================== */
+html, body{
+  margin:0;
+  background:var(--bg);
+  color:#e5e7eb;
+  font-family:var(--font-base);
+  font-weight:400;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* Jerarquía de títulos con fuente de display/tech */
+h1, h2, h3, h4, h5, h6{
+  font-family:var(--font-head);
+  font-weight:700;
+  letter-spacing:.2px;
+  color:#e9ecf1;
+  line-height:1.25;
+  margin-top:0;
+}
+
+/* Subtítulos y elementos destacados */
+.subtitle, .lead{
+  font-family:var(--font-head);
+  font-weight:500;
+  letter-spacing:.15px;
+}
+
+.text-muted-2{ color:#cdd3db; }
+
+/* ================================
+   Navbar / Search
+=================================== */
+.bg-blur{
+  background:rgba(17,19,25,.76);
+  backdrop-filter:blur(8px);
+}
+
+/* Marca retro (se mantiene) */
+.brand-name{
+  font-family:var(--font-brand);
+  font-size:1rem;
+  letter-spacing:.5px;
+}
+
+/* Inputs con tipografía base */
+.input-glass .form-control{
+  background:#0f1117;
+  border-color:#1f2430;
+  color:#e5e7eb;
+  font-family:var(--font-base);
+  font-weight:500;
+  transition: all .25s ease;
+}
+.input-glass .form-control::placeholder{ color:#9aa3af; }
+.input-glass .form-control:focus{
+  background:#13151d;
+  border-color:var(--primary);
+  box-shadow: 0 0 0 3px rgba(110,87,255,.15);
+}
+
+/* Indicador de búsqueda activa */
+.input-glass .form-control.searching{
+  border-color:var(--accent);
+  background:#0f1117;
+  animation: searchPulse 1.5s ease infinite;
+}
+@keyframes searchPulse{
+  0%, 100%{ box-shadow: 0 0 0 0 rgba(0,224,255,.4); }
+  50%{ box-shadow: 0 0 0 4px rgba(0,224,255,.0); }
+}
+
+.input-glass .input-group-text{
+  background:#0f1117;
+  border-color:#1f2430;
+  color:#9aa3af;
+  transition: all .25s ease;
+}
+.input-glass .form-control:focus ~ .input-group-text,
+.input-glass:has(.form-control:focus) .input-group-text{
+  border-color:var(--primary);
+  color:var(--accent);
+}
+
+/* ================================
+   Botones (UI coherente)
+=================================== */
+.btn{
+  font-family:var(--font-base);
+  font-weight:600;
+  letter-spacing:.3px;
+  transition: all .2s ease;
+}
+.btn-buy{
+  border:none;
+  color:#fff;
+  background:var(--primary);
+  font-weight:700;
+}
+.btn-buy:hover{ background:var(--primary-600); }
+
+/* Botones de filtros */
+.btn-outline-light{
+  border-color:#2a3350;
+  color:#e5e7eb;
+  position:relative;
+  overflow:hidden;
+}
+.btn-outline-light:hover{
+  background:rgba(110,87,255,.15);
+  border-color:var(--primary);
+  color:#fff;
+  transform: translateY(-2px);
+}
+.btn-outline-light.active{
+  background:linear-gradient(90deg,var(--primary),var(--accent));
+  border-color:transparent;
+  color:#0b0b0b;
+  box-shadow: 0 4px 12px rgba(110,87,255,.35);
+  font-weight:700;
+}
+
+/* Botones de navegación (carrito y usuario) */
+.cart-btn, .user-btn{
+  width:42px;
+  height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  transition:all .25s ease;
+}
+.cart-btn:hover, .user-btn:hover{
+  background:rgba(110,87,255,.15);
+  border-color:var(--primary);
+  transform:scale(1.1);
+}
+.cart-btn:active, .user-btn:active{
+  transform:scale(0.95);
+}
+
+/* Avatar de usuario */
+.user-avatar{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid var(--accent);
+  transition:all .25s ease;
+}
+.user-btn:hover .user-avatar{
+  border-color:var(--primary);
+  transform:scale(1.1);
+}
+
+/* Badge del carrito mejorado */
+#cartBadge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .75rem;
+  font-weight: 700;
+  padding: 0 .4rem;
+  background: linear-gradient(135deg, #ff3366, #ff6b6b);
+  border: 2px solid var(--bg);
+  border-radius: 50%;
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(255, 51, 102, .7), 0 0 20px rgba(255, 51, 102, .3);
+  animation: badgePulse 2s ease infinite;
+  z-index: 10;
+}
+
+#cartBadge:empty {
+  display: none;
+}
+
+@keyframes badgePulse {
+  0%, 100% { 
+    transform: scale(1); 
+    box-shadow: 0 2px 10px rgba(255, 51, 102, .7), 0 0 20px rgba(255, 51, 102, .3);
+  }
+  50% { 
+    transform: scale(1.15); 
+    box-shadow: 0 4px 15px rgba(255, 51, 102, 1), 0 0 30px rgba(255, 51, 102, .6);
+  }
+}
+
+/* Efecto ripple en botones */
+.ripple-effect{
+  position:absolute;
+  border-radius:50%;
+  background:rgba(255,255,255,.5);
+  transform:scale(0);
+  animation:rippleAnim .6s ease-out;
+  pointer-events:none;
+}
+@keyframes rippleAnim{
+  to{ transform:scale(4); opacity:0; }
+}
+
+/* ================================
+   HERO: Carousel (fade) + ken-burns AFTER slide
+=================================== */
+.hero-carousel{
+  position: relative;
+  height: min(78vh, 780px);
+  overflow: hidden;
+  margin-top: .75rem; /* separa del navbar */
+
+  --zoom-duration: 7s;
+  --zoom-delay: .7s;
+  --zoom-scale: 1.08;
+}
+/* Que todo el carrusel herede el alto del hero */
+.hero-carousel .carousel,
+.hero-carousel .carousel-inner,
+.hero-carousel .carousel-item{
+  height: 100%;
+}
+.hero-carousel .carousel-item{ position: relative; }
+
+/* usa la fuente de títulos para más impacto */
+.hero-carousel .carousel-item > .container{
+  height: 100%;
+  position: relative;
+  z-index: 2;
+  font-family:var(--font-head);
+}
+.hero-caption h1{
+  color:#e9ecf1;
+  font-family:var(--font-head);
+  font-weight:700;
+  letter-spacing:.3px;
+}
+
+/* Fondo del slide y animación */
+.hero-carousel .slide-bg{
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 60%;
+  transform: scale(1);
+  will-change: transform;
+}
+.hero-carousel .carousel-item.active .slide-bg{
+  animation: kenburns var(--zoom-duration) ease var(--zoom-delay) forwards;
+}
+@keyframes kenburns{
+  from { transform: scale(1); }
+  to   { transform: scale(var(--zoom-scale)); }
+}
+
+/* Velo/gradiente para legibilidad */
+.hero-carousel .overlay{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(60% 60% at 50% 40%, rgba(255, 17, 0, 0.25), transparent 60%),
+    linear-gradient(180deg, rgba(12,13,16,.25) 0%, rgba(12,13,16,.65) 100%);
+}
+
+/* Indicadores y badges */
+.hero-carousel .carousel-indicators [data-bs-target]{
+  width:10px; height:10px; border-radius:999px; background:#6e57ff; opacity:.5;
+}
+.hero-carousel .carousel-indicators .active{ opacity:1; }
+.badge-promo{
+  background:linear-gradient(90deg,var(--primary),var(--accent));
+  font-family:var(--font-base);
+  font-weight:600;
+  letter-spacing:.2px;
+}
+.badge-info{
+  background:rgba(0,224,255,.25);
+  border:1px solid rgba(0,224,255,.35);
+  color:#cfefff;
+  font-family:var(--font-base);
+}
+
+/* Utilidades para afinar el encuadre por slide */
+.pos-40 .slide-bg{ background-position:center 40%; }
+.pos-50 .slide-bg{ background-position:center 50%; }
+.pos-60 .slide-bg{ background-position:center 60%; }
+.pos-70 .slide-bg{ background-position:center 70%; }
+
+/* Responsive */
+@media (max-width: 768px){
+  .hero-carousel{ height: 65vh; }
+  .hero-carousel .slide-bg{ background-position:center 50%; }
+  
+  /* Badge del carrito en móvil */
+  .cart-btn, .user-btn {
+    width: 38px;
+    height: 38px;
+  }
+  
+  #cartBadge {
+    min-width: 20px;
+    height: 20px;
+    font-size: .7rem;
+    top: -3px;
+    right: -3px;
+  }
+}
+
+/* Accesibilidad*/
+@media (prefers-reduced-motion: reduce){
+  .hero-carousel .carousel-item.active .slide-bg{ animation: none !important; }
+  .hero-carousel .slide-bg{ transform: none !important; }
+}
+
+/* ================================
+   Cards de productos
+=================================== */
+.game-card{
+  height:100%;
+  overflow:hidden;
+  background:var(--card);
+  border:1px solid #ffffff;
+  border-radius:16px;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.game-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 20px rgba(0,0,0,.25);
+}
+.game-cover{
+  width:100%;
+  aspect-ratio:16/9;
+  object-fit:cover;
+}
+
+/* Estilos para tarjetas renderizadas por JS */
+.product-card{
+  background:var(--card);
+  border:1px solid rgba(255,255,255,0.04);
+  border-radius:12px;
+  overflow:hidden;
+  transition:transform .16s ease, box-shadow .16s ease;
+  cursor:pointer;
+  opacity:0;
+  animation: fadeInUp .5s ease forwards;
+}
+.product-card:hover{ transform:translateY(-6px); box-shadow:0 18px 40px rgba(0,0,0,.55); }
+
+/* Animación de aparición escalonada */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Delay escalonado para cada tarjeta */
+.product-card:nth-child(1) { animation-delay: 0.05s; }
+.product-card:nth-child(2) { animation-delay: 0.1s; }
+.product-card:nth-child(3) { animation-delay: 0.15s; }
+.product-card:nth-child(4) { animation-delay: 0.2s; }
+.product-card:nth-child(5) { animation-delay: 0.25s; }
+.product-card:nth-child(6) { animation-delay: 0.3s; }
+.product-card:nth-child(7) { animation-delay: 0.35s; }
+.product-card:nth-child(8) { animation-delay: 0.4s; }
+.product-card:nth-child(9) { animation-delay: 0.45s; }
+.product-card:nth-child(10) { animation-delay: 0.5s; }
+
+.product-img-wrap{ position:relative; overflow:hidden; background:#0f1117; display:block; }
+.product-img-wrap img.card-img-top{ 
+  width:100%; 
+  height:220px; 
+  object-fit:cover; 
+  display:block;
+  transition: transform .35s ease;
+}
+/* Zoom suave en imagen al hover */
+.product-card:hover .product-img-wrap img.card-img-top{
+  transform: scale(1.08);
+}
+
+/* Efecto de brillo al pasar el mouse */
+.product-img-wrap::after{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+.product-card:hover .product-img-wrap::after{
+  left: 100%;
+}
+
+.badge-discount{
+  position:absolute; top:8px; left:8px; z-index:5;
+  background: linear-gradient(90deg,var(--primary),var(--accent));
+  color:#fff; padding:.28rem .5rem; border-radius:8px; font-weight:700; font-size:.78rem;
+  box-shadow:0 6px 18px rgba(0,0,0,.35);
+}
+
+/* Mejorar legibilidad de textos en tarjetas */
+.card-body .card-title{ 
+  min-height:2.4rem; 
+  color:#f5f5f7 !important;
+  font-weight:600;
+}
+.card-body .h5{ 
+  font-family:var(--font-head); 
+  color:#fff !important;
+}
+.card-body .text-muted{ 
+  color:#d1d5db !important;
+  opacity:1;
+}
+.card-body .text-decoration-line-through{
+  color:#9ca3af !important;
+}
+
+/* Precios con la fuente de títulos para que resalten */
+.price{
+  font-family:var(--font-head);
+  font-weight:700;
+  letter-spacing:.3px;
+}
+.old-price{
+  font-size:.95rem;
+  font-weight:500;
+  color:#9aa3af;
+  text-decoration:line-through;
+  font-family:var(--font-base);
+}
+
+/* ================================
+   Footer 
+=================================== */
+.site-footer{
+  background: radial-gradient(80% 60% at 50% 0%, rgba(110,87,255,.10), transparent 60%) , var(--card);
+  border-top: 1px solid #1f2430;
+  color: #e9ecf1;
+}
+.site-footer .brand-name{
+  font-size:1.05rem;
+  font-family:var(--font-brand);
+}
+
+/* Títulos del footer con head para contraste */
+.footer-title{
+  color:#aeb6c3;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  font-weight:700;
+  font-size:.85rem;
+  margin-bottom:.75rem;
+  font-family:var(--font-head);
+}
+
+/* Aviso (baja de suscripción) */
+.aviso{
+  color:#bbbec4;
+  font-size: .92rem;
+  font-style: italic;
+  font-family:var(--font-base);
+}
+
+.text-footer{ color:#c9cfd8; }
+
+/* listas de enlaces */
+.footer-links{ list-style:none; padding:0; margin:0; }
+.footer-links li{ margin:.35rem 0; }
+.footer-links a{
+  color:#e9ecf1; text-decoration:none;
+  opacity:.9; transition:opacity .15s ease, color .15s ease;
+  font-family:var(--font-base);
+  font-weight:500;
+}
+.footer-links a:hover{ color:#fff; opacity:1; }
+
+/* redes */
+.social-btn{
+  width:38px; height:38px; display:grid; place-items:center;
+  border-radius:999px; background:#0f1117; color:#e9ecf1;
+  border:1px solid #1f2430; transition:transform .15s ease, background .15s ease;
+  font-family:var(--font-base);
+  font-weight:600;
+}
+.social-btn:hover{ transform:translateY(-2px); background:#151823; }
+
+/* pagos (texto/badge simple para no depender de logos) */
+.pay-badge{
+  font-size:.75rem; line-height:1;
+  background:#0b1220;
+  border:1px solid #1f2430;
+  color:#d6dbe4;
+  padding:.4rem .6rem;
+  border-radius:999px;
+  font-family:var(--font-base);
+  font-weight:600;
+  letter-spacing:.25px;
+}
+
+/* newsletter */
+.newsletter .form-control{
+  background:#0f1117; border:1px solid #1f2430; color:#e9ecf1;
+  font-family:var(--font-base);
+}
+.newsletter .form-control::placeholder{ color:#9aa3af; }
+
+/* chips de confianza */
+.trust-chip{
+  font-size:.8rem;
+  background:#0b1220;
+  border:1px solid #1f2430;
+  border-radius:999px;
+  color:#cfe3ff;
+  padding:.35rem .65rem;
+  display:inline-flex; align-items:center; gap:.35rem;
+  font-family:var(--font-base);
+  font-weight:600;
+  letter-spacing:.25px;
+}
+
+/* barra inferior */
+.footer-bar{
+  border-top:1px solid #ffffff;
+  background:#0f1117;
+  
+}
+
+.footer-bar .form-select{
+  background:#0b1220; color:#e5e7eb;
+  border:1px solid #1f2430;
+  font-family:var(--font-base);
+  
+}
+
+.footer-bar .form-select:focus{ box-shadow:none; border-color:#2a3350; }
+
+/* pequeñas mejoras responsive */
+@media (max-width: 576px){
+  .footer-links a{ display:inline-block; padding:.1rem 0; }
+}
+
+/* ===== Popup Promoción (mejorado) ===== */
+.promo-modal .modal-dialog{
+  max-width: 420px;
+  width: min(92vw, 460px);
+  transform: translateY(10px) scale(.98);
+  transition: transform .28s ease-out;
+  font-family:var(--font-base);
+}
+.promo-modal.show .modal-dialog{ transform: translateY(0) scale(1); }
+
+.promo-modal .modal-content{
+  position: relative;
+  border: none;
+  border-radius: 18px;
+  overflow: hidden;
+  color: #fff;
+  background: linear-gradient(180deg, rgba(210,106,203,.95), rgba(110,87,255,.97));
+  box-shadow: 0 24px 64px rgba(0,0,0,.50);
+  font-family:var(--font-base);
+}
+
+.promo-modal .modal-body{ padding: 0; }
+
+.promo-modal .promo-wrap{
+  background: rgba(12,13,16,.25);
+  border-radius: 12px;
+}
+
+.promo-modal .promo-img{
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(0,0,0,.35);
+}
+
+/* ✕ visible y clickeable siempre */
+.promo-modal .btn-close{
+  z-index: 3;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.4));
+}
+
+/* Backdrop un poco más suave con blur */
+.modal-backdrop.show{
+  opacity: .55;
+  backdrop-filter: blur(2px);
+}
+
+/* Botón CTA estilo limpio */
+.promo-modal .btn-light{
+  background: #fff;
+  color: #1a1a1a;
+  border: 0;
+  box-shadow: 0 8px 24px rgba(0,0,0,.2);
+  font-family:var(--font-base);
+  font-weight:600;
+  letter-spacing:.2px;
+}
+.promo-modal .btn-light:hover{ opacity: .92; }
+
+@media (max-width: 480px){
+  .promo-modal .modal-content{ border-radius: 14px; }
+  .promo-modal .promo-wrap{ border-radius: 10px; }
+}
+/* ===== Mini-carrito (offcanvas) ===== */
+.mini-cart{
+  background:#0f1117; color:#e9ecf1; border-left:1px solid #1f2430; width:min(92vw, 420px);
+}
+.mini-cart .offcanvas-header{ border-bottom:1px solid #1f2430; }
+.mini-cart .list-group-item{
+  background:transparent; color:#e9ecf1; border-color:#1f2430;
+}
+.mini-cart .thumb{
+  width:52px; height:52px; border-radius:8px; object-fit:cover;
+  background:#151823; border:1px solid #1f2430;
+}
+.mini-cart .qty-btn{
+  --bs-btn-padding-y:.125rem; --bs-btn-padding-x:.5rem; --bs-btn-font-size:.8rem;
+  border-color:#2a3350; color:#e9ecf1;
+}
+.mini-cart .qty-btn:hover{ background:#151823; }
+.mini-cart .price-line{ color:#cfe3ff; }
+
+/* ===== Select de ordenamiento ===== */
+.form-select{
+  background:#0f1117;
+  border-color:#2a3350;
+  color:#e5e7eb;
+  font-family:var(--font-base);
+  font-weight:500;
+  cursor:pointer;
+  transition: all .2s ease;
+}
+.form-select:hover{
+  border-color:var(--primary);
+  background:#13151d;
+}
+.form-select:focus{
+  background:#13151d;
+  border-color:var(--primary);
+  box-shadow: 0 0 0 3px rgba(110,87,255,.15);
+  color:#fff;
+}
+.form-select option{
+  background:#0f1117;
+  color:#e5e7eb;
+}
+/* ===== Scroll Reveal minimal ===== */
+[data-reveal]{
+  opacity:0;
+  transform: translateY(16px);
+  transition: opacity .5s ease, transform .6s ease;
+}
+[data-reveal="right"]{ transform: translateX(18px); }
+[data-reveal="left"]{  transform: translateX(-18px); }
+[data-reveal="scale"]{ transform: scale(.96); }
+.is-shown{ opacity:1; transform:none; }
+
+/* ===== Card tilt + brillo (CSS only) ===== */
+.game-card{ transform-style:preserve-3d; position:relative; }
+.game-card:hover{
+  transform: perspective(600px) rotateX(2deg) rotateY(-2deg) translateY(-3px);
+}
+.game-card::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background: linear-gradient(120deg, transparent 40%, rgba(255,255,255,.08) 50%, transparent 60%);
+  transform: translateX(-120%); transition: transform .6s ease;
+}
+.game-card:hover::after{ transform: translateX(120%); }
+
+/* ===== Botón Volver Arriba ===== */
+#toTop{
+  position: fixed; 
+  right: 20px; 
+  bottom: 20px; 
+  z-index: 1050;
+  opacity:0; 
+  transform: translateY(100px) scale(0.8);
+  transition: opacity .3s ease, transform .3s ease;
+  pointer-events: none;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border: none;
+  box-shadow: 0 4px 20px rgba(110,87,255,.4);
+}
+#toTop.show{ 
+  opacity:1; 
+  transform:translateY(0) scale(1); 
+  pointer-events: all;
+}
+#toTop:hover{
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 30px rgba(110,87,255,.6);
+}
+#toTop:active{
+  transform: translateY(-2px) scale(0.98);
+}
+#toTop i{
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+/* Suaviza backdrop de offcanvas/modals sin JS extra */
+.offcanvas-backdrop.show{ backdrop-filter: blur(2px); opacity:.45; }
+
+/* ===== Modal de Detalles de Producto ===== */
+.product-detail-modal .modal-dialog{
+  max-width: 800px;
+}
+.product-detail-modal .modal-content{
+  background:var(--card);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;
+  color:#f5f5f7;
+}
+.product-detail-modal .modal-header{
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.product-detail-modal .modal-footer{
+  border-top:1px solid rgba(255,255,255,0.08);
+}
+.product-detail-modal .product-detail-img{
+  width:100%;
+  max-height:400px;
+  object-fit:cover;
+  border-radius:12px;
+}
+.product-detail-modal .detail-label{
+  color:#9ca3af;
+  font-weight:600;
+  font-size:.85rem;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  margin-bottom:.25rem;
+}
+.product-detail-modal .detail-value{
+  color:#f5f5f7;
+  font-size:1.1rem;
+  font-weight:500;
+}
+.product-detail-modal .price-detail{
+  font-size:2rem;
+  font-weight:700;
+  color:var(--primary);
+  font-family:var(--font-head);
+}
+.product-detail-modal .old-price-detail{
+  font-size:1.2rem;
+  color:#9ca3af;
+  text-decoration:line-through;
+}
+.product-detail-modal .platform-badge{
+  background:rgba(110,87,255,0.15);
+  color:var(--accent);
+  padding:.4rem .8rem;
+  border-radius:8px;
+  font-weight:600;
+  font-size:.9rem;
+  display:inline-block;
+}
+
+/* ================================================
+   MODAL DE LOGIN / REGISTRO
+================================================ */
+.login-modal .modal-content{
+  background:var(--card);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:16px;
+  color:#f5f5f7;
+}
+.login-modal .modal-header{
+  padding:1.5rem 1.5rem 1rem;
+}
+.login-modal .modal-title{
+  font-family:var(--font-head);
+  font-weight:700;
+  font-size:1.5rem;
+  color:#fff;
+}
+.login-modal .modal-title i{
+  color:var(--accent);
+  font-size:1.8rem;
+  vertical-align:middle;
+}
+
+/* Tabs de autenticación */
+.login-modal .nav-pills{
+  background:rgba(255,255,255,0.03);
+  border-radius:12px;
+  padding:.25rem;
+}
+.login-modal .nav-pills .nav-link{
+  color:#9ca3af;
+  font-weight:600;
+  border-radius:10px;
+  transition:all .25s ease;
+  padding:.6rem 1rem;
+}
+.login-modal .nav-pills .nav-link:hover{
+  color:#fff;
+  background:rgba(255,255,255,0.05);
+}
+.login-modal .nav-pills .nav-link.active{
+  background:linear-gradient(90deg,var(--primary),var(--accent));
+  color:#0b0b0b;
+  font-weight:700;
+}
+
+/* Formularios de autenticación */
+.auth-form .form-label{
+  color:#d1d5db;
+  font-weight:600;
+  font-size:.9rem;
+  margin-bottom:.5rem;
+}
+.auth-form .form-label i{
+  color:var(--accent);
+  opacity:.7;
+}
+.auth-form .form-control{
+  background:#0f1117;
+  border:1px solid #2a3350;
+  color:#f5f5f7;
+  padding:.75rem 1rem;
+  border-radius:10px;
+  font-family:var(--font-base);
+  transition:all .25s ease;
+}
+.auth-form .form-control:focus{
+  background:#13151d;
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(110,87,255,.15);
+  color:#fff;
+}
+.auth-form .form-control::placeholder{
+  color:#6b7280;
+}
+.auth-form .input-group .btn{
+  border-color:#2a3350;
+  background:#0f1117;
+  color:#9ca3af;
+}
+.auth-form .input-group .btn:hover{
+  border-color:var(--primary);
+  background:#13151d;
+  color:var(--accent);
+}
+.auth-form .form-check-input{
+  background-color:#0f1117;
+  border-color:#2a3350;
+  cursor:pointer;
+}
+.auth-form .form-check-input:checked{
+  background-color:var(--primary);
+  border-color:var(--primary);
+}
+.auth-form .form-check-label{
+  color:#d1d5db;
+  cursor:pointer;
+}
+
+/* Separador "o continuar con" */
+.divider{
+  position:relative;
+  text-align:center;
+  color:#6b7280;
+  font-size:.85rem;
+}
+.divider::before{
+  content:'';
+  position:absolute;
+  top:50%;
+  left:0;
+  right:0;
+  height:1px;
+  background:rgba(255,255,255,0.1);
+  z-index:0;
+}
+.divider span{
+  position:relative;
+  z-index:1;
+  background:var(--card);
+  padding:0 1rem;
+}
+
+/* Botones de login social */
+.social-login-btn{
+  border-color:#2a3350;
+  color:#e5e7eb;
+  font-weight:600;
+  padding:.75rem;
+  transition:all .25s ease;
+}
+.social-login-btn:hover{
+  border-color:var(--primary);
+  background:rgba(110,87,255,.1);
+  color:#fff;
+  transform:translateY(-2px);
+}
+.social-login-btn i{
+  font-size:1.2rem;
+}
+
+/* Respeta preferencias de reduce motion */
+@media (prefers-reduced-motion: reduce){
+  [data-reveal]{ transition:none; }
+  .game-card:hover{ transform: translateY(-3px); }
+  .game-card::after{ display:none; }
+  #toTop{ transition:none; }
+  .product-img-wrap img.card-img-top{ transition:none !important; }
+  .product-card:hover .product-img-wrap img.card-img-top{ transform:none !important; }
+  .product-card{ animation:none !important; }
+  .input-glass .form-control.searching{ animation:none !important; }
+}
+
+/* ===== Spinner de carga personalizado ===== */
+.spinner-border{
+  border-width: 3px;
+}
+.spinner-border.text-primary{
+  border-color: rgba(110,87,255,.25);
+  border-top-color: var(--primary);
+}
+
+/* ===== Animación de pulso para contador ===== */
+#contadorProductos{
+  transition: all .25s ease;
+}
+#contadorProductos.updated{
+  animation: counterPulse .4s ease;
+}
+@keyframes counterPulse{
+  0%, 100%{ transform: scale(1); }
+  50%{ transform: scale(1.05); color: var(--accent); }
+}
+
+/* ============================================================
+   BOTÓN DE ADMINISTRACIÓN
+============================================================ */
+.admin-btn {
+  z-index: 1000;
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.7) !important;
+  border: 1px solid rgba(255, 51, 102, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.admin-btn:hover {
+  background: rgba(255, 51, 102, 0.9) !important;
+  border-color: var(--accent);
+  transform: scale(1.05);
+}
+
+.admin-btn i {
+  font-size: 1.1rem;
+}
+
+/* Tabla de administración */
+#adminModal .table {
+  color: var(--text);
+}
+
+#adminModal .table thead {
+  background: var(--card);
+  border-bottom: 2px solid var(--primary);
+}
+
+#adminModal .table tbody tr:hover {
+  background: rgba(110, 87, 255, 0.1);
+}
+
+#adminModal .modal-content {
+  background: var(--bg);
+  border: 1px solid rgba(110, 87, 255, 0.2);
+}
+
+#adminModal .nav-tabs {
+  border-bottom: 2px solid rgba(110, 87, 255, 0.2);
+}
+
+#adminModal .nav-tabs .nav-link {
+  color: var(--text);
+  border: none;
+  padding: 0.75rem 1.5rem;
+}
+
+#adminModal .nav-tabs .nav-link:hover {
+  background: rgba(110, 87, 255, 0.1);
+  border: none;
+}
+
+#adminModal .nav-tabs .nav-link.active {
+  background: rgba(110, 87, 255, 0.2);
+  color: var(--primary);
+  border: none;
+  border-bottom: 3px solid var(--primary);
+}
+
+/* ================================
+   TEMA OSCURO FORZADO - MODALES
+=================================== */
+
+/* Modal de Perfil - Tema Oscuro */
+#perfilModal .modal-content,
+#adminModalMejorado .modal-content {
+  background: var(--bg) !important;
+  border: 1px solid rgba(110, 87, 255, 0.3);
+  color: #e5e7eb !important;
+}
+
+#perfilModal .modal-header,
+#adminModalMejorado .modal-header {
+  background: var(--card) !important;
+  border-bottom: 1px solid rgba(110, 87, 255, 0.3);
+  color: #fff !important;
+}
+
+#perfilModal .modal-body,
+#adminModalMejorado .modal-body {
+  background: var(--bg) !important;
+  color: #e5e7eb !important;
+}
+
+#perfilModal .modal-footer,
+#adminModalMejorado .modal-footer {
+  background: var(--card) !important;
+  border-top: 1px solid rgba(110, 87, 255, 0.3);
+}
+
+/* Formularios en modales */
+#perfilModal .form-control,
+#perfilModal .form-select,
+#adminModalMejorado .form-control,
+#adminModalMejorado .form-select {
+  background: var(--card) !important;
+  border: 1px solid rgba(110, 87, 255, 0.3) !important;
+  color: #e5e7eb !important;
+}
+
+#perfilModal .form-control:focus,
+#perfilModal .form-select:focus,
+#adminModalMejorado .form-control:focus,
+#adminModalMejorado .form-select:focus {
+  background: var(--card) !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 0.25rem rgba(110, 87, 255, 0.25);
+  color: #fff !important;
+}
+
+#perfilModal .form-label,
+#adminModalMejorado .form-label {
+  color: #e5e7eb !important;
+}
+
+#perfilModal .text-muted,
+#adminModalMejorado .text-muted {
+  color: #9aa3af !important;
+}
+
+/* Tabs en modales */
+#perfilModal .nav-pills .nav-link,
+#adminModalMejorado .nav-tabs .nav-link {
+  color: #9aa3af !important;
+  background: transparent;
+}
+
+#perfilModal .nav-pills .nav-link:hover,
+#adminModalMejorado .nav-tabs .nav-link:hover {
+  background: rgba(110, 87, 255, 0.1);
+  color: #fff !important;
+}
+
+#perfilModal .nav-pills .nav-link.active,
+#adminModalMejorado .nav-tabs .nav-link.active {
+  background: var(--primary) !important;
+  color: #fff !important;
+}
+
+/* Tablas en admin */
+#adminModalMejorado .table {
+  color: #e5e7eb !important;
+  border-color: rgba(110, 87, 255, 0.2) !important;
+}
+
+#adminModalMejorado .table thead {
+  background: var(--card) !important;
+  color: #fff !important;
+}
+
+#adminModalMejorado .table tbody tr {
+  background: var(--bg) !important;
+  border-color: rgba(110, 87, 255, 0.1) !important;
+}
+
+#adminModalMejorado .table tbody tr:hover {
+  background: rgba(110, 87, 255, 0.1) !important;
+}
+
+/* Cards en admin */
+#adminModalMejorado .card {
+  background: var(--card) !important;
+  border: 1px solid rgba(110, 87, 255, 0.3) !important;
+  color: #e5e7eb !important;
+}
+
+#adminModalMejorado .card-body {
+  color: #e5e7eb !important;
+}
+
+#adminModalMejorado .card-title {
+  color: #fff !important;
+}
+
+/* Alerts en admin */
+#adminModalMejorado .alert-info {
+  background: rgba(59, 130, 246, 0.1) !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+  color: #60a5fa !important;
+}
+
+#adminModalMejorado .alert-secondary {
+  background: rgba(107, 114, 128, 0.1) !important;
+  border-color: rgba(107, 114, 128, 0.3) !important;
+  color: #9ca3af !important;
+}
+
+/* Menú desplegable de usuario */
+#userMenuDropdown .dropdown-menu {
+  background: #1a1a1a !important;
+  border: 1px solid #333 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+#userMenuDropdown .dropdown-item {
+  color: #e5e7eb !important;
+  transition: all 0.2s;
+}
+
+#userMenuDropdown .dropdown-item:hover {
+  background: rgba(110, 87, 255, 0.2) !important;
+  color: #fff !important;
+}
+
+#userMenuDropdown .dropdown-divider {
+  border-color: #333 !important;
+}
+
+/* Avatar de usuario en navbar */
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.user-avatar:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(110, 87, 255, 0.6);
+}
+
+/* Placeholder para inputs */
+#perfilModal .form-control::placeholder,
+#perfilModal .form-select::placeholder,
+#adminModalMejorado .form-control::placeholder,
+#adminModalMejorado .form-select::placeholder {
+  color: #6b7280 !important;
+}
+
+/* Badges en modales */
+#perfilModal .badge,
+#adminModalMejorado .badge {
+  font-weight: 600;
+}
+
+/* Scrollbars en modales */
+#perfilModal .modal-body::-webkit-scrollbar,
+#adminModalMejorado .modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+#perfilModal .modal-body::-webkit-scrollbar-track,
+#adminModalMejorado .modal-body::-webkit-scrollbar-track {
+  background: var(--card);
+}
+
+#perfilModal .modal-body::-webkit-scrollbar-thumb,
+#adminModalMejorado .modal-body::-webkit-scrollbar-thumb {
+  background: rgba(110, 87, 255, 0.5);
+  border-radius: 4px;
+}
+
+#perfilModal .modal-body::-webkit-scrollbar-thumb:hover,
+#adminModalMejorado .modal-body::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
