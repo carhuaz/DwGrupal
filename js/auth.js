@@ -23,11 +23,17 @@ document.addEventListener('DOMContentLoaded', () => {
 async function initAuth() {
   console.log('🔄 Inicializando autenticación...');
   
-  // Esperar a que Supabase esté listo (máximo 3 segundos)
+  // Esperar a que Supabase esté listo (máximo 5 segundos)
   let intentos = 0;
-  while (typeof supabase === 'undefined' && intentos < 30) {
+  while ((!window.supabase || !window.supabase.auth) && intentos < 50) {
     await new Promise(resolve => setTimeout(resolve, 100));
     intentos++;
+  }
+  
+  if (!window.supabase || !window.supabase.auth) {
+    console.warn('⚠️ Supabase no disponible, algunas funciones estarán limitadas');
+  } else {
+    console.log('✅ Supabase disponible para auth.js');
   }
   
   // Verificar sesión existente
@@ -67,6 +73,7 @@ async function checkExistingSession() {
             email: session.user.email,
             name: profile.nombre_completo || session.user.email.split('@')[0],
             role: profile.rol || 'usuario',
+            rol: profile.rol || 'usuario', // Agregar también 'rol' para compatibilidad
             avatar: profile.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(session.user.email.split('@')[0])}&background=6e57ff&color=fff`,
             telefono: profile.telefono || '',
             direccion: profile.direccion || '',
@@ -246,11 +253,13 @@ async function loginWithSupabase(email, password, remember) {
       email: data.user.email,
       name: profile?.nombre_completo || data.user.user_metadata?.nombre || email.split('@')[0],
       role: profile?.rol || 'usuario',
+      rol: profile?.rol || 'usuario', // Agregar también con nombre 'rol' para compatibilidad
       avatar: profile?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(email.split('@')[0])}&background=6e57ff&color=fff`,
       telefono: profile?.telefono || '',
       direccion: profile?.direccion || '',
       ciudad: profile?.ciudad || '',
       pais: profile?.pais || 'Perú',
+      nombre_completo: profile?.nombre_completo || data.user.user_metadata?.nombre || email.split('@')[0],
       bio: profile?.bio || '',
       fecha_nacimiento: profile?.fecha_nacimiento || null,
       preferencias: profile?.preferencias || {},
@@ -404,21 +413,27 @@ async function simulateRegister(name, email, password) {
 function loginUser(user, saveSession = true) {
   authState.isLoggedIn = true;
   authState.user = user;
-  authState.role = user.role || 'usuario';
+  authState.role = user.role || user.rol || 'usuario';
+  
+  // Asegurar que el objeto user tenga ambos: role y rol
+  if (!user.rol) user.rol = user.role || 'usuario';
+  if (!user.role) user.role = user.rol || 'usuario';
   
   if (saveSession) {
     localStorage.setItem('digitalLoot_user', JSON.stringify(user));
-    localStorage.setItem('digitalLoot_role', user.role || 'usuario');
+    localStorage.setItem('digitalLoot_role', user.role || user.rol || 'usuario');
   }
   
   updateUserUI();
   
   // Mostrar panel admin si es administrador
-  if (user.role === 'admin' || user.role === 'administrador') {
+  const esAdmin = user.role === 'admin' || user.role === 'administrador' || 
+                  user.rol === 'admin' || user.rol === 'administrador';
+  if (esAdmin) {
     showAdminPanel();
   }
   
-  console.log('✅ Usuario logueado:', user.email, '| Rol:', user.role);
+  console.log('✅ Usuario logueado:', user.email, '| Rol:', user.role || user.rol);
 }
 
 /**
@@ -516,6 +531,9 @@ function showUserMenu(event) {
         <div class="dropdown-divider" style="border-color: #333;"></div>
         <button class="dropdown-item text-warning" onclick="abrirAdminPanel(); cerrarMenuUsuario();" style="background-color: rgba(220, 38, 38, 0.1);">
           <i class="bi bi-shield-lock me-2"></i>Panel de Admin
+        </button>
+        <button class="dropdown-item text-info" onclick="window.location.href='admin-pedidos.html';" style="background-color: rgba(110, 87, 255, 0.1);">
+          <i class="bi bi-box-seam me-2"></i>Gestionar Pedidos
         </button>
       ` : ''}
       <div class="dropdown-divider" style="border-color: #333;"></div>
@@ -883,11 +901,23 @@ async function loadAdminStats() {
   }
 }
 
+/**
+ * Abrir panel de administración (abre el modal de admin)
+ */
+function abrirAdminPanel() {
+  if (!isAdmin()) {
+    alert('No tienes permisos de administrador');
+    return;
+  }
+  openAdminModal();
+}
+
 // Exportar funciones globales
 window.logoutUser = logoutUser;
 window.authState = authState;
 window.isAdmin = isAdmin;
 window.openAdminModal = openAdminModal;
+window.abrirAdminPanel = abrirAdminPanel;
 window.promoteToAdmin = promoteToAdmin;
 window.demoteFromAdmin = demoteFromAdmin;
 window.showUserMenu = showUserMenu;

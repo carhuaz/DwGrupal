@@ -455,11 +455,25 @@ function configurarBuscador() {
 }
 
 // Inicializar cuando cargue la página
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   console.log('📄 Página cargada, inicializando productos...');
   
+  // Esperar a que Supabase esté listo
+  let intentos = 0;
+  while ((!window.supabase || !window.supabase.from) && intentos < 50) {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    intentos++;
+  }
+  
+  if (!window.supabase || !window.supabase.from) {
+    console.error('❌ Supabase no disponible para productos.js');
+    return;
+  }
+  
+  console.log('✅ Supabase listo para productos.js');
+  
   // Solo cargar productos destacados si estamos en index.html
-  if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+  if (window.location.pathname.includes('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/')) {
     cargarProductosDestacados();
   }
   

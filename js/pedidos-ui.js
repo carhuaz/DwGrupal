@@ -108,8 +108,8 @@ function mostrarPedidos(pedidos) {
     <div class="pedido-item" data-pedido-id="${pedido.id}">
       <div class="row align-items-center">
         <div class="col-md-3">
-          <h6 class="mb-1">${pedido.numero_pedido}</h6>
-          <small class="text-muted">${formatearFecha(pedido.fecha_pedido)}</small>
+          <h6 class="mb-1">#${pedido.id.substring(0, 8).toUpperCase()}</h6>
+          <small class="text-muted">${formatearFecha(pedido.created_at)}</small>
         </div>
         <div class="col-md-3">
           <div class="d-flex align-items-center">
@@ -118,9 +118,6 @@ function mostrarPedidos(pedidos) {
               <span class="badge ${obtenerClaseBadgeEstado(pedido.estado)}">
                 ${pedido.estado.toUpperCase()}
               </span>
-              ${pedido.codigo_seguimiento ? `
-                <br><small class="text-muted">Track: ${pedido.codigo_seguimiento}</small>
-              ` : ''}
             </div>
           </div>
         </div>
@@ -129,20 +126,20 @@ function mostrarPedidos(pedidos) {
           <small class="text-muted">${pedido.metodo_pago || 'N/A'}</small>
         </div>
         <div class="col-md-2 text-center">
-          ${pedido.fecha_estimada_entrega ? `
-            <small class="text-muted">Entrega estimada:</small><br>
-            <strong>${new Date(pedido.fecha_estimada_entrega).toLocaleDateString('es-ES')}</strong>
-          ` : 'Por definir'}
+          <small class="text-muted">${pedido.nombre || 'Cliente'}</small>
         </div>
         <div class="col-md-2 text-end">
           <button class="btn btn-outline-primary btn-sm" onclick="verDetallePedido('${pedido.id}')">
             <i class="bi bi-eye me-1"></i>Ver Detalles
           </button>
           ${pedido.estado === 'pendiente' ? `
-            <button class="btn btn-outline-danger btn-sm mt-1" onclick="confirmarCancelarPedido('${pedido.id}')">
+            <button class="btn btn-outline-warning btn-sm mt-1" onclick="confirmarCancelarPedido('${pedido.id}')">
               <i class="bi bi-x-circle me-1"></i>Cancelar
             </button>
           ` : ''}
+          <button class="btn btn-outline-danger btn-sm mt-1" onclick="confirmarEliminarPedido('${pedido.id}')">
+            <i class="bi bi-trash me-1"></i>Eliminar
+          </button>
         </div>
       </div>
     </div>
@@ -197,8 +194,8 @@ async function verDetallePedido(pedidoId) {
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
-              <h4 class="mb-0">${pedido.numero_pedido}</h4>
-              <small class="text-muted">${formatearFecha(pedido.fecha_pedido)}</small>
+              <h4 class="mb-0">#${pedido.id.substring(0, 8).toUpperCase()}</h4>
+              <small class="text-muted">${formatearFecha(pedido.created_at)}</small>
             </div>
             <span class="badge ${obtenerClaseBadgeEstado(pedido.estado)} fs-6">
               <i class="bi ${obtenerIconoEstado(pedido.estado)} me-1"></i>
@@ -206,53 +203,29 @@ async function verDetallePedido(pedidoId) {
             </span>
           </div>
 
-          <!-- Timeline de Estado -->
-          <div class="timeline mt-4">
-            <div class="timeline-item ${['pendiente', 'procesando', 'enviado', 'entregado'].includes(pedido.estado) ? 'active' : ''}">
-              <strong>Pedido Recibido</strong>
-              <br><small class="text-muted">${formatearFecha(pedido.fecha_pedido)}</small>
-            </div>
-            <div class="timeline-item ${['procesando', 'enviado', 'entregado'].includes(pedido.estado) ? 'active' : ''}">
-              <strong>En Procesamiento</strong>
-              ${pedido.estado === 'procesando' ? '<br><small class="text-success">Estado actual</small>' : ''}
-            </div>
-            <div class="timeline-item ${['enviado', 'entregado'].includes(pedido.estado) ? 'active' : ''}">
-              <strong>Enviado</strong>
-              ${pedido.codigo_seguimiento ? `<br><small>Código: ${pedido.codigo_seguimiento}</small>` : ''}
-              ${pedido.estado === 'enviado' ? '<br><small class="text-success">Estado actual</small>' : ''}
-            </div>
-            <div class="timeline-item ${pedido.estado === 'entregado' ? 'active' : ''}">
-              <strong>Entregado</strong>
-              ${pedido.fecha_entrega_real ? `<br><small>${new Date(pedido.fecha_entrega_real).toLocaleDateString('es-ES')}</small>` : ''}
-            </div>
+          <!-- Estado del pedido -->
+          <div class="alert alert-info">
+            <strong>Estado:</strong> ${pedido.estado}
+            ${pedido.notas ? `<br><strong>Notas:</strong> ${pedido.notas}` : ''}
           </div>
         </div>
       </div>
 
-      <!-- Información de Envío -->
+      <!-- Información del Cliente -->
       <div class="card mb-3">
         <div class="card-header">
-          <h6 class="mb-0"><i class="bi bi-truck me-2"></i>Información de Envío</h6>
+          <h6 class="mb-0"><i class="bi bi-person me-2"></i>Información del Cliente</h6>
         </div>
         <div class="card-body">
           <div class="row">
             <div class="col-md-6">
-              <p class="mb-2"><strong>Destinatario:</strong> ${pedido.nombre_cliente}</p>
-              <p class="mb-2"><strong>Teléfono:</strong> ${pedido.telefono || 'N/A'}</p>
+              <p class="mb-2"><strong>Nombre:</strong> ${pedido.nombre || 'N/A'}</p>
               <p class="mb-2"><strong>Email:</strong> ${pedido.email}</p>
             </div>
             <div class="col-md-6">
-              <p class="mb-2"><strong>Dirección:</strong> ${pedido.direccion_envio}</p>
-              <p class="mb-2"><strong>Ciudad:</strong> ${pedido.ciudad}</p>
-              <p class="mb-2"><strong>País:</strong> ${pedido.pais}</p>
-              ${pedido.codigo_postal ? `<p class="mb-2"><strong>C.P.:</strong> ${pedido.codigo_postal}</p>` : ''}
+              <p class="mb-2"><strong>Teléfono:</strong> ${pedido.telefono || 'N/A'}</p>
             </div>
           </div>
-          ${pedido.notas_cliente ? `
-            <div class="alert alert-info mt-3 mb-0">
-              <strong>Notas:</strong> ${pedido.notas_cliente}
-            </div>
-          ` : ''}
         </div>
       </div>
 
@@ -276,19 +249,10 @@ async function verDetallePedido(pedidoId) {
                 ${pedido.items && pedido.items.length > 0 ? pedido.items.map(item => `
                   <tr>
                     <td>
-                      <div class="d-flex align-items-center">
-                        ${item.imagen_url ? `
-                          <img src="${item.imagen_url}" alt="${item.nombre_producto}" 
-                               style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" class="me-3">
-                        ` : ''}
-                        <div>
-                          <strong>${item.nombre_producto}</strong>
-                          ${item.categoria ? `<br><small class="text-muted">${item.categoria}</small>` : ''}
-                        </div>
-                      </div>
+                      <strong>${item.nombre_producto}</strong>
                     </td>
                     <td class="text-center">${item.cantidad}</td>
-                    <td class="text-end">S/ ${parseFloat(item.precio_unitario).toFixed(2)}</td>
+                    <td class="text-end">S/ ${parseFloat(item.precio).toFixed(2)}</td>
                     <td class="text-end"><strong>S/ ${parseFloat(item.subtotal).toFixed(2)}</strong></td>
                   </tr>
                 `).join('') : '<tr><td colspan="4" class="text-center">No hay productos</td></tr>'}
@@ -304,25 +268,6 @@ async function verDetallePedido(pedidoId) {
           <h6 class="mb-0"><i class="bi bi-wallet2 me-2"></i>Resumen de Pago</h6>
         </div>
         <div class="card-body">
-          <div class="d-flex justify-content-between mb-2">
-            <span>Subtotal:</span>
-            <span>S/ ${parseFloat(pedido.subtotal).toFixed(2)}</span>
-          </div>
-          ${pedido.descuento > 0 ? `
-            <div class="d-flex justify-content-between mb-2 text-success">
-              <span>Descuento:</span>
-              <span>- S/ ${parseFloat(pedido.descuento).toFixed(2)}</span>
-            </div>
-          ` : ''}
-          <div class="d-flex justify-content-between mb-2">
-            <span>Impuestos (IGV):</span>
-            <span>S/ ${parseFloat(pedido.impuestos).toFixed(2)}</span>
-          </div>
-          <div class="d-flex justify-content-between mb-2">
-            <span>Envío:</span>
-            <span>${parseFloat(pedido.envio) === 0 ? '<span class="text-success">GRATIS</span>' : 'S/ ' + parseFloat(pedido.envio).toFixed(2)}</span>
-          </div>
-          <hr>
           <div class="d-flex justify-content-between fw-bold fs-5">
             <span>Total:</span>
             <span class="text-primary">S/ ${parseFloat(pedido.total).toFixed(2)}</span>
@@ -338,11 +283,20 @@ async function verDetallePedido(pedidoId) {
 
       ${pedido.estado === 'pendiente' ? `
         <div class="text-center mt-4">
-          <button class="btn btn-danger" onclick="confirmarCancelarPedido('${pedido.id}')">
+          <button class="btn btn-warning me-2" onclick="confirmarCancelarPedido('${pedido.id}')">
             <i class="bi bi-x-circle me-2"></i>Cancelar Pedido
           </button>
+          <button class="btn btn-danger" onclick="confirmarEliminarPedido('${pedido.id}')">
+            <i class="bi bi-trash me-2"></i>Eliminar Pedido
+          </button>
         </div>
-      ` : ''}
+      ` : `
+        <div class="text-center mt-4">
+          <button class="btn btn-danger" onclick="confirmarEliminarPedido('${pedido.id}')">
+            <i class="bi bi-trash me-2"></i>Eliminar Pedido
+          </button>
+        </div>
+      `}
     `;
 
   } catch (error) {
@@ -358,6 +312,40 @@ async function verDetallePedido(pedidoId) {
 function confirmarCancelarPedido(pedidoId) {
   if (confirm('¿Estás seguro de que deseas cancelar este pedido?')) {
     cancelarPedidoUI(pedidoId);
+  }
+}
+
+/**
+ * Confirmar antes de eliminar pedido
+ * @param {String} pedidoId - ID del pedido
+ */
+function confirmarEliminarPedido(pedidoId) {
+  eliminarPedidoUI(pedidoId);
+}
+
+/**
+ * Eliminar pedido con feedback UI
+ * @param {String} pedidoId - ID del pedido
+ */
+async function eliminarPedidoUI(pedidoId) {
+  try {
+    const exito = await eliminarPedido(pedidoId);
+    
+    if (exito) {
+      alert('✅ Pedido eliminado exitosamente');
+      
+      // Recargar pedidos
+      await cargarMisPedidos();
+      
+      // Cerrar modal de detalle si está abierto
+      const modalDetalle = bootstrap.Modal.getInstance(document.getElementById('detallePedidoModal'));
+      if (modalDetalle) {
+        modalDetalle.hide();
+      }
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Error al eliminar el pedido');
   }
 }
 
@@ -393,41 +381,54 @@ async function cancelarPedidoUI(pedidoId) {
  * Abrir modal para finalizar compra
  */
 function abrirModalFinalizarCompra() {
+  // Verificar si el usuario está autenticado
   if (!authState.isLoggedIn) {
-    alert('Debes iniciar sesión para realizar una compra');
+    alert('⚠️ Por favor, inicia sesión para realizar una compra');
+    // Opcionalmente abrir el modal de login
+    const loginModal = document.getElementById('loginModal');
+    if (loginModal) {
+      const modal = new bootstrap.Modal(loginModal);
+      modal.show();
+    }
     return;
   }
 
-  const carrito = obtenerCarrito();
-  if (!carrito || carrito.length === 0) {
-    alert('Tu carrito está vacío');
+  // Verificar que el carrito tenga productos
+  const itemsCarrito = window.carrito ? window.carrito.items : [];
+  if (!itemsCarrito || itemsCarrito.length === 0) {
+    alert('⚠️ Tu carrito está vacío. Agrega productos antes de realizar la compra.');
     return;
   }
 
   // Calcular totales
-  const subtotal = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-  const impuestos = subtotal * 0.18;
-  const envio = subtotal > 100 ? 0 : 10;
-  const total = subtotal + impuestos + envio;
+  const subtotal = itemsCarrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+  const total = subtotal;
 
   // Actualizar resumen
-  document.getElementById('resumen-subtotal').textContent = `S/ ${subtotal.toFixed(2)}`;
-  document.getElementById('resumen-impuestos').textContent = `S/ ${impuestos.toFixed(2)}`;
-  document.getElementById('resumen-envio').textContent = envio === 0 ? 'GRATIS' : `S/ ${envio.toFixed(2)}`;
-  document.getElementById('resumen-total').textContent = `S/ ${total.toFixed(2)}`;
+  const subtotalElem = document.getElementById('resumen-subtotal');
+  const totalElem = document.getElementById('resumen-total');
+  
+  if (subtotalElem) subtotalElem.textContent = `S/ ${subtotal.toFixed(2)}`;
+  if (totalElem) totalElem.textContent = `S/ ${total.toFixed(2)}`;
 
   // Prellenar con datos del perfil si existen
   if (authState.user) {
-    document.getElementById('compra-nombre').value = authState.user.nombre || '';
-    document.getElementById('compra-telefono').value = authState.user.telefono || '';
-    document.getElementById('compra-direccion').value = authState.user.direccion || '';
-    document.getElementById('compra-ciudad').value = authState.user.ciudad || '';
-    document.getElementById('compra-pais').value = authState.user.pais || 'Perú';
+    const nombreInput = document.getElementById('compra-nombre');
+    const telefonoInput = document.getElementById('compra-telefono');
+    
+    if (nombreInput) nombreInput.value = authState.user.nombre_completo || '';
+    if (telefonoInput) telefonoInput.value = authState.user.telefono || '';
   }
 
   // Abrir modal
-  const modal = new bootstrap.Modal(document.getElementById('confirmarCompraModal'));
-  modal.show();
+  const modalElem = document.getElementById('confirmarCompraModal');
+  if (modalElem) {
+    const modal = new bootstrap.Modal(modalElem);
+    modal.show();
+  } else {
+    console.error('❌ No se encontró el modal de confirmar compra');
+    alert('Error: No se pudo abrir el formulario de compra');
+  }
 }
 
 /**
@@ -445,10 +446,6 @@ async function procesarCompra() {
   const datosEnvio = {
     nombre: document.getElementById('compra-nombre').value.trim(),
     telefono: document.getElementById('compra-telefono').value.trim(),
-    direccion: document.getElementById('compra-direccion').value.trim(),
-    ciudad: document.getElementById('compra-ciudad').value.trim(),
-    pais: document.getElementById('compra-pais').value,
-    codigoPostal: document.getElementById('compra-codigo-postal').value.trim(),
     metodoPago: document.getElementById('compra-metodo-pago').value,
     notas: document.getElementById('compra-notas').value.trim()
   };
@@ -469,13 +466,16 @@ async function procesarCompra() {
       modal.hide();
 
       // Mostrar mensaje de éxito
-      alert(`¡Pedido creado exitosamente!\n\nNúmero de pedido: ${resultado.pedido.numero_pedido}\n\nPuedes ver el estado de tu pedido en "Mis Pedidos"`);
+      alert(`¡Pedido creado exitosamente!\n\n${resultado.mensaje}\n\nPuedes ver el estado de tu pedido en "Mis Pedidos"`);
 
       // Limpiar formulario
       form.reset();
 
-      // Actualizar UI del carrito (vaciar)
-      actualizarUICarrito();
+      // Cerrar el carrito si está abierto
+      const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('miniCart'));
+      if (offcanvas) {
+        offcanvas.hide();
+      }
 
     } else {
       alert('Error al crear el pedido: ' + resultado.error);
@@ -492,3 +492,11 @@ async function procesarCompra() {
 }
 
 console.log('✅ Módulo de UI de pedidos cargado');
+
+// Exportar funciones al scope global
+window.abrirMisPedidos = abrirMisPedidos;
+window.cargarMisPedidos = cargarMisPedidos;
+window.verDetallePedido = verDetallePedido;
+window.filtrarPedidosPorEstado = filtrarPedidosPorEstado;
+window.abrirModalFinalizarCompra = abrirModalFinalizarCompra;
+window.procesarCompra = procesarCompra;

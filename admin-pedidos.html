@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel de Pedidos - Admin | Digital Loot</title>
+
+    <!-- Bootstrap 5.3 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+
+    <!-- CSS personalizados -->
+    <link rel="stylesheet" href="estilos/estilos.css" />
+    <link rel="stylesheet" href="estilos/admin-pedidos.css" />
+
+    <style>
+      /* Estilos inline mínimos - El tema principal está en admin-pedidos.css */
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="index.html">
+          <i class="bi bi-controller me-2"></i>Digital Loot
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">
+                <i class="bi bi-house-door me-1"></i>Inicio
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="catalogo.html">
+                <i class="bi bi-grid me-1"></i>Catálogo
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="admin-pedidos.html">
+                <i class="bi bi-box-seam me-1"></i>Pedidos
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="#"
+                onclick="logoutUser(); return false;"
+              >
+                <i class="bi bi-box-arrow-right me-1"></i>Cerrar Sesión
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div class="container my-5">
+      <!-- Header -->
+      <div class="row mb-4 admin-header">
+        <div class="col">
+          <h1 class="mb-2">
+            <i class="bi bi-speedometer2 me-2"></i>Panel de Pedidos
+          </h1>
+          <p class="text-muted">Gestiona todos los pedidos del sistema</p>
+        </div>
+        <div class="col-auto">
+          <button class="btn btn-export me-2" onclick="exportarPedidosCSV()">
+            <i class="bi bi-download me-2"></i>Exportar CSV
+          </button>
+          <button class="btn btn-filter" onclick="cargarPedidosAdmin()">
+            <i class="bi bi-arrow-clockwise me-2"></i>Actualizar
+          </button>
+        </div>
+      </div>
+
+      <!-- Estadísticas -->
+      <div class="row mb-4">
+        <div class="col-md-3 col-6 mb-3">
+          <div class="stat-card h-100">
+            <div class="card-body text-center">
+              <i class="bi bi-box fs-1"></i>
+              <h3 class="display-4 mt-2 mb-0" id="admin-stat-total">0</h3>
+              <h5 class="text-muted">Total Pedidos</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+          <div class="stat-card h-100">
+            <div class="card-body text-center">
+              <i class="bi bi-clock-history fs-1"></i>
+              <h3 class="display-4 mt-2 mb-0" id="admin-stat-pendientes">0</h3>
+              <h5 class="text-muted">Pendientes</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+          <div class="stat-card h-100">
+            <div class="card-body text-center">
+              <i class="bi bi-hourglass-split fs-1"></i>
+              <h3 class="display-4 mt-2 mb-0" id="admin-stat-procesando">0</h3>
+              <h5 class="text-muted">En Proceso</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-6 mb-3">
+          <div class="stat-card h-100">
+            <div class="card-body text-center">
+              <i class="bi bi-check-circle fs-1"></i>
+              <h3 class="display-4 mt-2 mb-0" id="admin-stat-completados">0</h3>
+              <h5 class="text-muted">Completados</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filtros -->
+      <div class="filters-section mb-4">
+        <div
+          class="d-flex justify-content-between align-items-center flex-wrap"
+        >
+          <div>
+            <h4 class="mb-2">Filtrar por Estado:</h4>
+            <div class="btn-group-wrap" role="group">
+              <button
+                type="button"
+                class="btn btn-filter filter-btn active"
+                data-estado="todos"
+              >
+                📄 Todos
+              </button>
+              <button
+                type="button"
+                class="btn btn-filter filter-btn"
+                data-estado="pendiente"
+              >
+                ⏳ Pendientes
+              </button>
+              <button
+                type="button"
+                class="btn btn-filter filter-btn"
+                data-estado="procesando"
+              >
+                🔄 Procesando
+              </button>
+              <button
+                type="button"
+                class="btn btn-filter filter-btn"
+                data-estado="completado"
+              >
+                ✔️ Completados
+              </button>
+              <button
+                type="button"
+                class="btn btn-filter filter-btn"
+                data-estado="cancelado"
+              >
+                ❌ Cancelados
+              </button>
+              <button
+                type="button"
+                class="btn btn-filter filter-btn"
+                data-estado="reembolsado"
+              >
+                💰 Reembolsados
+              </button>
+            </div>
+          </div>
+          <div class="mt-3 mt-md-0">
+            <h5 class="mb-0 ventas-badge">
+              <i class="bi bi-currency-dollar me-2"></i>
+              Ventas Totales:
+              <span id="admin-stat-ventas">S/ 0.00</span>
+            </h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista de Pedidos -->
+      <div class="table-section">
+        <h4 class="mb-3"><i class="bi bi-list-ul me-2"></i>Lista de Pedidos</h4>
+        <div class="table-responsive" id="adminPedidosContainer">
+          <div class="text-center py-5">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-3">Cargando pedidos...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Detalle del Pedido -->
+    <div
+      class="modal fade"
+      id="adminDetallePedidoModal"
+      tabindex="-1"
+      aria-labelledby="adminDetallePedidoModalLabel"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+      >
+        <div class="modal-content bg-dark text-light border-secondary">
+          <div class="modal-header bg-primary text-white border-secondary">
+            <h5 class="modal-title" id="adminDetallePedidoModalLabel">
+              <i class="bi bi-receipt me-2"></i>Detalle del Pedido
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body" id="adminDetallePedidoContent">
+            <!-- Contenido dinámico -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Cambiar Estado -->
+    <div
+      class="modal fade"
+      id="cambiarEstadoModal"
+      tabindex="-1"
+      aria-labelledby="cambiarEstadoModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" id="cambiarEstadoModalLabel">
+              <i class="bi bi-arrow-repeat me-2"></i>Cambiar Estado del Pedido
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <!-- Info del pedido se inserta dinámicamente aquí -->
+
+            <div class="mb-3">
+              <label for="nuevoEstadoSelect" class="form-label">
+                <strong><i class="bi bi-tag"></i> Nuevo Estado:</strong>
+              </label>
+              <select class="form-select form-select-lg" id="nuevoEstadoSelect">
+                <option value="pendiente">
+                  ⏳ Pendiente - Esperando confirmación
+                </option>
+                <option value="procesando">
+                  🔄 Procesando - Pedido en proceso
+                </option>
+                <option value="completado">
+                  ✔️ Completado - Entregado al cliente
+                </option>
+                <option value="cancelado">
+                  ❌ Cancelado - Pedido cancelado
+                </option>
+                <option value="reembolsado">
+                  💰 Reembolsado - Dinero devuelto
+                </option>
+              </select>
+              <small class="text-muted d-block mt-2">
+                <i class="bi bi-info-circle"></i> Flujo: Pendiente → Procesando
+                → Completado
+              </small>
+            </div>
+
+            <div class="alert alert-warning">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              <strong>Importante:</strong> El cambio de estado se guardará
+              inmediatamente en la base de datos.
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              <i class="bi bi-x-circle me-2"></i>Cancelar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary btn-lg"
+              onclick="confirmarCambioEstado()"
+            >
+              <i class="bi bi-check-circle me-2"></i>Confirmar Cambio
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      // Guardar referencia INMEDIATAMENTE después de cargar el CDN
+      if (
+        window.supabase &&
+        typeof window.supabase.createClient === "function"
+      ) {
+        window._supabaseLib = window.supabase;
+        console.log("📦 Supabase CDN guardado en _supabaseLib");
+      }
+    </script>
+    <script src="js/supabaseClient.js?v=4"></script>
+
+    <!-- Scripts del proyecto -->
+    <script src="js/auth.js?v=4"></script>
+    <script src="js/admin-pedidos-simple.js?v=4"></script>
+
+    <!-- Inicialización -->
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        console.log("🚀 Iniciando panel de pedidos...");
+
+        // Esperar a que Supabase esté listo
+        let intentos = 0;
+        while (
+          (typeof supabase === "undefined" || !supabase || !supabase.auth) &&
+          intentos < 50
+        ) {
+          console.log("⏳ Esperando Supabase... intento", intentos + 1);
+          await new Promise((resolve) => setTimeout(resolve, 100));
+          intentos++;
+        }
+
+        if (!supabase || !supabase.auth) {
+          console.error("❌ Supabase no se pudo inicializar");
+          alert(
+            "Error: No se pudo conectar con el servidor. Recarga la página."
+          );
+          return;
+        }
+
+        console.log("✅ Supabase listo");
+
+        // Esperar a que authState esté disponible
+        intentos = 0;
+        while (typeof authState === "undefined" && intentos < 30) {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+          intentos++;
+        }
+
+        // Verificar sesión existente
+        if (typeof checkExistingSession === "function") {
+          await checkExistingSession();
+        }
+
+        console.log("👤 Usuario:", authState?.user);
+        console.log(
+          "🔐 Rol:",
+          authState?.user?.rol || authState?.user?.role || "no hay rol"
+        );
+
+        // Verificar si es admin
+        const user = authState?.user;
+        const esAdmin =
+          user &&
+          (user.rol === "admin" ||
+            user.rol === "administrador" ||
+            user.role === "admin" ||
+            user.role === "administrador");
+
+        if (esAdmin) {
+          console.log("✅ Acceso de admin confirmado");
+          await inicializarPanelAdminPedidos();
+        } else {
+          console.log("❌ No es admin o no hay sesión");
+          console.log(
+            "authState completo:",
+            JSON.stringify(authState, null, 2)
+          );
+
+          // Mostrar opciones al usuario
+          const ir = confirm(
+            "⚠️ No tienes permisos de administrador o no has iniciado sesión.\n\n" +
+              "¿Deseas ir a la página de verificación de sesión?"
+          );
+
+          if (ir) {
+            window.location.href = "verificar-sesion.html";
+          } else {
+            window.location.href = "index.html";
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -5,45 +5,39 @@
 ============================================================ */
 
 class Carrito {
-  /**
-   * Constructor - Inicializa el carrito desde localStorage
-   */
   constructor() {
     this.items = JSON.parse(localStorage.getItem('carrito')) || [];
+    this.eventosConfigurados = false;
     this.inicializar();
   }
 
-  /**
-   * Inicializar funcionalidades del carrito
-   */
   inicializar() {
+    console.log('🛒 Inicializando carrito...');
     this.actualizarUI();
     this.configurarEventos();
     this.escucharBotonesAgregar();
+    console.log('✅ Carrito inicializado con', this.items.length, 'items');
   }
 
-  /**
-   * Escuchar clicks en botones de agregar al carrito
-   * Soporta tanto el sistema nuevo (Supabase) como el antiguo
-   */
   escucharBotonesAgregar() {
     document.addEventListener('click', (e) => {
-      // Sistema nuevo con Supabase
       const btnSupabase = e.target.closest('.btn-add-cart');
       if (btnSupabase) {
         e.preventDefault();
+        e.stopPropagation();
+        
         const producto = {
-          id: parseInt(btnSupabase.dataset.id),
+          id: String(btnSupabase.dataset.id),
           nombre: btnSupabase.dataset.nombre,
           precio: parseFloat(btnSupabase.dataset.precio),
-          imagen: btnSupabase.dataset.imagen,
-          cantidad: 1
+          imagen: btnSupabase.dataset.imagen
         };
+        
+        console.log('➕ Agregando producto:', producto.nombre);
         this.agregar(producto);
         return;
       }
 
-      // Sistema antiguo (fallback)
       const btnAntiguo = e.target.closest('.btn-buy');
       if (btnAntiguo) {
         e.preventDefault();
@@ -53,11 +47,6 @@ class Carrito {
     });
   }
 
-  /**
-   * Extraer datos de producto desde una tarjeta del DOM
-   * @param {HTMLElement} btn - Botón de compra
-   * @returns {Object|null} Datos del producto o null
-   */
   extraerProductoCard(btn) {
     const card = btn.closest('.game-card') || btn.closest('.product-card');
     if (!card) return null;
@@ -74,30 +63,24 @@ class Carrito {
     const precio = parseFloat(precioTexto.replace(/[^\d.,]/g, '').replace(',', '.')) || 0;
     const id = titulo.toLowerCase().replace(/[^\w]+/g, '-') + '-' + Date.now();
 
-    return {
-      id: id,
-      nombre: titulo,
-      precio: precio,
-      imagen: imagen,
-      cantidad: 1
-    };
+    return { id, nombre: titulo, precio, imagen };
   }
 
   agregar(producto) {
-    const existe = this.items.find(item => 
-      item.id === producto.id || item.nombre === producto.nombre
-    );
+    const existe = this.items.find(item => String(item.id) === String(producto.id));
     
     if (existe) {
       existe.cantidad++;
+      console.log('📦 Cantidad aumentada:', existe.nombre, '→', existe.cantidad);
     } else {
       this.items.push({
-        id: producto.id,
+        id: String(producto.id),
         nombre: producto.nombre,
         precio: producto.precio,
         imagen: producto.imagen,
         cantidad: 1
       });
+      console.log('🆕 Producto agregado:', producto.nombre);
     }
     
     this.guardar();
@@ -105,33 +88,43 @@ class Carrito {
     this.mostrarNotificacion('✓ Agregado al carrito');
     this.abrirCarrito();
   }
-
   eliminar(id) {
-    this.items = this.items.filter(item => item.id != id);
+    console.log('🗑️ Eliminando ID:', id);
+    const antes = this.items.length;
+    this.items = this.items.filter(item => String(item.id) !== String(id));
+    console.log('Productos eliminados:', antes - this.items.length);
     this.guardar();
     this.actualizarUI();
   }
 
   incrementar(id) {
-    const item = this.items.find(i => i.id == id);
+    console.log('➕ Incrementando ID:', id);
+    const item = this.items.find(i => String(i.id) === String(id));
     if (item) {
       item.cantidad++;
+      console.log('Nueva cantidad:', item.cantidad);
       this.guardar();
       this.actualizarUI();
+    } else {
+      console.error('❌ Item no encontrado');
     }
   }
 
   decrementar(id) {
-    const item = this.items.find(i => i.id == id);
+    console.log('➖ Decrementando ID:', id);
+    const item = this.items.find(i => String(i.id) === String(id));
     if (item) {
       if (item.cantidad > 1) {
         item.cantidad--;
+        console.log('Nueva cantidad:', item.cantidad);
+        this.guardar();
+        this.actualizarUI();
       } else {
+        console.log('Cantidad = 1, eliminando...');
         this.eliminar(id);
-        return;
       }
-      this.guardar();
-      this.actualizarUI();
+    } else {
+      console.error('❌ Item no encontrado');
     }
   }
 
@@ -156,139 +149,108 @@ class Carrito {
 
     if (!cartList) return;
 
-    // Actualizar badge
     const totalItems = this.items.reduce((sum, item) => sum + item.cantidad, 0);
+    
+    // Actualizar badge
     if (badge) {
       badge.textContent = totalItems;
-      // Animar badge cuando cambia
-      badge.style.animation = 'none';
-      setTimeout(() => {
-        badge.style.animation = 'badgePulse 2s ease infinite';
-      }, 10);
+      badge.style.display = totalItems > 0 ? 'inline-block' : 'none';
     }
 
-    // Actualizar lista
+    // Limpiar y recrear lista
     cartList.innerHTML = '';
+
     if (this.items.length === 0) {
-      const liEmpty = document.createElement('li');
-      liEmpty.className = 'list-group-item text-center text-muted py-5';
-      const icon = document.createElement('i');
-      icon.className = 'bi bi-cart-x fs-1 d-block mb-2';
-      liEmpty.appendChild(icon);
-      const txt = document.createElement('div');
-      txt.textContent = 'Tu carrito está vacío';
-      liEmpty.appendChild(txt);
-      cartList.appendChild(liEmpty);
+      cartList.innerHTML = `
+        <li class="list-group-item text-center text-muted py-5">
+          <i class="bi bi-cart-x fs-1 d-block mb-2"></i>
+          <div>Tu carrito está vacío</div>
+        </li>
+      `;
       if (subtotal) subtotal.textContent = 'S/ 0.00';
-    } else {
-      this.items.forEach(item => {
-        const li = document.createElement('li');
-        li.className = 'list-group-item';
+      return;
+    }
 
-        const row = document.createElement('div');
-        row.className = 'd-flex gap-2 align-items-center';
+    // Crear items
+    this.items.forEach(item => {
+      const li = document.createElement('li');
+      li.className = 'list-group-item';
+      li.innerHTML = `
+        <div class="d-flex gap-2 align-items-center">
+          <img src="${item.imagen || 'img/placeholder.jpg'}" 
+               width="50" height="50" 
+               class="rounded object-fit-cover" 
+               alt="${item.nombre}">
+          <div class="flex-grow-1">
+            <div class="fw-semibold small">${item.nombre}</div>
+            <div class="d-flex align-items-center gap-2 mt-1">
+              <div class="btn-group btn-group-sm" role="group">
+                <button class="btn btn-outline-light btn-qty-dec" 
+                        data-id="${item.id}" 
+                        type="button">−</button>
+                <span class="px-2 small">${item.cantidad}</span>
+                <button class="btn btn-outline-light btn-qty-inc" 
+                        data-id="${item.id}" 
+                        type="button">+</button>
+              </div>
+              <span class="ms-auto text-primary fw-semibold small">
+                S/ ${(item.precio * item.cantidad).toFixed(2)}
+              </span>
+            </div>
+          </div>
+          <button class="btn btn-sm btn-outline-danger btn-remove" 
+                  data-id="${item.id}" 
+                  type="button">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      `;
+      cartList.appendChild(li);
+    });
 
-        const img = document.createElement('img');
-        img.src = item.imagen || 'img/placeholder.jpg';
-        img.width = 50;
-        img.height = 50;
-        img.className = 'rounded object-fit-cover';
-        img.alt = item.nombre;
-
-        const flex = document.createElement('div');
-        flex.className = 'flex-grow-1';
-
-        const name = document.createElement('div');
-        name.className = 'fw-semibold small';
-        name.textContent = item.nombre;
-
-        const controlsRow = document.createElement('div');
-        controlsRow.className = 'd-flex align-items-center gap-2 mt-1';
-
-        const btnGroup = document.createElement('div');
-        btnGroup.className = 'btn-group btn-group-sm';
-        btnGroup.role = 'group';
-
-        const dec = document.createElement('button');
-        dec.className = 'btn btn-outline-light btn-qty-dec';
-        dec.dataset.id = item.id;
-        dec.type = 'button';
-        dec.textContent = '−';
-
-        const qtySpan = document.createElement('span');
-        qtySpan.className = 'px-2 small';
-        qtySpan.textContent = String(item.cantidad);
-
-        const inc = document.createElement('button');
-        inc.className = 'btn btn-outline-light btn-qty-inc';
-        inc.dataset.id = item.id;
-        inc.type = 'button';
-        inc.textContent = '+';
-
-        btnGroup.appendChild(dec);
-        btnGroup.appendChild(qtySpan);
-        btnGroup.appendChild(inc);
-
-        const price = document.createElement('span');
-        price.className = 'ms-auto text-primary fw-semibold small';
-        price.textContent = `S/ ${(item.precio * item.cantidad).toFixed(2)}`;
-
-        controlsRow.appendChild(btnGroup);
-        controlsRow.appendChild(price);
-
-        flex.appendChild(name);
-        flex.appendChild(controlsRow);
-
-        const removeBtn = document.createElement('button');
-        removeBtn.className = 'btn btn-sm btn-outline-danger btn-remove';
-        removeBtn.dataset.id = item.id;
-        removeBtn.type = 'button';
-        const remIcon = document.createElement('i');
-        remIcon.className = 'bi bi-trash';
-        removeBtn.appendChild(remIcon);
-
-        row.appendChild(img);
-        row.appendChild(flex);
-        row.appendChild(removeBtn);
-
-        li.appendChild(row);
-        cartList.appendChild(li);
-      });
-
-      if (subtotal) subtotal.textContent = `S/ ${this.calcularTotal().toFixed(2)}`;
+    if (subtotal) {
+      subtotal.textContent = `S/ ${this.calcularTotal().toFixed(2)}`;
     }
   }
 
   configurarEventos() {
-    // Botones dentro del carrito
-    document.getElementById('cartList')?.addEventListener('click', (e) => {
-      const id = e.target.closest('[data-id]')?.dataset.id;
-      if (!id) return;
-
-      if (e.target.closest('.btn-qty-inc')) {
-        this.incrementar(id);
-      } else if (e.target.closest('.btn-qty-dec')) {
-        this.decrementar(id);
-      } else if (e.target.closest('.btn-remove')) {
-        this.eliminar(id);
+    const cartList = document.getElementById('cartList');
+    if (!cartList) return;
+    
+    // Solo configurar UNA VEZ
+    if (this.eventosConfigurados) {
+      return;
+    }
+    
+    console.log('🎯 Configurando eventos del carrito...');
+    
+    // Event delegation en el contenedor padre
+    cartList.addEventListener('click', (e) => {
+      const btnInc = e.target.closest('.btn-qty-inc');
+      const btnDec = e.target.closest('.btn-qty-dec');
+      const btnRemove = e.target.closest('.btn-remove');
+      
+      if (btnInc && btnInc.dataset.id) {
+        e.preventDefault();
+        this.incrementar(btnInc.dataset.id);
+      } else if (btnDec && btnDec.dataset.id) {
+        e.preventDefault();
+        this.decrementar(btnDec.dataset.id);
+      } else if (btnRemove && btnRemove.dataset.id) {
+        e.preventDefault();
+        this.eliminar(btnRemove.dataset.id);
       }
     });
 
-    // Vaciar carrito
+    // Botón vaciar carrito
     document.getElementById('btnClearCart')?.addEventListener('click', () => {
       if (this.items.length && confirm('¿Vaciar el carrito?')) {
         this.vaciar();
       }
     });
 
-    // Ir a pagar
-    document.getElementById('btnCheckout')?.addEventListener('click', () => {
-      if (this.items.length === 0) {
-        alert('El carrito está vacío');
-      } else {
-        alert(`Total a pagar: S/ ${this.calcularTotal().toFixed(2)}\n\n(Sistema de pago en desarrollo)`);
-      }
-    });
+    this.eventosConfigurados = true;
+    console.log('✅ Eventos configurados');
   }
 
   abrirCarrito() {

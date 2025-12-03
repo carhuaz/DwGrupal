@@ -294,26 +294,70 @@ async function abrirAdminPanel() {
 async function cargarEstadisticasAdmin() {
   const container = document.getElementById('adminStatsContent');
   
+  // Mostrar loading
+  container.innerHTML = `
+    <div class="col-12 text-center py-4">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-2">Cargando estadísticas...</p>
+    </div>
+  `;
+
   try {
-    // Llamar a la función SQL de estadísticas
-    const { data, error } = await supabase
-      .rpc('estadisticas_generales');
-    
-    if (error) {
-      console.error('❌ Error al cargar estadísticas:', error);
-      container.innerHTML = '<p class="text-danger">Error al cargar estadísticas</p>';
-      return;
+    // Esperar a que Supabase esté listo
+    let intentos = 0;
+    while ((!window.supabase || !window.supabase.from) && intentos < 30) {
+      await new Promise(r => setTimeout(r, 100));
+      intentos++;
     }
-    
-    const stats = data;
+
+    if (!window.supabase || !window.supabase.from) {
+      throw new Error('Supabase no está disponible');
+    }
+
+    console.log('📊 Cargando estadísticas...');
+
+    // Consultar estadísticas directamente de las tablas
+    const usuariosRes = await window.supabase.from('perfiles').select('id, rol');
+    const productosRes = await window.supabase.from('productos').select('id, stock');
+    const pedidosRes = await window.supabase.from('pedidos').select('id, estado, total');
+
+    console.log('📊 Usuarios:', usuariosRes);
+    console.log('📊 Productos:', productosRes);
+    console.log('📊 Pedidos:', pedidosRes);
+
+    // Verificar errores
+    if (usuariosRes.error) console.error('Error usuarios:', usuariosRes.error);
+    if (productosRes.error) console.error('Error productos:', productosRes.error);
+    if (pedidosRes.error) console.error('Error pedidos:', pedidosRes.error);
+
+    // Calcular estadísticas de usuarios
+    const usuarios = usuariosRes.data || [];
+    const totalUsuarios = usuarios.length;
+    const totalAdmins = usuarios.filter(u => u.rol === 'admin' || u.rol === 'administrador').length;
+
+    // Calcular estadísticas de productos
+    const productos = productosRes.data || [];
+    const totalProductos = productos.length;
+    const productosVendidos = productos.filter(p => p.stock === 0).length;
+
+    // Calcular estadísticas de pedidos
+    const pedidos = pedidosRes.data || [];
+    const totalPedidos = pedidos.length;
+    const pedidosCompletados = pedidos.filter(p => p.estado === 'completado').length;
+    const pedidosPendientes = pedidos.filter(p => p.estado === 'pendiente').length;
+    const ingresosTotales = pedidos
+      .filter(p => p.estado === 'completado' || p.estado === 'procesando')
+      .reduce((sum, p) => sum + parseFloat(p.total || 0), 0);
+
+    console.log('📊 Stats calculadas:', { totalUsuarios, totalAdmins, totalProductos, totalPedidos, ingresosTotales });
     
     container.innerHTML = `
       <div class="col-md-3">
         <div class="card bg-primary text-white">
           <div class="card-body">
             <h6 class="card-title"><i class="bi bi-people me-2"></i>Usuarios</h6>
-            <h2 class="mb-0">${stats.total_usuarios || 0}</h2>
-            <small>${stats.total_administradores || 0} administradores</small>
+            <h2 class="mb-0">${totalUsuarios}</h2>
+            <small>${totalAdmins} administradores</small>
           </div>
         </div>
       </div>
@@ -321,8 +365,8 @@ async function cargarEstadisticasAdmin() {
         <div class="card bg-success text-white">
           <div class="card-body">
             <h6 class="card-title"><i class="bi bi-box-seam me-2"></i>Productos</h6>
-            <h2 class="mb-0">${stats.total_productos || 0}</h2>
-            <small>${stats.productos_vendidos || 0} vendidos</small>
+            <h2 class="mb-0">${totalProductos}</h2>
+            <small>${productosVendidos} vendidos</small>
           </div>
         </div>
       </div>
@@ -330,8 +374,8 @@ async function cargarEstadisticasAdmin() {
         <div class="card bg-info text-white">
           <div class="card-body">
             <h6 class="card-title"><i class="bi bi-cart me-2"></i>Pedidos</h6>
-            <h2 class="mb-0">${stats.total_pedidos || 0}</h2>
-            <small>${stats.pedidos_completados || 0} completados / ${stats.pedidos_pendientes || 0} pendientes</small>
+            <h2 class="mb-0">${totalPedidos}</h2>
+            <small>${pedidosCompletados} completados / ${pedidosPendientes} pendientes</small>
           </div>
         </div>
       </div>
@@ -339,14 +383,14 @@ async function cargarEstadisticasAdmin() {
         <div class="card bg-warning text-dark">
           <div class="card-body">
             <h6 class="card-title"><i class="bi bi-currency-dollar me-2"></i>Ingresos</h6>
-            <h2 class="mb-0">S/ ${Number(stats.ingresos_totales || 0).toFixed(2)}</h2>
+            <h2 class="mb-0">S/ ${ingresosTotales.toFixed(2)}</h2>
             <small>Total generado</small>
           </div>
         </div>
       </div>
     `;
     
-    console.log('✅ Estadísticas cargadas:', stats);
+    console.log('✅ Estadísticas cargadas correctamente');
   } catch (error) {
     console.error('❌ Error:', error);
     container.innerHTML = '<p class="text-danger">Error al cargar estadísticas</p>';

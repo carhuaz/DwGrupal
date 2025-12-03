@@ -84,16 +84,16 @@
             <button
               type="button"
               class="btn btn-outline-info"
-              onclick="filtrarPedidosPorEstado('enviado')"
+              onclick="filtrarPedidosPorEstado('procesando')"
             >
-              Enviados
+              Procesando
             </button>
             <button
               type="button"
               class="btn btn-outline-success"
-              onclick="filtrarPedidosPorEstado('entregado')"
+              onclick="filtrarPedidosPorEstado('completado')"
             >
-              Entregados
+              Completados
             </button>
           </div>
           <button class="btn btn-primary" onclick="cargarMisPedidos()">
@@ -158,159 +158,213 @@
   aria-hidden="true"
 >
   <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
+    <div
+      class="modal-content"
+      style="
+        border: 2px solid #6e57ff;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(110, 87, 255, 0.3);
+      "
+    >
+      <div
+        class="modal-header"
+        style="
+          background: linear-gradient(135deg, #6e57ff 0%, #8b75ff 100%);
+          color: white;
+          border-radius: 13px 13px 0 0;
+        "
+      >
         <h5 class="modal-title" id="confirmarCompraModalLabel">
           <i class="bi bi-credit-card me-2"></i>Finalizar Compra
         </h5>
         <button
           type="button"
-          class="btn-close"
+          class="btn-close btn-close-white"
           data-bs-dismiss="modal"
           aria-label="Cerrar"
         ></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" style="padding: 2rem">
         <form id="formConfirmarCompra">
-          <!-- Información de Envío -->
-          <h6 class="mb-3">
-            <i class="bi bi-truck me-2"></i>Información de Envío
+          <!-- Información de Contacto -->
+          <h6
+            class="mb-3"
+            style="color: #6e57ff; font-weight: bold; font-size: 1.1rem"
+          >
+            <i class="bi bi-person-circle me-2"></i>Información de Contacto
           </h6>
 
           <div class="row mb-3">
             <div class="col-md-6">
-              <label for="compra-nombre" class="form-label"
-                >Nombre Completo *</label
+              <label
+                for="compra-nombre"
+                class="form-label"
+                style="font-weight: 600; color: #333"
               >
+                Nombre Completo *
+              </label>
               <input
                 type="text"
                 class="form-control"
                 id="compra-nombre"
                 required
+                style="
+                  border: 2px solid #e0e0e0;
+                  border-radius: 8px;
+                  padding: 10px;
+                  transition: all 0.3s;
+                "
+                onfocus="this.style.borderColor='#6e57ff'; this.style.boxShadow='0 0 0 0.2rem rgba(110, 87, 255, 0.15)';"
+                onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';"
               />
             </div>
             <div class="col-md-6">
-              <label for="compra-telefono" class="form-label">Teléfono *</label>
+              <label
+                for="compra-telefono"
+                class="form-label"
+                style="font-weight: 600; color: #333"
+              >
+                Teléfono *
+              </label>
               <input
                 type="tel"
                 class="form-control"
                 id="compra-telefono"
                 required
+                style="
+                  border: 2px solid #e0e0e0;
+                  border-radius: 8px;
+                  padding: 10px;
+                  transition: all 0.3s;
+                "
+                onfocus="this.style.borderColor='#6e57ff'; this.style.boxShadow='0 0 0 0.2rem rgba(110, 87, 255, 0.15)';"
+                onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';"
               />
             </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="compra-direccion" class="form-label">Dirección *</label>
-            <input
-              type="text"
-              class="form-control"
-              id="compra-direccion"
-              required
-            />
-          </div>
-
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="compra-ciudad" class="form-label">Ciudad *</label>
-              <input
-                type="text"
-                class="form-control"
-                id="compra-ciudad"
-                required
-              />
-            </div>
-            <div class="col-md-6">
-              <label for="compra-codigo-postal" class="form-label"
-                >Código Postal</label
-              >
-              <input
-                type="text"
-                class="form-control"
-                id="compra-codigo-postal"
-              />
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="compra-pais" class="form-label">País *</label>
-            <select class="form-select" id="compra-pais" required>
-              <option value="Perú" selected>Perú</option>
-              <option value="Argentina">Argentina</option>
-              <option value="Chile">Chile</option>
-              <option value="Colombia">Colombia</option>
-              <option value="México">México</option>
-              <option value="España">España</option>
-            </select>
           </div>
 
           <!-- Método de Pago -->
-          <h6 class="mb-3 mt-4">
+          <h6
+            class="mb-3 mt-4"
+            style="color: #6e57ff; font-weight: bold; font-size: 1.1rem"
+          >
             <i class="bi bi-wallet2 me-2"></i>Método de Pago
           </h6>
 
           <div class="mb-3">
-            <select class="form-select" id="compra-metodo-pago" required>
+            <select
+              class="form-select"
+              id="compra-metodo-pago"
+              required
+              style="
+                border: 2px solid #e0e0e0;
+                border-radius: 8px;
+                padding: 10px;
+                transition: all 0.3s;
+              "
+              onfocus="this.style.borderColor='#6e57ff'; this.style.boxShadow='0 0 0 0.2rem rgba(110, 87, 255, 0.15)';"
+              onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';"
+            >
               <option value="tarjeta" selected>
-                Tarjeta de Crédito/Débito
+                💳 Tarjeta de Crédito/Débito
               </option>
-              <option value="paypal">PayPal</option>
-              <option value="transferencia">Transferencia Bancaria</option>
-              <option value="efectivo">Contra Entrega (Efectivo)</option>
+              <option value="paypal">📱 PayPal</option>
+              <option value="transferencia">🏦 Transferencia Bancaria</option>
+              <option value="efectivo">💵 Contra Entrega (Efectivo)</option>
             </select>
           </div>
 
           <!-- Notas Adicionales -->
           <div class="mb-3">
-            <label for="compra-notas" class="form-label"
-              >Notas Adicionales (Opcional)</label
+            <label
+              for="compra-notas"
+              class="form-label"
+              style="font-weight: 600; color: #333"
             >
+              Notas Adicionales (Opcional)
+            </label>
             <textarea
               class="form-control"
               id="compra-notas"
               rows="3"
               placeholder="Instrucciones de entrega, referencias, etc."
+              style="
+                border: 2px solid #e0e0e0;
+                border-radius: 8px;
+                padding: 10px;
+                transition: all 0.3s;
+              "
+              onfocus="this.style.borderColor='#6e57ff'; this.style.boxShadow='0 0 0 0.2rem rgba(110, 87, 255, 0.15)';"
+              onblur="this.style.borderColor='#e0e0e0'; this.style.boxShadow='none';"
             ></textarea>
           </div>
 
           <!-- Resumen de Compra -->
-          <div class="card bg-light mt-4">
+          <div
+            class="card mt-4"
+            style="
+              background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+              border: 2px solid #6e57ff;
+              border-radius: 10px;
+              box-shadow: 0 4px 15px rgba(110, 87, 255, 0.2);
+            "
+          >
             <div class="card-body">
-              <h6 class="card-title mb-3">Resumen de Compra</h6>
+              <h6
+                class="card-title mb-3"
+                style="color: #6e57ff; font-weight: bold"
+              >
+                <i class="bi bi-receipt me-2"></i>Resumen de Compra
+              </h6>
               <div class="d-flex justify-content-between mb-2">
-                <span>Subtotal:</span>
-                <span id="resumen-subtotal">S/ 0.00</span>
-              </div>
-              <div class="d-flex justify-content-between mb-2">
-                <span>Impuestos (IGV 18%):</span>
-                <span id="resumen-impuestos">S/ 0.00</span>
-              </div>
-              <div class="d-flex justify-content-between mb-2">
-                <span>Envío:</span>
-                <span id="resumen-envio">S/ 0.00</span>
-              </div>
-              <div class="d-flex justify-content-between mb-2">
-                <small class="text-muted"
-                  >Envío gratis en compras mayores a S/ 100</small
+                <span style="font-weight: 500">Subtotal:</span>
+                <span
+                  id="resumen-subtotal"
+                  style="font-weight: 600; color: #333"
+                  >S/ 0.00</span
                 >
               </div>
-              <hr />
+              <hr style="border-top: 2px solid #6e57ff; opacity: 0.3" />
               <div class="d-flex justify-content-between fw-bold fs-5">
-                <span>Total:</span>
-                <span id="resumen-total" class="text-primary">S/ 0.00</span>
+                <span style="color: #333">Total a Pagar:</span>
+                <span
+                  id="resumen-total"
+                  style="color: #6e57ff; font-size: 1.8rem"
+                  >S/ 0.00</span
+                >
               </div>
             </div>
           </div>
         </form>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Cancelar
+      <div
+        class="modal-footer"
+        style="background-color: #f8f9fa; border-radius: 0 0 13px 13px"
+      >
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          style="border-radius: 8px"
+        >
+          <i class="bi bi-x-circle me-2"></i>Cancelar
         </button>
         <button
           type="button"
-          class="btn btn-primary btn-lg"
+          class="btn btn-lg"
           onclick="procesarCompra()"
+          style="
+            background: linear-gradient(135deg, #6e57ff 0%, #8b75ff 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 30px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(110, 87, 255, 0.4);
+            transition: all 0.3s;
+          "
+          onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(110, 87, 255, 0.5)';"
+          onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(110, 87, 255, 0.4)';"
         >
           <i class="bi bi-check-circle me-2"></i>Confirmar Pedido
         </button>
@@ -320,18 +374,41 @@
 </div>
 
 <style>
-  /* Estilos para los modales de pedidos */
-  #misPedidosModal .card,
-  #detallePedidoModal .card,
-  #confirmarCompraModal .card {
-    transition: transform 0.2s, box-shadow 0.2s;
+  /* Estilos mejorados para el modal de pedidos */
+  #confirmarCompraModal .modal-content {
+    animation: slideInDown 0.3s ease-out;
   }
 
-  #misPedidosModal .card:hover {
+  @keyframes slideInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Animación de inputs al escribir */
+  #confirmarCompraModal input:focus,
+  #confirmarCompraModal select:focus,
+  #confirmarCompraModal textarea:focus {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
   }
 
+  /* Estilo del botón Confirmar Pedido */
+  #confirmarCompraModal .btn-lg:not(.btn-secondary):hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(110, 87, 255, 0.6) !important;
+  }
+
+  #confirmarCompraModal .btn-lg:not(.btn-secondary):active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  /* Estilos para los pedidos */
   .pedido-item {
     border: 1px solid rgba(110, 87, 255, 0.2);
     border-radius: 8px;
@@ -341,8 +418,9 @@
   }
 
   .pedido-item:hover {
-    border-color: var(--primary);
+    border-color: #6e57ff;
     box-shadow: 0 2px 8px rgba(110, 87, 255, 0.3);
+    transform: translateY(-2px);
   }
 
   .timeline {
@@ -373,13 +451,41 @@
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: var(--primary);
+    background: #6e57ff;
     border: 3px solid #fff;
-    box-shadow: 0 0 0 2px var(--primary);
+    box-shadow: 0 0 0 2px #6e57ff;
   }
 
   .timeline-item.active::before {
     background: #28a745;
     box-shadow: 0 0 0 2px #28a745;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 2px #28a745;
+    }
+    50% {
+      box-shadow: 0 0 0 6px rgba(40, 167, 69, 0.3);
+    }
+  }
+
+  /* Mejorar stats cards */
+  #misPedidosModal .card {
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  #misPedidosModal .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(110, 87, 255, 0.2);
+  }
+
+  /* Badges más bonitos */
+  .badge {
+    padding: 0.4em 0.8em;
+    font-weight: 600;
+    letter-spacing: 0.5px;
   }
 </style>

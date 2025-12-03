@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="estilos/estilos.css" />
     <link rel="stylesheet" href="estilos/nosotros.css" />
     <link rel="stylesheet" href="estilos/contacto.css" />
+    <link rel="stylesheet" href="estilos/modal-checkout.css" />
   </head>
   <body>
     <!-- NAVBAR -->
@@ -616,6 +617,183 @@
       </div>
     </div>
 
+    <!-- ============================================================
+         MODALES DE PEDIDOS
+    ============================================================ -->
+
+    <!-- MODAL: MIS PEDIDOS -->
+    <div
+      class="modal fade"
+      id="misPedidosModal"
+      tabindex="-1"
+      aria-labelledby="misPedidosModalLabel"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable"
+      >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="misPedidosModalLabel">
+              <i class="bi bi-bag-check me-2"></i>Mis Pedidos
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div id="listaPedidos">
+              <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p class="mt-3">Cargando tus pedidos...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: DETALLE DE PEDIDO -->
+    <div
+      class="modal fade"
+      id="detallePedidoModal"
+      tabindex="-1"
+      aria-labelledby="detallePedidoModalLabel"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"
+      >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="detallePedidoModalLabel">
+              <i class="bi bi-receipt me-2"></i>Detalle del Pedido
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body" id="detallePedidoContent"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: CONFIRMAR COMPRA -->
+    <div
+      class="modal fade"
+      id="confirmarCompraModal"
+      tabindex="-1"
+      aria-labelledby="confirmarCompraModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmarCompraModalLabel">
+              <i class="bi bi-credit-card me-2"></i>Finalizar Compra
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="formConfirmarCompra">
+              <h6 class="mb-3">
+                <i class="bi bi-truck me-2"></i>Información de Envío
+              </h6>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="compra-nombre" class="form-label"
+                    >Nombre Completo *</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="compra-nombre"
+                    required
+                  />
+                </div>
+                <div class="col-md-6">
+                  <label for="compra-telefono" class="form-label"
+                    >Teléfono *</label
+                  >
+                  <input
+                    type="tel"
+                    class="form-control"
+                    id="compra-telefono"
+                    required
+                  />
+                </div>
+              </div>
+              <h6 class="mb-3 mt-4">
+                <i class="bi bi-wallet2 me-2"></i>Método de Pago
+              </h6>
+              <div class="mb-3">
+                <select class="form-select" id="compra-metodo-pago" required>
+                  <option value="tarjeta" selected>
+                    Tarjeta de Crédito/Débito
+                  </option>
+                  <option value="paypal">PayPal</option>
+                  <option value="transferencia">Transferencia Bancaria</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="compra-notas" class="form-label"
+                  >Notas Adicionales (Opcional)</label
+                >
+                <textarea
+                  class="form-control"
+                  id="compra-notas"
+                  rows="3"
+                ></textarea>
+              </div>
+              <div class="card bg-light mt-4">
+                <div class="card-body">
+                  <h6 class="card-title mb-3">Resumen de Compra</h6>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal:</span>
+                    <span id="resumen-subtotal">S/ 0.00</span>
+                  </div>
+                  <hr />
+                  <div class="d-flex justify-content-between fw-bold fs-5">
+                    <span>Total:</span>
+                    <span id="resumen-total" class="text-primary">S/ 0.00</span>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary btn-lg"
+              onclick="procesarCompra()"
+            >
+              <i class="bi bi-check-circle me-2"></i>Confirmar Pedido
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- FOOTER -->
     <footer class="site-footer mt-5">
       <div class="container py-5 text-center">
@@ -655,17 +833,27 @@
 
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabaseClient.js"></script>
+    <script>
+      // Guardar referencia INMEDIATAMENTE después de cargar el CDN
+      if (
+        window.supabase &&
+        typeof window.supabase.createClient === "function"
+      ) {
+        window._supabaseLib = window.supabase;
+        console.log("📦 Supabase CDN guardado en _supabaseLib");
+      }
+    </script>
+    <script src="js/supabaseClient.js?v=4"></script>
 
     <!-- Autenticación -->
-    <script src="js/auth.js"></script>
+    <script src="js/auth.js?v=4"></script>
 
     <!-- Carrito -->
-    <script src="js/carrito.js"></script>
+    <script src="js/carrito.js?v=4"></script>
 
     <!-- Pedidos -->
-    <script src="js/pedidos.js"></script>
-    <script src="js/pedidos-ui.js"></script>
+    <script src="js/pedidos.js?v=4"></script>
+    <script src="js/pedidos-ui.js?v=4"></script>
 
     <script src="scripts/script.js"></script>
     <script src="scripts/contacto.js"></script>

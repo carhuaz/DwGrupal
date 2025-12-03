@@ -183,8 +183,10 @@ document.addEventListener('DOMContentLoaded', () => {
   })();
 
   /* ================================================================
-     6) MINI-CARRITO (Offcanvas) con localStorage
+     6) MINI-CARRITO - DESHABILITADO (ahora se usa carrito.js)
   ================================================================== */
+  /*
+  // CARRITO ANTIGUO COMENTADO - Ahora se usa js/carrito.js
   (function miniCart() {
     const KEY = 'cartItems';
     const currency = n => `S/ ${Number(n || 0).toFixed(2)}`;
@@ -287,12 +289,6 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#btnClearCart')?.addEventListener('click', () => {
       cart = []; save(); render();
     });
-
-    // Simular checkout
-    $('#btnCheckout')?.addEventListener('click', () => {
-      alert('¡Gracias por su compra! 😉');
-    });
-
     // Hook a todos los "Agregar"
     $$('.btn.btn-buy').forEach(btn => {
       btn.addEventListener('click', (e) => {
@@ -304,6 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Init
     load(); render();
   })();
+  */
 
   /* ================================================================
      7) SCROLL REVEAL (IntersectionObserver)

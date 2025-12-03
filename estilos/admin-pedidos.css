@@ -1,0 +1,386 @@
+/* ============================================================
+   ESTILOS DEL PANEL DE ADMINISTRACIÓN DE PEDIDOS - TEMA OSCURO
+============================================================ */
+
+/* Body y Container Principal */
+body {
+  background: #0f0f23 !important;
+  color: #ffffff !important;
+}
+
+/* Header del Panel */
+.admin-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 100%) !important;
+  border-bottom: 3px solid #6e57ff !important;
+  padding: 2rem 0 !important;
+  margin-bottom: 2rem !important;
+  box-shadow: 0 5px 20px rgba(110, 87, 255, 0.3) !important;
+}
+
+.admin-header h1 {
+  color: #8b75ff !important;
+  text-shadow: 0 0 15px rgba(139, 117, 255, 0.6) !important;
+  font-weight: bold !important;
+}
+
+/* Cards de Estadísticas */
+.stat-card {
+  background: linear-gradient(135deg, #1a1a2e 0%, #0f0f23 100%) !important;
+  border: 3px solid #6e57ff !important;
+  border-radius: 15px !important;
+  padding: 1.5rem !important;
+  margin-bottom: 1.5rem !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 5px 20px rgba(110, 87, 255, 0.3) !important;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 10px 30px rgba(110, 87, 255, 0.5) !important;
+  border-color: #8b75ff !important;
+}
+
+.stat-card .display-4 {
+  color: #00ff88 !important;
+  text-shadow: 0 0 15px rgba(0, 255, 136, 0.6) !important;
+  font-weight: 900 !important;
+}
+
+.stat-card h5 {
+  color: #8b75ff !important;
+  font-weight: 600 !important;
+  margin-top: 1rem !important;
+}
+
+.stat-card i {
+  font-size: 3rem !important;
+  opacity: 0.8 !important;
+}
+
+/* Iconos de estadísticas con colores específicos */
+.stat-card .bi-box::before {
+  color: #6e57ff !important;
+  text-shadow: 0 0 10px rgba(110, 87, 255, 0.5);
+}
+
+.stat-card .bi-clock-history::before {
+  color: #ffc107 !important;
+  text-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+}
+
+.stat-card .bi-hourglass-split::before {
+  color: #17a2b8 !important;
+  text-shadow: 0 0 10px rgba(23, 162, 184, 0.5);
+}
+
+.stat-card .bi-check-circle::before {
+  color: #28a745 !important;
+  text-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+}
+
+/* Sección de Filtros */
+.filters-section {
+  background: #1a1a2e !important;
+  border: 2px solid #6e57ff !important;
+  border-radius: 12px !important;
+  padding: 1.5rem !important;
+  margin-bottom: 2rem !important;
+}
+
+.filters-section h4 {
+  color: #8b75ff !important;
+  font-weight: bold !important;
+  margin-bottom: 1rem !important;
+  text-shadow: 0 0 10px rgba(139, 117, 255, 0.4) !important;
+}
+
+/* Botones de Filtro */
+.btn-filter {
+  background: #0f0f23 !important;
+  color: #ffffff !important;
+  border: 2px solid #6e57ff !important;
+  border-radius: 8px !important;
+  padding: 10px 20px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+  margin-right: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+.btn-filter:hover {
+  background: #6e57ff !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 5px 15px rgba(110, 87, 255, 0.5) !important;
+}
+
+.btn-filter.active {
+  background: linear-gradient(135deg, #6e57ff 0%, #8b75ff 100%) !important;
+  border-color: #8b75ff !important;
+  box-shadow: 0 5px 20px rgba(110, 87, 255, 0.6) !important;
+  transform: scale(1.05) !important;
+}
+
+/* Ventas Totales Badge */
+.ventas-badge {
+  background: linear-gradient(135deg, #6e57ff 0%, #8b75ff 100%) !important;
+  color: white !important;
+  padding: 15px 30px !important;
+  border-radius: 10px !important;
+  font-size: 1.3rem !important;
+  font-weight: bold !important;
+  box-shadow: 0 5px 20px rgba(110, 87, 255, 0.5) !important;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Tabla de Pedidos */
+.table-section {
+  background: #1a1a2e !important;
+  border: 3px solid #6e57ff !important;
+  border-radius: 15px !important;
+  padding: 2rem !important;
+  box-shadow: 0 10px 30px rgba(110, 87, 255, 0.4) !important;
+}
+
+.table-section h4 {
+  color: #8b75ff !important;
+  font-weight: bold !important;
+  margin-bottom: 1.5rem !important;
+  text-shadow: 0 0 10px rgba(139, 117, 255, 0.5) !important;
+}
+
+/* Tabla con scroll */
+.table-responsive {
+  background: #0f0f23 !important;
+  border-radius: 10px !important;
+  padding: 10px !important;
+  max-height: 600px !important;
+  overflow-y: auto !important;
+}
+
+/* Scrollbar personalizada */
+.table-responsive::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: #0f0f23;
+  border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #6e57ff;
+  border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #8b75ff;
+}
+
+/* Estilos de la Tabla */
+.table {
+  color: #ffffff !important;
+  margin-bottom: 0 !important;
+}
+
+.table thead {
+  background: linear-gradient(135deg, #6e57ff 0%, #8b75ff 100%) !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10 !important;
+}
+
+.table thead th {
+  color: white !important;
+  font-weight: bold !important;
+  border: none !important;
+  padding: 15px !important;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.3) !important;
+  vertical-align: middle !important;
+}
+
+.table tbody tr {
+  background: #1a1a2e !important;
+  border-bottom: 1px solid rgba(110, 87, 255, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+.table tbody tr:hover {
+  background: rgba(110, 87, 255, 0.15) !important;
+  transform: scale(1.01) !important;
+  box-shadow: 0 2px 10px rgba(110, 87, 255, 0.3) !important;
+}
+
+.table tbody td {
+  color: #ffffff !important;
+  padding: 15px !important;
+  border: none !important;
+  vertical-align: middle !important;
+}
+
+/* Badges de Estado */
+.badge {
+  padding: 8px 16px !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.badge.bg-warning {
+  background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%) !important;
+  color: #000 !important;
+  box-shadow: 0 3px 10px rgba(255, 193, 7, 0.4) !important;
+}
+
+.badge.bg-info {
+  background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+  color: white !important;
+  box-shadow: 0 3px 10px rgba(23, 162, 184, 0.4) !important;
+}
+
+.badge.bg-success {
+  background: linear-gradient(135deg, #28a745 0%, #218838 100%) !important;
+  color: white !important;
+  box-shadow: 0 3px 10px rgba(40, 167, 69, 0.4) !important;
+}
+
+.badge.bg-danger {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+  color: white !important;
+  box-shadow: 0 3px 10px rgba(220, 53, 69, 0.4) !important;
+}
+
+.badge.bg-secondary {
+  background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%) !important;
+  color: white !important;
+  box-shadow: 0 3px 10px rgba(108, 117, 125, 0.4) !important;
+}
+
+/* Select de Estado */
+.form-select {
+  background: #0f0f23 !important;
+  color: #ffffff !important;
+  border: 2px solid #6e57ff !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+}
+
+.form-select:focus {
+  background: #0f0f23 !important;
+  border-color: #8b75ff !important;
+  box-shadow: 0 0 15px rgba(139, 117, 255, 0.5) !important;
+  color: #ffffff !important;
+}
+
+.form-select option {
+  background: #1a1a2e !important;
+  color: #ffffff !important;
+  padding: 10px !important;
+}
+
+/* Botones de Acción */
+.btn-sm {
+  padding: 8px 16px !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+  border: 2px solid transparent !important;
+}
+
+.btn-info {
+  background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
+  border-color: #17a2b8 !important;
+}
+
+.btn-info:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 5px 15px rgba(23, 162, 184, 0.5) !important;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+  border-color: #dc3545 !important;
+}
+
+.btn-danger:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 5px 15px rgba(220, 53, 69, 0.5) !important;
+}
+
+/* Botón Exportar */
+.btn-export {
+  background: linear-gradient(135deg, #28a745 0%, #218838 100%) !important;
+  color: white !important;
+  border: 2px solid #28a745 !important;
+  border-radius: 10px !important;
+  padding: 12px 30px !important;
+  font-weight: bold !important;
+  box-shadow: 0 5px 20px rgba(40, 167, 69, 0.4) !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-export:hover {
+  transform: translateY(-3px) scale(1.05) !important;
+  box-shadow: 0 8px 30px rgba(40, 167, 69, 0.6) !important;
+}
+
+/* Mensaje cuando no hay pedidos */
+.no-pedidos {
+  background: rgba(110, 87, 255, 0.15) !important;
+  border: 2px dashed #6e57ff !important;
+  border-radius: 12px !important;
+  padding: 3rem !important;
+  text-align: center !important;
+  color: #8b75ff !important;
+  font-size: 1.2rem !important;
+}
+
+.no-pedidos i {
+  font-size: 4rem !important;
+  margin-bottom: 1rem !important;
+  opacity: 0.5 !important;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stat-card,
+.filters-section,
+.table-section {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Loading Spinner */
+.spinner-border {
+  border-color: #6e57ff !important;
+  border-right-color: transparent !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stat-card {
+    margin-bottom: 1rem !important;
+  }
+  
+  .btn-filter {
+    width: 100% !important;
+    margin-right: 0 !important;
+  }
+  
+  .table-responsive {
+    font-size: 0.85rem !important;
+  }
+}

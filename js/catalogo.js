@@ -94,6 +94,24 @@ function ordenarProductos(criterio) {
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', async () => {
+  console.log('🚀 Iniciando página de catálogo...');
+  
+  // Esperar a que Supabase esté listo
+  let intentos = 0;
+  while ((!window.supabase || !window.supabase.from) && intentos < 50) {
+    console.log('⏳ Esperando Supabase... intento', intentos + 1);
+    await new Promise(resolve => setTimeout(resolve, 100));
+    intentos++;
+  }
+  
+  if (!window.supabase || !window.supabase.from) {
+    console.error('❌ Supabase no se pudo inicializar');
+    mostrarMensajeError();
+    return;
+  }
+  
+  console.log('✅ Supabase listo');
+  
   // Cargar productos
   await cargarTodosLosProductos();
   

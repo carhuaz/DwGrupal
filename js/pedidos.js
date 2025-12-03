@@ -18,51 +18,26 @@ async function crearPedido(datosEnvio) {
     }
 
     // Obtener carrito actual
-    const carrito = obtenerCarrito();
+    const itemsCarrito = window.carrito ? window.carrito.items : [];
     
-    if (!carrito || carrito.length === 0) {
+    if (!itemsCarrito || itemsCarrito.length === 0) {
       throw new Error('El carrito está vacío');
     }
 
     // Calcular totales
-    const subtotal = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
-    const descuento = 0; // Aquí podrías aplicar cupones
-    const impuestos = subtotal * 0.18; // 18% IGV (ajustar según tu país)
-    const envio = subtotal > 100 ? 0 : 10; // Envío gratis sobre $100
-    const total = subtotal - descuento + impuestos + envio;
+    const subtotal = itemsCarrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+    const total = subtotal;
 
-    // Generar número de pedido (se hará en el backend con la función SQL)
-    const numeroPedido = await generarNumeroPedido();
-
-    // Crear objeto del pedido
+    // Crear objeto del pedido (usando nombres de columnas correctos)
     const pedido = {
-      user_id: authState.user.id,
+      usuario_id: authState.user.id,
       email: authState.user.email,
-      numero_pedido: numeroPedido,
+      nombre: datosEnvio.nombre || authState.user.nombre_completo || 'Cliente',
+      telefono: datosEnvio.telefono || authState.user.telefono || '',
+      total: total,
       estado: 'pendiente',
-      
-      // Datos del cliente
-      nombre_cliente: datosEnvio.nombre || authState.user.nombre || 'Cliente',
-      telefono: datosEnvio.telefono || '',
-      direccion_envio: datosEnvio.direccion,
-      ciudad: datosEnvio.ciudad,
-      pais: datosEnvio.pais || 'Perú',
-      codigo_postal: datosEnvio.codigoPostal || '',
-      
-      // Totales
-      subtotal: subtotal.toFixed(2),
-      descuento: descuento.toFixed(2),
-      impuestos: impuestos.toFixed(2),
-      envio: envio.toFixed(2),
-      total: total.toFixed(2),
-      
-      // Método de pago
       metodo_pago: datosEnvio.metodoPago || 'tarjeta',
-      
-      // Notas
-      notas_cliente: datosEnvio.notas || '',
-      
-      fecha_estimada_entrega: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] // +7 días
+      notas: datosEnvio.notas || ''
     };
 
     // Insertar pedido en la base de datos
@@ -77,20 +52,32 @@ async function crearPedido(datosEnvio) {
       throw new Error('No se pudo crear el pedido: ' + errorPedido.message);
     }
 
-    // Insertar items del pedido
-    const items = carrito.map(item => ({
-      pedido_id: pedidoCreado.id,
-      producto_id: item.id,
-      nombre_producto: item.nombre,
-      precio_unitario: item.precio,
-      cantidad: item.cantidad,
-      subtotal: (item.precio * item.cantidad).toFixed(2),
-      imagen_url: item.imagen,
-      categoria: item.categoria || 'General'
-    }));
+    // Insertar items del pedido (usando nombres de columnas correctos)
+    const items = itemsCarrito.map(item => {
+      // Intentar obtener el producto_id como UUID si existe
+      // Si no es UUID válido, usar null (la tabla permite null según el schema)
+      let productoId = null;
+      
+      // Verificar si item.id es un UUID válido
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (typeof item.id === 'string' && uuidRegex.test(item.id)) {
+        productoId = item.id;
+      } else if (item.producto_id && uuidRegex.test(item.producto_id)) {
+        productoId = item.producto_id;
+      }
+      
+      return {
+        pedido_id: pedidoCreado.id,
+        producto_id: productoId,
+        nombre_producto: item.nombre,
+        precio: parseFloat(item.precio),
+        cantidad: parseInt(item.cantidad),
+        subtotal: parseFloat(item.precio * item.cantidad)
+      };
+    });
 
     const { error: errorItems } = await supabase
-      .from('pedido_items')
+      .from('pedidos_items')
       .insert(items);
 
     if (errorItems) {
@@ -101,14 +88,16 @@ async function crearPedido(datosEnvio) {
     }
 
     // Vaciar carrito después de crear el pedido
-    vaciarCarrito();
+    if (window.carrito) {
+      window.carrito.vaciar();
+    }
 
-    console.log('✅ Pedido creado exitosamente:', pedidoCreado.numero_pedido);
+    console.log('✅ Pedido creado exitosamente:', pedidoCreado.id);
     
     return {
       success: true,
       pedido: pedidoCreado,
-      mensaje: `Pedido ${pedidoCreado.numero_pedido} creado exitosamente`
+      mensaje: `Pedido #${pedidoCreado.id.substring(0, 8)} creado exitosamente`
     };
 
   } catch (error) {
@@ -117,32 +106,6 @@ async function crearPedido(datosEnvio) {
       success: false,
       error: error.message
     };
-  }
-}
-
-/**
- * Generar número de pedido único
- * @returns {String} - Número de pedido formato DL-YYYYMMDD-XXXX
- */
-async function generarNumeroPedido() {
-  try {
-    const { data, error } = await supabase.rpc('generar_numero_pedido');
-    
-    if (error) {
-      console.error('Error al generar número de pedido:', error);
-      // Fallback: generar localmente
-      const fecha = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-      const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-      return `DL-${fecha}-${random}`;
-    }
-    
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-    // Fallback
-    const fecha = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-    const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-    return `DL-${fecha}-${random}`;
   }
 }
 
@@ -159,8 +122,8 @@ async function obtenerMisPedidos() {
     const { data, error } = await supabase
       .from('pedidos')
       .select('*')
-      .eq('user_id', authState.user.id)
-      .order('fecha_pedido', { ascending: false });
+      .eq('usuario_id', authState.user.id)
+      .order('created_at', { ascending: false });
 
     if (error) {
       console.error('Error al obtener pedidos:', error);
@@ -195,7 +158,7 @@ async function obtenerDetallePedido(pedidoId) {
 
     // Obtener items del pedido
     const { data: items, error: errorItems } = await supabase
-      .from('pedido_items')
+      .from('pedidos_items')
       .select('*')
       .eq('pedido_id', pedidoId);
 
@@ -218,18 +181,32 @@ async function obtenerDetallePedido(pedidoId) {
 async function obtenerEstadisticasPedidos() {
   try {
     if (!authState.isLoggedIn || !authState.user) {
-      return null;
+      return {
+        total_pedidos: 0,
+        pedidos_completados: 0,
+        pedidos_enviados: 0,
+        total_gastado: 0
+      };
     }
 
-    const { data, error } = await supabase
-      .rpc('obtener_estadisticas_ventas', { user_id_param: authState.user.id });
+    const { data: pedidos, error } = await supabase
+      .from('pedidos')
+      .select('*')
+      .eq('usuario_id', authState.user.id);
 
     if (error) {
       console.error('Error al obtener estadísticas:', error);
       return null;
     }
 
-    return data;
+    const stats = {
+      total_pedidos: pedidos.length,
+      pedidos_completados: pedidos.filter(p => p.estado === 'completado').length,
+      pedidos_enviados: pedidos.filter(p => p.estado === 'procesando').length,
+      total_gastado: pedidos.reduce((sum, p) => sum + parseFloat(p.total || 0), 0)
+    };
+
+    return stats;
   } catch (error) {
     console.error('Error:', error);
     return null;
@@ -245,28 +222,18 @@ async function obtenerEstadisticasPedidos() {
 async function actualizarEstadoPedido(pedidoId, nuevoEstado) {
   try {
     // Verificar que el usuario sea admin
-    if (!authState.user || authState.user.role !== 'admin') {
+    if (!authState.user || authState.user.rol !== 'admin') {
       throw new Error('No tienes permisos para actualizar pedidos');
     }
 
-    const estadosValidos = ['pendiente', 'procesando', 'enviado', 'entregado', 'cancelado'];
+    const estadosValidos = ['pendiente', 'procesando', 'completado', 'cancelado', 'reembolsado'];
     if (!estadosValidos.includes(nuevoEstado)) {
       throw new Error('Estado no válido');
     }
 
-    const updateData = {
-      estado: nuevoEstado,
-      updated_at: new Date().toISOString()
-    };
-
-    // Si el estado es 'entregado', actualizar fecha de entrega
-    if (nuevoEstado === 'entregado') {
-      updateData.fecha_entrega_real = new Date().toISOString().split('T')[0];
-    }
-
     const { error } = await supabase
       .from('pedidos')
-      .update(updateData)
+      .update({ estado: nuevoEstado })
       .eq('id', pedidoId);
 
     if (error) {
@@ -289,16 +256,21 @@ async function actualizarEstadoPedido(pedidoId, nuevoEstado) {
  */
 async function obtenerTodosPedidos(filtroEstado = null) {
   try {
+    console.log('🔐 Verificando permisos de admin...');
+    
     // Verificar que el usuario sea admin
-    if (!authState.user || authState.user.role !== 'admin') {
-      console.error('No tienes permisos para ver todos los pedidos');
+    if (!authState.user || authState.user.rol !== 'admin') {
+      console.error('❌ No tienes permisos para ver todos los pedidos');
       return [];
     }
+
+    console.log('✅ Usuario admin verificado');
+    console.log('🔍 Consultando pedidos en Supabase...', filtroEstado ? `Filtro: ${filtroEstado}` : 'Sin filtro');
 
     let query = supabase
       .from('pedidos')
       .select('*')
-      .order('fecha_pedido', { ascending: false });
+      .order('created_at', { ascending: false });
 
     if (filtroEstado) {
       query = query.eq('estado', filtroEstado);
@@ -307,13 +279,14 @@ async function obtenerTodosPedidos(filtroEstado = null) {
     const { data, error } = await query;
 
     if (error) {
-      console.error('Error al obtener pedidos:', error);
+      console.error('❌ Error de Supabase:', error);
       return [];
     }
 
+    console.log('✅ Pedidos obtenidos de la BD:', data?.length || 0);
     return data || [];
   } catch (error) {
-    console.error('Error:', error);
+    console.error('❌ Error en obtenerTodosPedidos:', error);
     return [];
   }
 }
@@ -324,21 +297,38 @@ async function obtenerTodosPedidos(filtroEstado = null) {
  */
 async function obtenerEstadisticasGlobales() {
   try {
+    console.log('📊 Obteniendo estadísticas globales...');
+    
     // Verificar que el usuario sea admin
-    if (!authState.user || authState.user.role !== 'admin') {
+    if (!authState.user || authState.user.rol !== 'admin') {
+      console.error('❌ No tienes permisos para ver estadísticas');
       return null;
     }
 
-    const { data, error } = await supabase.rpc('obtener_estadisticas_ventas');
+    const { data: pedidos, error } = await supabase
+      .from('pedidos')
+      .select('*');
 
     if (error) {
-      console.error('Error al obtener estadísticas globales:', error);
+      console.error('❌ Error al obtener estadísticas globales:', error);
       return null;
     }
 
-    return data;
+    console.log('✅ Total de pedidos en BD:', pedidos?.length || 0);
+
+    const stats = {
+      total_pedidos: pedidos.length,
+      pedidos_pendientes: pedidos.filter(p => p.estado === 'pendiente').length,
+      pedidos_procesando: pedidos.filter(p => p.estado === 'procesando').length,
+      pedidos_completados: pedidos.filter(p => p.estado === 'completado').length,
+      pedidos_cancelados: pedidos.filter(p => p.estado === 'cancelado').length,
+      total_ventas: pedidos.reduce((sum, p) => sum + parseFloat(p.total || 0), 0)
+    };
+
+    console.log('📊 Estadísticas calculadas:', stats);
+    return stats;
   } catch (error) {
-    console.error('Error:', error);
+    console.error('❌ Error:', error);
     return null;
   }
 }
@@ -353,7 +343,7 @@ async function cancelarPedido(pedidoId) {
     // Obtener el pedido primero
     const { data: pedido, error: errorGet } = await supabase
       .from('pedidos')
-      .select('estado, user_id')
+      .select('estado, usuario_id')
       .eq('id', pedidoId)
       .single();
 
@@ -362,7 +352,7 @@ async function cancelarPedido(pedidoId) {
     }
 
     // Verificar que el usuario sea el dueño o admin
-    if (pedido.user_id !== authState.user.id && authState.user.role !== 'admin') {
+    if (pedido.usuario_id !== authState.user.id && authState.user.rol !== 'admin') {
       throw new Error('No tienes permisos para cancelar este pedido');
     }
 
@@ -373,10 +363,7 @@ async function cancelarPedido(pedidoId) {
 
     const { error } = await supabase
       .from('pedidos')
-      .update({ 
-        estado: 'cancelado',
-        updated_at: new Date().toISOString()
-      })
+      .update({ estado: 'cancelado' })
       .eq('id', pedidoId);
 
     if (error) {
@@ -385,6 +372,64 @@ async function cancelarPedido(pedidoId) {
     }
 
     console.log('✅ Pedido cancelado exitosamente');
+    return true;
+  } catch (error) {
+    console.error('Error:', error);
+    alert(error.message);
+    return false;
+  }
+}
+
+/**
+ * Eliminar un pedido completamente de la base de datos
+ * @param {String} pedidoId - ID del pedido a eliminar
+ * @returns {Boolean} - Éxito de la operación
+ */
+async function eliminarPedido(pedidoId) {
+  try {
+    if (!confirm('¿Estás seguro de eliminar este pedido? Esta acción no se puede deshacer.')) {
+      return false;
+    }
+
+    // Obtener el pedido primero
+    const { data: pedido, error: errorGet } = await supabase
+      .from('pedidos')
+      .select('usuario_id')
+      .eq('id', pedidoId)
+      .single();
+
+    if (errorGet || !pedido) {
+      throw new Error('No se encontró el pedido');
+    }
+
+    // Verificar que el usuario sea el dueño o admin
+    if (pedido.usuario_id !== authState.user.id && authState.user.rol !== 'admin') {
+      throw new Error('No tienes permisos para eliminar este pedido');
+    }
+
+    // Primero eliminar los items del pedido (por la relación de clave foránea)
+    const { error: errorItems } = await supabase
+      .from('pedidos_items')
+      .delete()
+      .eq('pedido_id', pedidoId);
+
+    if (errorItems) {
+      console.error('Error al eliminar items del pedido:', errorItems);
+      throw new Error('Error al eliminar los productos del pedido');
+    }
+
+    // Ahora eliminar el pedido
+    const { error: errorPedido } = await supabase
+      .from('pedidos')
+      .delete()
+      .eq('id', pedidoId);
+
+    if (errorPedido) {
+      console.error('Error al eliminar pedido:', errorPedido);
+      throw new Error('Error al eliminar el pedido');
+    }
+
+    console.log('✅ Pedido eliminado exitosamente de la base de datos');
     return true;
   } catch (error) {
     console.error('Error:', error);
@@ -419,9 +464,9 @@ function obtenerClaseBadgeEstado(estado) {
   const clases = {
     'pendiente': 'bg-warning text-dark',
     'procesando': 'bg-info',
-    'enviado': 'bg-primary',
-    'entregado': 'bg-success',
-    'cancelado': 'bg-danger'
+    'completado': 'bg-success',
+    'cancelado': 'bg-danger',
+    'reembolsado': 'bg-secondary'
   };
   return clases[estado] || 'bg-secondary';
 }
@@ -435,9 +480,9 @@ function obtenerIconoEstado(estado) {
   const iconos = {
     'pendiente': 'bi-clock-history',
     'procesando': 'bi-hourglass-split',
-    'enviado': 'bi-truck',
-    'entregado': 'bi-check-circle',
-    'cancelado': 'bi-x-circle'
+    'completado': 'bi-check-circle',
+    'cancelado': 'bi-x-circle',
+    'reembolsado': 'bi-arrow-counterclockwise'
   };
   return iconos[estado] || 'bi-box';
 }
